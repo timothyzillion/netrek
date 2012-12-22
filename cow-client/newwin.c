@@ -1235,6 +1235,8 @@ showMotd(W_Window motdwin, int atline)
   int     count;
   char    buf[128];
 
+return;
+
   sprintf(buf, "---  %s  ---", (char *) query_cowid());
   length = strlen(buf);
   center = TWINSIDE / 2 - (length * W_Textwidth) / 2;
