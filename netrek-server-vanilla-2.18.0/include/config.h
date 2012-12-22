@@ -284,15 +284,15 @@ when this file is used as input to generate config.h */
 #define HAVE_SYS_FCNTL_H 1
 #define HAVE_FCNTL_H 1
 #define HAVE_CTYPE_H 1
-/* #undef HAVE_MACHINE_ENDIAN_H */
+#define HAVE_MACHINE_ENDIAN_H 1
 #define HAVE_SYS_RESOURCE_H 1
 #define HAVE_SYS_WAIT_H 1
 #define HAVE_NETINET_IN_H 1
                                 /* Needed for Solaris 2.x */
-/* #undef HAVE_SYS_FILIO_H */
+#define HAVE_SYS_FILIO_H 1
 /* #undef HAVE_GMP2_H */
 /* #undef NO_U_INT */
-#define SIZEOF_LONG 4
+#define SIZEOF_LONG 8
 #define HAVE_USLEEP 1
 #define HAVE_SETSTATE 1
 #define HAVE_RANDOM 1

@@ -7,7 +7,7 @@ include ../$(CONFIG)
 
 DESTDIR = /usr/local/games/netrek-server-vanilla/og
 XTREKDIR = /usr/local/games/netrek-server-vanilla
-XTREKOWNER = james
+XTREKOWNER = tjk
 
 R_OBJS = 	   \
 	    robot.o\
@@ -91,7 +91,7 @@ INCLUDES = struct.h \
 
 INPUT = input.o redraw.o
 
-LIBS =  -lgdbm -lresolv -lnsl -lm 
+LIBS =  -lgdbm -lresolv -lm 
 EXTRALIBS = $(LINKFLAGS)
 
 CC = gcc

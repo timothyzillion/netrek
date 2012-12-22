@@ -18,7 +18,7 @@
 /*
  *  This file contains the routines necessary to start the daemon
  *  and connect to the shared memory.  startdaemon() should never
- *  be called except through openmem.  
+ *  be called except through openmem.
  *
  *  openmem(int trystart) is used to connect to the memory and
  *  perhaps create it.  It is called an integer argument:
@@ -29,8 +29,8 @@
  *    the daemon.  It returns 1 if successful, and exits if not.
  *    This is useful for tools, such as xtkill.
  *  openmem(-1) tries to connect to the memory, but will NOT start
- *    the daemon.  It returns 1 if successful, and 0 if not.  
- *    This is useful for tools such as players, which need to 
+ *    the daemon.  It returns 1 if successful, and 0 if not.
+ *    This is useful for tools such as players, which need to
  *    return data if no one is playing.
  *
  *  setupmem() is called only by the daemon and sets up the shared
@@ -106,10 +106,10 @@ static void startdaemon(void)
 
     i = fork();
     if (i == (pid_t)0) {
-	execl(Daemon, "netrek-daemon", "--tell", (char *) NULL);
-	perror(Daemon);
-	ERROR(1,("Couldn't start daemon!!!\n"));
-	_exit(1);
+  execl(Daemon, "netrek-daemon", "--tell", (char *) NULL);
+  perror(Daemon);
+  ERROR(1,("Couldn't start daemon!!!\n"));
+  _exit(1);
     }
 
     /* wait until daemon has initialised */
@@ -210,31 +210,31 @@ int openmem(int trystart)
     initpkey();
     shmid = shmget(pkey, SHMFLAG, 0);
     if (shmid < 0) {            /* Could not find the shared memory */
-	if (errno != ENOENT) {  /* Error other not created yet */
-	    perror("shmget");
-	    exit(1);
-	}
-	if (trystart==1){          /* Create the memory */
-	  startdaemon();
-	}
-	else if (trystart < 0){    /* Just checking if it exists */
-	  return 0;
-	}
-	else {                     /* Wanted to use it, but...   */
-	  fprintf(stderr,"Warning: Daemon not running!\n");
-	  exit(1);
-	}
-	shmid = shmget(pkey, SHMFLAG, 0);
-	if (shmid < 0) {  /* This is a bummer of an error */
-	    ERROR(1, ("Daemon not running (err:%d)\n",errno));
-	    exit(1);
-	}
+  if (errno != ENOENT) {  /* Error other not created yet */
+      perror("shmget");
+      exit(1);
+  }
+  if (trystart==1){          /* Create the memory */
+    startdaemon();
+  }
+  else if (trystart < 0){    /* Just checking if it exists */
+    return 0;
+  }
+  else {                     /* Wanted to use it, but...   */
+    fprintf(stderr,"Warning: Daemon not running!\n");
+    exit(1);
+  }
+  shmid = shmget(pkey, SHMFLAG, 0);
+  if (shmid < 0) {  /* This is a bummer of an error */
+      ERROR(1, ("Daemon not running (err:%d)\n",errno));
+      exit(1);
+  }
     }
     sharedMemory = (struct memory *) shmat(shmid, 0, 0);
     if (sharedMemory == (struct memory *) -1) {
-	printf("Error number: %d\n",errno);
-	perror("shared memory");
-	exit(1);
+  printf("Error number: %d\n",errno);
+  perror("shared memory");
+  exit(1);
     }
     setup_memory(sharedMemory);
     opensem();
@@ -244,7 +244,7 @@ int openmem(int trystart)
 
 int setupmem(void) {
     struct shmid_ds smbuf;
-  
+
     initpkey();
     /* Kill any existing segments */
     if ((shmid = shmget(pkey, SHMFLAG , 0)) >= 0) {
@@ -255,7 +255,7 @@ int setupmem(void) {
     /* Get them memory id */
     shmid = shmget(pkey, sizeof(struct memory), IPC_CREAT | 0777);
     if (shmid < 0) {
-      ERROR(1,("setupmem: Can't open shared memory, error %i\n",errno));
+      ERROR(1,("setupmem: Can't open shared memory, error %d %i\n", (int)sizeof(struct memory), errno));
       return 0;
     }
 

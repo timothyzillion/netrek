@@ -234,7 +234,11 @@ netrek protocol
 #define SP_LTD          62      /* LTD stats for character */
 #endif
 
+#ifdef LTD_STATS
 #define TOTAL_SPACKETS  SP_LTD + 1 + 1 /* length of packet sizes array */
+#else
+#define TOTAL_SPACKETS  SP_RANK + 1 + 1 /* length of packet sizes array */
+#endif
 
 /* variable length packets */
 #define VPLAYER_SIZE    4

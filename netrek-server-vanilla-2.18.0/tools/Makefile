@@ -41,9 +41,11 @@ SRCS = ${srcdir}/ban.c ${srcdir}/getpath.c \
 EXECS =	ban getpath blotpassword mess message newscores planets players \
 	scores \
         setgalaxy stat trimscores watchmes xtkill \
-        mergescores keyman updated fun conq_vert convert sortdb cambot \
-        ntpasswd ltd_dump ltd_dump_html ltd_convert nuke metaget \
+        mergescores keyman updated fun conq_vert sortdb cambot \
+        ntpasswd nuke metaget \
 	setgame setplanet setteam setship delist
+#        mergescores keyman updated fun conq_vert convert sortdb cambot \
+#        ntpasswd ltd_dump ltd_dump_html ltd_convert nuke metaget \
 
 all: $(PMAKE) $(EXECS)
 
@@ -89,9 +91,9 @@ install: $(EXECS)
 	$(INSTALLPROG) $(INSTALLOPTS) keyman $(DESTDIR)$(LIBDIR)/tools/keyman
 	$(INSTALLPROG) $(INSTALLOPTS) fun $(DESTDIR)$(LIBDIR)/tools/fun
 	$(INSTALLPROG) $(INSTALLOPTS) sortdb $(DESTDIR)$(LIBDIR)/tools/sortdb
-	$(INSTALLPROG) $(INSTALLOPTS) ntpasswd $(DESTDIR)$(LIBDIR)/tools/ntpasswd
-	$(INSTALLPROG) $(INSTALLOPTS) ltd_dump $(DESTDIR)$(LIBDIR)/tools/ltd_dump
-	$(INSTALLPROG) $(INSTALLOPTS) ltd_dump_html $(DESTDIR)$(LIBDIR)/tools/ltd_dump_html
+#	$(INSTALLPROG) $(INSTALLOPTS) ntpasswd $(DESTDIR)$(LIBDIR)/tools/ntpasswd
+#	$(INSTALLPROG) $(INSTALLOPTS) ltd_dump $(DESTDIR)$(LIBDIR)/tools/ltd_dump
+#	$(INSTALLPROG) $(INSTALLOPTS) ltd_dump_html $(DESTDIR)$(LIBDIR)/tools/ltd_dump_html
 	$(INSTALLPROG) $(INSTALLOPTS) updated $(DESTDIR)$(LIBDIR)/updated
 	$(INSTALLPROG) $(INSTALLOPTS) cambot $(DESTDIR)$(LIBDIR)/cambot
 	$(INSTALLPROG) $(INSTALLOPTS) metaget $(DESTDIR)$(LIBDIR)/tools/metaget

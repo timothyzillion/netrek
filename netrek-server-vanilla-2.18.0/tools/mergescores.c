@@ -48,7 +48,7 @@ struct statentry *lplayers[10000]; /* up to 10000 local players */
 int lplayercount = 0;
 
 void usage(void);
-void read_lplayers(void);
+static void read_lplayers(void);
 int dumbsearch(struct statentry *);
 
 void trimblanks2(char *str)
@@ -292,6 +292,7 @@ int main(int argc, char **argv)
     return 1;		/* satify lint */
 }
 
+static
 void read_lplayers(void)
 {
     int lfd;
