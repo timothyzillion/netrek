@@ -1,0 +1,58 @@
+netrek-client-cow (3.2.1-4) unstable; urgency=low
+
+  * make desktop file without feedback
+
+ -- James Cameron <quozl@us.netrek.org>  Tue, 19 Sep 2006 20:28:14 +1000
+
+netrek-client-cow (3.2.1-3) unstable; urgency=low
+
+  * add kde window management fullscreen
+
+ -- James Cameron <quozl@us.netrek.org>  Tue, 19 Sep 2006 19:14:01 +1000
+
+netrek-client-cow (3.2.1-2) unstable; urgency=low
+
+  * add icon
+
+ -- James Cameron <quozl@us.netrek.org>  Tue, 19 Sep 2006 14:10:02 +1000
+
+netrek-client-cow (3.2.1-1) unstable; urgency=low
+
+  * full screen mode
+
+ -- James Cameron <quozl@us.netrek.org>  Tue, 19 Sep 2006 11:34:15 +1000
+
+netrek-client-cow (3.2.1-0) unstable; urgency=low
+
+  * test release
+
+ -- James Cameron <quozl@us.netrek.org>  Mon, 18 Sep 2006 22:00:03 +1000
+
+netrek-client-cow (3.2.0-1) unstable; urgency=low
+
+  * Fix regression caused by previous change, resulting in bad file
+    descriptor errors from select in ReadMetasRecv(). (Quozl)
+  * Change to Quozl's new release numbering scheme, he is the official 
+    librarian you know. :-)
+
+ -- Robert J. Tanner <tanner@real-time.com>  Wed, 22 Feb 2006 22:53:25 -0600
+
+netrek-client-cow (3.2.0) unstable; urgency=low
+
+  * oh wow
+
+ -- James Cameron <quozl@us.netrek.org>  Tue, 28 Feb 2006 12:26:09 +1100
+
+netrek-client-cow (3.01pl0-2) unstable; urgency=low
+
+  * At compile time figure out what RSA key to build against
+  * Created find-key.sh 
+
+ -- Robert J. Tanner <tanner@real-time.com>  Wed,  1 Feb 2006 02:20:12 -0600
+
+netrek-client-cow (3.01pl0-1) unstable; urgency=low
+
+  * Initial release
+
+ -- Robert J. Tanner <tanner@real-time.com>  Fri, 27 Jan 2006 01:37:21 -0600
+
