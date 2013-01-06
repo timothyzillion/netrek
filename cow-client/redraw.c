@@ -27,6 +27,8 @@
 #include "local.h"
 #include "map.h"
 
+#include "borg.h"
+
 void    redrawTstats(void);
 
 
@@ -133,6 +135,7 @@ redraw(void)
 #endif
 
   local();           /* redraw local window */
+  borg_update(me, torps, plasmatorps, set_course, set_speed, shield_up, shield_down, repair, repair_off);
 
   /* XFIX */
   W_FlushLineCaches(w);

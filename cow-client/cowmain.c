@@ -1,3 +1,4 @@
+
 /* main.c
  *
  * $Log: cowmain.c,v $
@@ -144,6 +145,8 @@
 #include "playerlist.h"
 #include "parsemeta.h"
 #include "map.h"
+
+#include "borg.h"
 
 void    initCensoring();
 
@@ -681,6 +684,8 @@ int     cowmain(char *server, int port, char *name)
   i = setjmp(env);         /* Error while initializing */
   if (i >= RETURNBASE)
     return (i - RETURNBASE);       /* Terminate with retcode */
+
+  borg_init();
 
 #ifdef GATEWAY
   /* restrict this client to certain machines */

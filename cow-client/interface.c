@@ -1,3 +1,4 @@
+
 /* interface.c
  *
  * This file will include all the interfaces between the input routines and the
@@ -29,16 +30,19 @@
 #include "data.h"
 #include "packets.h"
 
+void
 set_speed(int speed)
 {
   sendSpeedReq(speed);
 }
 
+void
 set_course(unsigned char dir)
 {
   sendDirReq(dir);
 }
 
+void
 shield_up(void)
 {
   if (!(me->p_flags & PFSHIELD))
@@ -47,6 +51,7 @@ shield_up(void)
     }
 }
 
+void
 shield_down(void)
 {
   if (me->p_flags & PFSHIELD)
@@ -55,6 +60,7 @@ shield_down(void)
     }
 }
 
+void
 shield_tog(void)
 {
   if (me->p_flags & PFSHIELD)
@@ -67,6 +73,7 @@ shield_tog(void)
     }
 }
 
+void
 bomb_planet(void)
 {
   if (!(me->p_flags & PFBOMB))
@@ -75,6 +82,7 @@ bomb_planet(void)
     }
 }
 
+void
 beam_up(void)
 {
   if (!(me->p_flags & PFBEAMUP))
@@ -83,6 +91,7 @@ beam_up(void)
     }
 }
 
+void
 beam_down(void)
 {
   if (!(me->p_flags & PFBEAMDOWN))
@@ -91,6 +100,7 @@ beam_down(void)
     }
 }
 
+void
 repair(void)
 {
   if (!(me->p_flags & PFREPAIR))
@@ -99,6 +109,7 @@ repair(void)
     }
 }
 
+void
 repair_off(void)
 {
   if (me->p_flags & PFREPAIR)
@@ -113,6 +124,7 @@ repeat_message(void)
   lastm = 0;
 }
 
+void
 cloak(void)
 {
   if (me->p_flags & PFCLOAK)
@@ -125,6 +137,7 @@ cloak(void)
     }
 }
 
+void
 cloak_on(void)
 {
   if (!(me->p_flags & PFCLOAK))
@@ -133,6 +146,7 @@ cloak_on(void)
     }
 }
 
+void
 cloak_off(void)
 {
   if (me->p_flags & PFCLOAK)

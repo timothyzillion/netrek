@@ -63,7 +63,7 @@ RANDOMOBJ       = @LIBOBJS@
 include $(KEYDEF)
 
 
-ROBJ 		= check.o colors.o data.o death.o defaults.o dmessage.o\
+ROBJ 		= borg.o check.o colors.o data.o death.o defaults.o dmessage.o\
                   enter.o findslot.o getname.o getship.o helpwin.o inform.o\
                   interface.o newwin.o option.o planetlist.o macrowin.o\
 	          map.o playerlist.o ranklist.o reserved.o sintab.o\
@@ -74,7 +74,7 @@ ROBJ 		= check.o colors.o data.o death.o defaults.o dmessage.o\
 		  docwin.o cflags.o beeplite.o feature.o\
 		  string_util.o local.o censor.o cowmain.o camera.o
 
-RSRC 		= check.c colors.c data.c death.c defaults.c dmessage.c\
+RSRC 		= borg.c check.c colors.c data.c death.c defaults.c dmessage.c\
 	          enter.c findslot.c getname.c getship.c helpwin.c inform.c\
 	          input.c interface.c newwin.c option.c planetlist.c\
                   macrowin.c map.c playerlist.c ranklist.c redraw.c\
@@ -86,7 +86,7 @@ RSRC 		= check.c colors.c data.c death.c defaults.c dmessage.c\
 		  string_util.c local.c censor.c cowmain.c camera.c
 
 
-INCLUDES 	= struct.h packets.h defs.h copyright.h bitmaps.h data.h\
+INCLUDES 	= borg.h struct.h packets.h defs.h copyright.h bitmaps.h data.h\
 	          oldbitmaps.h tngbitmaps.h hullbitmaps.h rabbitbitmaps.h\
 		  sound.h audio.h litebitmaps.h 
 

@@ -1,3 +1,4 @@
+
 /* input.c
  *
  * $Log: input.c,v $
@@ -123,6 +124,8 @@
 #include "playerlist.h"
 #include "spopt.h"
 #include "map.h"
+
+#include "borg.h"
 
 int     detallow = 1;        /* flag used to figure out *
 
@@ -2587,15 +2590,7 @@ Key125(void)
 
 /* ~ */
 Key126(W_Event * data) {
-
-#ifdef SOUND
-  if ((soundWin != NULL) && W_IsMapped(soundWin))
-    sounddone();
-  else
-    soundwindow();
-#else
-  emptyKey();
-#endif
+  borg_toggle();
 }
 
 Key127(W_Event * data)
