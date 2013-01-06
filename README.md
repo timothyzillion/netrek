@@ -8,6 +8,10 @@ BSD-sockets, cryptographic signatures, network protocols, strategy, dogfighting,
 
 In the mid-1990s, I played a lot of "Paradise" netrek: a variant which introduced some new strategy elements that I really liked (jumpships especially).
 
-**
+http://www.netrek.org/developer/design.html
 
-Reading this code now is strange. Lots of pre-ANSI C, and general cruftiness. I am fairly fussy about the readability of code; and it is hard to believe that this source was one of the first "large projects" that I read (and had remembered as "well written").
+----
+
+On my Mac the config script happily finds the X11 includes, but (since it is looking for libX11.a) fails to find the libs:
+
+(cd cow-client; ./configure --x-libraries=/usr/X11/lib)
