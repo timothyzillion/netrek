@@ -42,7 +42,7 @@ warning(char *text)
   if (doPhaser && phaserShowStats)
     {
       sprintf(newtext, "%s [%2d%%]", text,
-	      phaserStatTry ? (phaserStatHit * 100) / phaserStatTry : 0);
+        phaserStatTry ? (phaserStatHit * 100) / phaserStatTry : 0);
       warncount += 6;
       W_WriteText(warnw, 5, 5, textColor, newtext, warncount, W_RegularFont);
     }
@@ -50,8 +50,8 @@ warning(char *text)
 #endif
 
     W_WriteText(warnw, 5, 5, textColor, text, warncount, W_RegularFont);
-  warntimer = udcounter + WARNTIME;		 /* set the line to be * *
-						  * cleared */
+  warntimer = udcounter + WARNTIME;    /* set the line to be * *
+              * cleared */
 
 
   if (logmess || doPhaser)
@@ -61,52 +61,52 @@ warning(char *text)
 
 #ifdef PHASER_STATS
       sprintf(newtext, "%.100s %02d:%02d:%02d",
-	      (doPhaser && phaserShowStats) ? newtext : text, tm->tm_hour,
+        (doPhaser && phaserShowStats) ? newtext : text, tm->tm_hour,
 #else
       sprintf(newtext, "%.100s %02d:%02d:%02d", text, tm->tm_hour,
 #endif
 
-	      tm->tm_min, tm->tm_sec);
+        tm->tm_min, tm->tm_sec);
       warncount = (warncount > 100) ? 109 : warncount + 9;
 
       if (logmess)
-	{
-	  if (logFile != NULL)
-	    {
-	      fprintf(logFile, "%s\n", newtext);
-	      fflush(logFile);
-	    }
-	  else
-	    puts(newtext);
-	}
+  {
+    if (logFile != NULL)
+      {
+        fprintf(logFile, "%s\n", newtext);
+        fflush(logFile);
+      }
+    else
+      puts(newtext);
+  }
 
       if (doPhaser)
-	{
-	  W_WriteText(phaserwin, 0, 0, textColor, newtext, warncount, 0);
-	  switch (showPhaser)
-	    {
-	      /* 0 -- none 1 -- review all 2 -- review team 3 -- review indiv
-	       * * 4 -- review kill 5 -- total */
-	    case 0:
-	      break;
-	    case 1:
-	      W_WriteText(messwa, 0, 0, textColor, newtext, warncount, 0);
-	      break;
-	    case 2:
-	      W_WriteText(messwt, 0, 0, textColor, newtext, warncount, 0);
-	      break;
-	    case 3:
-	      W_WriteText(messwi, 0, 0, textColor, newtext, warncount, 0);
-	      break;
-	    case 4:
-	      W_WriteText(messwk, 0, 0, textColor, newtext, warncount, 0);
-	      break;
-	    case 5:
-	      W_WriteText(reviewWin, 0, 0, textColor, newtext, warncount, 0);
-	      break;
-	    default:
-	      break;
-	    }
-	}
+  {
+    W_WriteText(phaserwin, 0, 0, textColor, newtext, warncount, 0);
+    switch (showPhaser)
+      {
+        /* 0 -- none 1 -- review all 2 -- review team 3 -- review indiv
+         * * 4 -- review kill 5 -- total */
+      case 0:
+        break;
+      case 1:
+        W_WriteText(messwa, 0, 0, textColor, newtext, warncount, 0);
+        break;
+      case 2:
+        W_WriteText(messwt, 0, 0, textColor, newtext, warncount, 0);
+        break;
+      case 3:
+        W_WriteText(messwi, 0, 0, textColor, newtext, warncount, 0);
+        break;
+      case 4:
+        W_WriteText(messwk, 0, 0, textColor, newtext, warncount, 0);
+        break;
+      case 5:
+        W_WriteText(reviewWin, 0, 0, textColor, newtext, warncount, 0);
+        break;
+      default:
+        break;
+      }
+  }
     }
 }

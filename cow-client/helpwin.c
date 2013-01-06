@@ -1,4 +1,3 @@
-
 /* helpwin.c copyright 1991 ERic mehlhaff Free to use, hack, etc. Just keep
  * these credits here. Use of this code may be dangerous to your health
  * and/or system. Its use is at your own risk. I assume no responsibility for
@@ -35,29 +34,29 @@
 /* this is a set of routines that makes up a multi column help window, * and
  * shows just what the keymaps current keymap representation of the * keys
  * are. *
- * 
+ *
  * fillhelp() handles the filling in if the strings for the help window *
  * update_Help_to_Keymap() checks the keymap and sets it up in hte * help
  * window. *
- * 
- * 
- * 
+ *
+ *
+ *
  * Format for each entry is follows: * first character is the hard-coded
  * character representation for the key * in the keymap.  Useful for when you
  * re-key things. This  could confuse * people who do'nt know the keymap
  * format. *
- * 
+ *
  * the next few spaces are either spaces or  keys that also do that * function.
  * Note that if you have more than 3 keys set to do the same * thing, they
  * will not be displayed. * So, you could, I suppose map everything to 'Q'
  * and it would not * show, but that's a pretty bizarre situation. *
- * 
- * 
- * 
+ *
+ *
+ *
  * Bugs & Comments: * You have to be sure that helpWin is defined to be big
  * enough to handle * all the messages.  That's pretty much a trial&error
  * by-hand thing * at this point *
- * 
+ *
  */
 
 
@@ -66,7 +65,7 @@
  * functions */
 void    update_Help_to_Keymap(char *helpmessage);
 
-#define HELPMESSAGES	(sizeof(help_message)/ sizeof(char *))
+#define HELPMESSAGES  (sizeof(help_message)/ sizeof(char *))
 /* this is the number of help messages there are */
 
 char   *help_message[] =
@@ -146,7 +145,7 @@ char   *help_message[] =
   "`     Packet window on/off",
   "-     Update small",
   "|     Update medium",
-#endif						 /* SHORT_PACKETS */
+#endif             /* SHORT_PACKETS */
 
   "      (space) special windows off",
 
@@ -182,27 +181,27 @@ void
   for (column = 0; column < 4; column++)
     {
       for (row = 1; row < HELPMESSAGES / 4 + 1; row++)
-	{
-	  if (help_message[i] == 0)
-	    break;
-	  else
-	    {
-	      STRNCPY(helpmessage, help_message[i], sizeof(helpmessage));
-	      update_Help_to_Keymap(helpmessage);
-	      W_WriteText(helpWin, MAXHELP * column, row - 1, textColor,
-			  helpmessage, strlen(helpmessage), W_RegularFont);
-	      i++;
-	    }
-	}
+  {
+    if (help_message[i] == 0)
+      break;
+    else
+      {
+        STRNCPY(helpmessage, help_message[i], sizeof(helpmessage));
+        update_Help_to_Keymap(helpmessage);
+        W_WriteText(helpWin, MAXHELP * column, row - 1, textColor,
+        helpmessage, strlen(helpmessage), W_RegularFont);
+        i++;
+      }
+  }
       if (help_message[i] == 0)
-	break;
+  break;
     }
 }
 
 
 /* this takes the help messages and puts in the keymap, so the player can see
  * just what does  what!
- * 
+ *
  * ordinary format:       "U     Show rankings window", translatedd here to "[
  * sE  Computer options window", */
 void
@@ -228,16 +227,16 @@ void
   for (i = 0; i < 96; i++)
     {
       if (mystats->st_keymap[i] != key)
-	continue;
+  continue;
       if (i + 32 == key)
-	continue;				 /* it's already there! don't
-						  * * * add it! */
+  continue;        /* it's already there! don't
+              * * * add it! */
 
       /* we've found a key mapped to key! */
       /* the key is i+32 */
       num_mapped++;
       if (num_mapped > 3)
-	continue;				 /* we've found too many! */
+  continue;        /* we've found too many! */
 
       /* put the key in the string */
       helpmessage[1 + num_mapped] = i + 32;

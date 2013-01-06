@@ -1,4 +1,3 @@
-
 /* death.c
  *
  * $Log: death.c,v $
@@ -63,7 +62,7 @@ death(void)
   if (oldalert != PFGREEN)
     {
       if (extraBorder)
-	W_ChangeBorder(oldw, gColor);
+  W_ChangeBorder(oldw, gColor);
       W_ChangeBorder(baseWin, gColor);
       oldalert = PFGREEN;
     }
@@ -95,9 +94,9 @@ death(void)
        * * anyway */
 
       sprintf(deathmessage, "Congratulations, You have scummed up to %s",
-	      ranks[mystats->st_rank].name);
+        ranks[mystats->st_rank].name);
       W_WriteText(w, 50, 100, W_Yellow, deathmessage, strlen(deathmessage),
-		  W_BoldFont);
+      W_BoldFont);
       promoted = 0;
     }
 
@@ -111,45 +110,45 @@ death(void)
       break;
     case KTORP:
       sprintf(deathmessage,
-	      "You were thumped by a photon torpedo from %s (%c%c).",
-	      players[me->p_whodead].p_name,
-	      teamlet[players[me->p_whodead].p_team],
-	      shipnos[me->p_whodead]);
+        "You were thumped by a photon torpedo from %s (%c%c).",
+        players[me->p_whodead].p_name,
+        teamlet[players[me->p_whodead].p_team],
+        shipnos[me->p_whodead]);
       break;
     case KPLASMA:
       sprintf(deathmessage,
-	      "You were SMACKed by a plasma torpedo from %s (%c%c) ",
-	      players[me->p_whodead].p_name,
-	      teamlet[players[me->p_whodead].p_team],
-	      shipnos[me->p_whodead]);
+        "You were SMACKed by a plasma torpedo from %s (%c%c) ",
+        players[me->p_whodead].p_name,
+        teamlet[players[me->p_whodead].p_team],
+        shipnos[me->p_whodead]);
       break;
     case KPHASER:
       sprintf(deathmessage,
-	      "You were phasered to death by %s (%c%c)",
-	      players[me->p_whodead].p_name,
-	      teamlet[players[me->p_whodead].p_team],
-	      shipnos[me->p_whodead]);
+        "You were phasered to death by %s (%c%c)",
+        players[me->p_whodead].p_name,
+        teamlet[players[me->p_whodead].p_team],
+        shipnos[me->p_whodead]);
       break;
     case KPLANET:
       sprintf(deathmessage, "You were killed by planetary fire from %s (%c)",
-	      planets[me->p_whodead].pl_name,
-	      teamlet[planets[me->p_whodead].pl_owner]);
+        planets[me->p_whodead].pl_name,
+        teamlet[planets[me->p_whodead].pl_owner]);
       break;
     case KSHIP:
       sprintf(deathmessage, "You were killed by the explosion of %s (%c%c)",
-	      players[me->p_whodead].p_name,
-	      teamlet[players[me->p_whodead].p_team],
-	      shipnos[me->p_whodead]);
+        players[me->p_whodead].p_name,
+        teamlet[players[me->p_whodead].p_team],
+        shipnos[me->p_whodead]);
       break;
     case KDAEMON:
       strcpy(deathmessage, "You were killed by a dying daemon.");
       break;
     case KWINNER:
       sprintf(deathmessage, "Galaxy has been conquered by %s (%c%c) %s",
-	      players[me->p_whodead].p_name,
-	      teamlet[players[me->p_whodead].p_team],
-	      shipnos[players[me->p_whodead].p_no],
-	      teamstring[players[me->p_whodead].p_team]);
+        players[me->p_whodead].p_name,
+        teamlet[players[me->p_whodead].p_team],
+        shipnos[players[me->p_whodead].p_no],
+        teamstring[players[me->p_whodead].p_team]);
       deathFont = W_BoldFont;
 
 #ifdef HAVE_XPM
@@ -162,10 +161,10 @@ death(void)
       break;
     case KGENOCIDE:
       sprintf(deathmessage, "You were GENOCIDED by %s (%c%c) %s. You suck!",
-	      players[me->p_whodead].p_name,
-	      teamlet[players[me->p_whodead].p_team],
-	      shipnos[me->p_whodead],
-	      teamstring[players[me->p_whodead].p_team]);
+        players[me->p_whodead].p_name,
+        teamlet[players[me->p_whodead].p_team],
+        shipnos[me->p_whodead],
+        teamstring[players[me->p_whodead].p_team]);
       deathFont = W_BoldFont;
       break;
     case KPROVIDENCE:
@@ -185,12 +184,12 @@ death(void)
       break;
     default:
       strcpy(deathmessage,
-	     "You were killed by something unknown to this game?");
+       "You were killed by something unknown to this game?");
       break;
     }
 
   W_WriteText(w, 50, 80, textColor, deathmessage, strlen(deathmessage),
-	      deathFont);
+        deathFont);
 
   w = oldw;
 
@@ -216,9 +215,9 @@ death(void)
 
 updatedeath(void)
 {
-  if (deathFont != W_BoldFont)			 /* Initialise deathFont */
+  if (deathFont != W_BoldFont)       /* Initialise deathFont */
     deathFont = W_RegularFont;
 
   W_WriteText(w, 50, 80, textColor, deathmessage, strlen(deathmessage),
-	      deathFont);
+        deathFont);
 }

@@ -1,7 +1,7 @@
 /* cowapi.h    -- The COW Aplication interface */
 
 /* Copyright (c) 1996   Kurt Siegl
- * 
+ *
  * Permission to use, copy, modify, and distribute this software and its
  * documentation for any purpose and without fee is hereby granted, provided
  * that the above copyright notice appear in all copies and that both that
@@ -15,7 +15,7 @@
  * $Log: cowapi.h,v $
  * Revision 1.5  2001/04/28 04:03:56  quozl
  * change -U to also adopt a local port number for TCP mode.
- * 		-- Benjamin `Quisar' Lerman  <quisar@quisar.ambre.net>
+ *    -- Benjamin `Quisar' Lerman  <quisar@quisar.ambre.net>
  *
  * Revision 1.4  2000/05/19 14:24:52  jeffno
  * Improvements to playback.
@@ -74,7 +74,7 @@ extern char pseudo[PSEUDOSIZE];
 extern char defpasswd[PSEUDOSIZE];
 extern char login[PSEUDOSIZE];
 
-extern int baseLocalPort; 
+extern int baseLocalPort;
 extern int log_packets;
 
 extern int ghoststart;

@@ -1,16 +1,15 @@
-
 #include "config.h"
 /* Feature.c
- * 
+ *
  * March, 1994.    Joe Rumsey, Tedd Hadley
- * 
+ *
  * most of the functions needed to handle SP_FEATURE/CP_FEATURE packets.  fill
  * in the features list below for your client, and add a call to
  * reportFeatures just before the RSA response is sent. handleFeature should
  * just call checkFeature, which will search the list and set the appropriate
  * variable.  features unknown to the server are set to the desired value for
  * client features, and off for server/client features.
- * 
+ *
  * feature packets look like:
  *
  * $Log: feature.c,v $
@@ -60,13 +59,13 @@ struct feature_cpacket
 struct feature
   {
     char   *name;
-    int    *var;				 /* holds allowed/enabled * * 
-						  * status */
-    char    feature_type;			 /* 'S' or 'C' for * *
-						  * server/client */
-    int     value;				 /* desired status */
-    char   *arg1, *arg2;			 /* where to copy args, if *
-						  * * non-null */
+    int    *var;         /* holds allowed/enabled * *
+              * status */
+    char    feature_type;      /* 'S' or 'C' for * *
+              * server/client */
+    int     value;         /* desired status */
+    char   *arg1, *arg2;       /* where to copy args, if *
+              * * non-null */
   };
 
 static int _dummy;
@@ -147,8 +146,8 @@ void
 #endif
 
   sprintf(buf, "%s: %s(%d)", &packet->name[0],
-	  ((value == 1) ? "ON" : (value == 0) ? "OFF" : "UNKNOWN"),
-	  value);
+    ((value == 1) ? "ON" : (value == 0) ? "OFF" : "UNKNOWN"),
+    value);
 
 #ifdef TOOLS
   W_WriteText(toolsWin, 0, 0, textColor, buf, strlen(buf), W_RegularFont);
@@ -159,19 +158,19 @@ void
   for (i = 0; features[i].name != 0; i++)
     {
       if (strcmpi(packet->name, features[i].name) == 0)
-	{
-	  /* if server returns unknown, set to off for server mods, desired * 
-	   * 
-	   * * value for client mods. Otherwise,  set to value from server. */
-	  *features[i].var = (value == -1 ?
-		 (features[i].feature_type == 'S' ? 0 : features[i].value) :
-			      value);
-	  if (features[i].arg1)
-	    *features[i].arg1 = packet->arg1;
-	  if (features[i].arg2)
-	    *features[i].arg2 = packet->arg2;
-	  break;
-	}
+  {
+    /* if server returns unknown, set to off for server mods, desired *
+     *
+     * * value for client mods. Otherwise,  set to value from server. */
+    *features[i].var = (value == -1 ?
+     (features[i].feature_type == 'S' ? 0 : features[i].value) :
+            value);
+    if (features[i].arg1)
+      *features[i].arg1 = packet->arg1;
+    if (features[i].arg2)
+      *features[i].arg2 = packet->arg2;
+    break;
+  }
     }
   if (features[i].name == 0)
     {
@@ -184,12 +183,12 @@ void
 #ifdef HAVE_XPM
   if (strcmpi(packet->name, "FEATURE_PACKETS") == 0)
     {
-      if (value == -1)				 /* Features Unknown ... turn 
-						  * 
-						  * * off */
-	F_agri_pix = 0;				 /* AGRI pixmaps just in case 
-						  * 
-						  */
+      if (value == -1)         /* Features Unknown ... turn
+              *
+              * * off */
+  F_agri_pix = 0;        /* AGRI pixmaps just in case
+              *
+              */
     }
 #endif
 
@@ -200,74 +199,74 @@ void
   if ((strcmpi(packet->name, "BEEPLITE") == 0))
     {
       switch (value)
-	{
-	case -1:				 /* Unknown, we can use all * 
-						  * 
-						  * * of the features! */
+  {
+  case -1:         /* Unknown, we can use all *
+              *
+              * * of the features! */
 
 #ifdef STABLE
-	  /* Stable release is absolutely non borgish */
-	  F_beeplite_flags =
-	      LITE_SOUNDS |
-	      LITE_TTS;
+    /* Stable release is absolutely non borgish */
+    F_beeplite_flags =
+        LITE_SOUNDS |
+        LITE_TTS;
 #else
-	  F_beeplite_flags = LITE_PLAYERS_MAP |
-	      LITE_PLAYERS_LOCAL |
-	      LITE_SELF |
-	      LITE_PLANETS |
-	      LITE_SOUNDS |
-	      LITE_COLOR |
-	      LITE_TTS;
+    F_beeplite_flags = LITE_PLAYERS_MAP |
+        LITE_PLAYERS_LOCAL |
+        LITE_SELF |
+        LITE_PLANETS |
+        LITE_SOUNDS |
+        LITE_COLOR |
+        LITE_TTS;
 #endif
 
-	  break;
-	case 1:
-	  if (F_beeplite_flags == 0)
-	    {					 /* Server says we can have * 
-						  * 
-						  * * beeplite, but no * *
-						  * options??? must be * *
-						  * configured wrong. */
-	      F_beeplite_flags = LITE_PLAYERS_MAP |
-		  LITE_PLAYERS_LOCAL |
-		  LITE_SELF |
-		  LITE_PLANETS |
-		  LITE_SOUNDS |
-		  LITE_COLOR |
-		  LITE_TTS;
-	    }
-	  strcpy(buf, "  disabled:");
-	  if (!(F_beeplite_flags & LITE_PLAYERS_MAP))
-	    strcat(buf, " LITE_PLAYERS_MAP");
-	  if (!(F_beeplite_flags & LITE_PLAYERS_LOCAL))
-	    strcat(buf, " LITE_PLAYERS_LOCAL");
-	  if (!(F_beeplite_flags & LITE_SELF))
-	    strcat(buf, " LITE_SELF");
-	  if (!(F_beeplite_flags & LITE_PLANETS))
-	    strcat(buf, " LITE_PLANETS");
-	  if (!(F_beeplite_flags & LITE_SOUNDS))
-	    strcat(buf, " LITE_SOUNDS\n");
-	  if (!(F_beeplite_flags & LITE_COLOR))
-	    strcat(buf, " LITE_COLOR");
-	  if (!(F_beeplite_flags & LITE_TTS))
-	    strcat(buf, " LITE_TTS");
+    break;
+  case 1:
+    if (F_beeplite_flags == 0)
+      {          /* Server says we can have *
+              *
+              * * beeplite, but no * *
+              * options??? must be * *
+              * configured wrong. */
+        F_beeplite_flags = LITE_PLAYERS_MAP |
+      LITE_PLAYERS_LOCAL |
+      LITE_SELF |
+      LITE_PLANETS |
+      LITE_SOUNDS |
+      LITE_COLOR |
+      LITE_TTS;
+      }
+    strcpy(buf, "  disabled:");
+    if (!(F_beeplite_flags & LITE_PLAYERS_MAP))
+      strcat(buf, " LITE_PLAYERS_MAP");
+    if (!(F_beeplite_flags & LITE_PLAYERS_LOCAL))
+      strcat(buf, " LITE_PLAYERS_LOCAL");
+    if (!(F_beeplite_flags & LITE_SELF))
+      strcat(buf, " LITE_SELF");
+    if (!(F_beeplite_flags & LITE_PLANETS))
+      strcat(buf, " LITE_PLANETS");
+    if (!(F_beeplite_flags & LITE_SOUNDS))
+      strcat(buf, " LITE_SOUNDS\n");
+    if (!(F_beeplite_flags & LITE_COLOR))
+      strcat(buf, " LITE_COLOR");
+    if (!(F_beeplite_flags & LITE_TTS))
+      strcat(buf, " LITE_TTS");
 
-	  if (strcmp(buf, "  disabled:"))
-	    {
+    if (strcmp(buf, "  disabled:"))
+      {
 
 #ifdef TOOLS
-	      W_WriteText(toolsWin, 0, 0, textColor, buf, strlen(buf), W_RegularFont);
+        W_WriteText(toolsWin, 0, 0, textColor, buf, strlen(buf), W_RegularFont);
 #else
-	      printf("%s\n", buf);
+        printf("%s\n", buf);
 #endif
-	    }
-	  break;
-	case 0:
-	  F_beeplite_flags = 0;
-	  break;
-	default:
-	  break;
-	}
+      }
+    break;
+  case 0:
+    F_beeplite_flags = 0;
+    break;
+  default:
+    break;
+  }
     }
 #endif /* BEEPLITE */
 }
@@ -297,11 +296,11 @@ void
   for (f = features; f->name != 0; f++)
     {
       if (strcmpi(f->name, "FEATURE_PACKETS") != 0)
-	sendFeature(f->name,
-		    f->feature_type,
-		    f->value,
-		    (f->arg1 ? *f->arg1 : 0),
-		    (f->arg2 ? *f->arg2 : 0));
+  sendFeature(f->name,
+        f->feature_type,
+        f->value,
+        (f->arg1 ? *f->arg1 : 0),
+        (f->arg2 ? *f->arg2 : 0));
 
 #ifdef DEBUG
       printf("(C->S) %s (%c): %d\n", f->name, f->feature_type, f->value);

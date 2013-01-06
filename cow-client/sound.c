@@ -1,6 +1,6 @@
 /* sound.c - Sound stuff
  *
- * Moved sound cvs commit log to the end of the file 
+ * Moved sound cvs commit log to the end of the file
  */
 #include "config.h"
 
@@ -43,10 +43,10 @@ int isDirectory(char* dir) {
 /* This is probably unix specific path */
 Mix_Chunk *sounds[NUM_WAVES];
 
-#else 
+#else
 /* Each sound has a priority which controls what can override what
  * Currently these are set as follows:
- * 
+ *
  * 10: explosion
  * 9: phaser,plasma
  * 8: torp/plasma hit
@@ -91,24 +91,24 @@ static struct Sound sounds[NUM_SOUNDS + 1] =
 
 static char sound_prefix[PATH_MAX];
 static int current_sound = NO_SOUND;
-static int sound_other = 1;			 /* Play other ship's sounds? 
+static int sound_other = 1;      /* Play other ship's sounds?
 
-						  * 
-						  * 
-						  */
+              *
+              *
+              */
 #endif // Not SDL sound
 
 #if defined(HAVE_SDL)
 
 /*
- * Build the patch to the sound files 
+ * Build the patch to the sound files
  */
 char *DATAFILE(const char* wav) {
  char buf[PATH_MAX];
  strncpy(buf, sounddir, 64);
  strncat(buf, "/", 1);
  return strncat(buf, wav, 48);
-} 
+}
 
 /*
  * Load the .wave files into the sounds array
@@ -173,9 +173,9 @@ extern void Init_Sound(void) {
   if (sound_init) {
     if ((sounddir = getdefault("sounddir")) == NULL) {
       if (getenv("SOUNDDIR") != NULL) {
-	sounddir = strdup(getenv("SOUNDDIR"));
+  sounddir = strdup(getenv("SOUNDDIR"));
       } else {
-	sounddir = "./sounds";
+  sounddir = "./sounds";
       }
     }
 
@@ -197,14 +197,14 @@ extern void Init_Sound(void) {
     /* Open the audio device at 8000 Hz 8 bit Microsoft PCM */
     if (Mix_OpenAudio(8000, AUDIO_U8, 1, 512) < 0) {
       fprintf(stderr,"Mix_OpenAudio: %s\n", Mix_GetError());
-    } 
+    }
 
     /* If we successfully loaded the wav files, so shut-off sound_init and play
      * the introduction
      */
     if (loadSounds()) {
       if (Mix_PlayChannel(-1, sounds[INTRO_WAV], 0) < 0) {
-	fprintf(stderr, "Mix_PlayChannel: %s\n", Mix_GetError());
+  fprintf(stderr, "Mix_PlayChannel: %s\n", Mix_GetError());
       }
     }
 #else
@@ -232,7 +232,7 @@ extern void Play_Sound(int type) {
 #if defined(HAVE_SDL)
 
     if (!sound_init) {
-	return;
+  return;
     }
 
   if ((type >= NUM_WAVES) || (type < 0)) {
@@ -306,63 +306,63 @@ static void soundrefresh(int i) {
     } else if (i < SOUND_OTHER) {
       flag = ((sounds[i].flag == 1) ? "ON" : "OFF");
       switch (i) {
-	case CLOAK_SOUND:
-	  sprintf(buf, "Cloak sound is %s", flag);
-	  break;
-	case UNCLOAK_SOUND:
-	  sprintf(buf, "Uncloak sound is %s", flag);
-	  break;
-	case ENGINE_SOUND:
-	  sprintf(buf, "Engine sound is not supported");
-	  /* sprintf (buf, "Engine sound is %s",  flag); */
-	  break;
-	case ENTER_SHIP_SOUND:
-	  sprintf(buf, "Enter ship sound is %s", flag);
-	  break;
-	case EXPLOSION_SOUND:
-	  sprintf(buf, "Explosion sound is %s", flag);
-	  break;
-	case FIRE_TORP_SOUND:
-	  sprintf(buf, "Fire torp sound is %s", flag);
-	  break;
-	case MESSAGE_SOUND:
-	  sprintf(buf, "Message sound is %s", flag);
-	  break;
-	case PHASER_SOUND:
-	  sprintf(buf, "Phaser sound is %s", flag);
-	  break;
-	case WARNING_SOUND:
-	  sprintf(buf, "Warning sound is %s", flag);
-	  break;
-	case SHIELD_DOWN_SOUND:
-	  sprintf(buf, "Shield down  sound is %s", flag);
-	  break;
-	case SHIELD_UP_SOUND:
-	  sprintf(buf, "Shield up sound is %s", flag);
-	  break;
-	case TORP_HIT_SOUND:
-	  sprintf(buf, "Torp hit sound is %s", flag);
-	  break;
-	case SELF_DESTRUCT_SOUND:
-	  sprintf(buf, "Self destruct sound is %s", flag);
-	  break;
-	case FIRE_PLASMA_SOUND:
-	  sprintf(buf, "Fire plasma sound is %s", flag);
-	  break;
-	case PLASMA_HIT_SOUND:
-	  sprintf(buf, "Plasma hit sound is %s", flag);
-	  break;
-	}
+  case CLOAK_SOUND:
+    sprintf(buf, "Cloak sound is %s", flag);
+    break;
+  case UNCLOAK_SOUND:
+    sprintf(buf, "Uncloak sound is %s", flag);
+    break;
+  case ENGINE_SOUND:
+    sprintf(buf, "Engine sound is not supported");
+    /* sprintf (buf, "Engine sound is %s",  flag); */
+    break;
+  case ENTER_SHIP_SOUND:
+    sprintf(buf, "Enter ship sound is %s", flag);
+    break;
+  case EXPLOSION_SOUND:
+    sprintf(buf, "Explosion sound is %s", flag);
+    break;
+  case FIRE_TORP_SOUND:
+    sprintf(buf, "Fire torp sound is %s", flag);
+    break;
+  case MESSAGE_SOUND:
+    sprintf(buf, "Message sound is %s", flag);
+    break;
+  case PHASER_SOUND:
+    sprintf(buf, "Phaser sound is %s", flag);
+    break;
+  case WARNING_SOUND:
+    sprintf(buf, "Warning sound is %s", flag);
+    break;
+  case SHIELD_DOWN_SOUND:
+    sprintf(buf, "Shield down  sound is %s", flag);
+    break;
+  case SHIELD_UP_SOUND:
+    sprintf(buf, "Shield up sound is %s", flag);
+    break;
+  case TORP_HIT_SOUND:
+    sprintf(buf, "Torp hit sound is %s", flag);
+    break;
+  case SELF_DESTRUCT_SOUND:
+    sprintf(buf, "Self destruct sound is %s", flag);
+    break;
+  case FIRE_PLASMA_SOUND:
+    sprintf(buf, "Fire plasma sound is %s", flag);
+    break;
+  case PLASMA_HIT_SOUND:
+    sprintf(buf, "Plasma hit sound is %s", flag);
+    break;
+  }
     } else if (i == SOUND_OTHER) {
       if (sound_other)
-	strcpy(buf, "Other ship's sound is ON");
+  strcpy(buf, "Other ship's sound is ON");
       else
-	strcpy(buf, "Other ship's sound is OFF");
+  strcpy(buf, "Other ship's sound is OFF");
     } else if (i == SOUND_INIT) {
       if (sound_init)
-	strcpy(buf, "Restart external sound player");
+  strcpy(buf, "Restart external sound player");
       else
-	strcpy(buf, "Initialize external sound player");
+  strcpy(buf, "Initialize external sound player");
     } else if (i == SOUND_DONE) {
       strcpy(buf, "Done");
     } else {
@@ -381,30 +381,30 @@ void soundaction(W_Event * data) {
 
   if (i == SOUND_TOGGLE) {
       if (sound_init)
-	sound_toggle = (sound_toggle == 1) ? 0 : 1;
+  sound_toggle = (sound_toggle == 1) ? 0 : 1;
       soundrefresh(SOUND_TOGGLE);
       if (!sound_toggle)
-	{
-	  Abort_Sound(ENGINE_SOUND);
-	}
+  {
+    Abort_Sound(ENGINE_SOUND);
+  }
       else
-	{
-	  Play_Sound(ENGINE_SOUND);
-	}
+  {
+    Play_Sound(ENGINE_SOUND);
+  }
     }
   else if (i < SOUND_OTHER)
     {
       sounds[i].flag = (sounds[i].flag == 1) ? 0 : 1;
       if (i + OTHER_SOUND_OFFSET <= NUM_SOUNDS)
-	sounds[i + OTHER_SOUND_OFFSET].flag = sounds[i].flag;
+  sounds[i + OTHER_SOUND_OFFSET].flag = sounds[i].flag;
 
       soundrefresh(i);
       Play_Sound(i);
       if (i == MESSAGE_SOUND)
-	{
-	  for (j = MESSAGE1_SOUND; j <= MESSAGE9_SOUND; j++)
-	    sounds[j].flag = sounds[MESSAGE_SOUND].flag;
-	}
+  {
+    for (j = MESSAGE1_SOUND; j <= MESSAGE9_SOUND; j++)
+      sounds[j].flag = sounds[MESSAGE_SOUND].flag;
+  }
       /* case ENGINE: st_engine = (st_engine == 1) ? 0 : 0; soundrefresh * *
        * (ENGINE); if (st_engine && sound_toggle) { Play_Sound * *
        * (ENGINE_SOUND); } else { Abort_Sound (ENGINE_SOUND); } break; */
@@ -440,9 +440,9 @@ extern void sounddone(void) {
  *
  * $Log: sound.c,v $
  * Revision 1.10  2002/06/22 19:32:40  tanner
- * 	* sound.c: Fixed a small, if sound is off in the .netrekrc, SDL
- * 	sound still tried to play the .wav files. Forgot to initialize the
- * 	sound_init var.
+ *  * sound.c: Fixed a small, if sound is off in the .netrekrc, SDL
+ *  sound still tried to play the .wav files. Forgot to initialize the
+ *  sound_init var.
  *
  * Revision 1.9  2002/06/22 04:43:24  tanner
  * Clean up of SDL code. #ifdef'd out functions not needed in SDL.
@@ -456,79 +456,79 @@ extern void sounddone(void) {
  * Revision 1.1.1.1.2.1  2002/06/13 04:10:16  tanner
  * Wed Jun 12 22:52:13 2002  Bob Tanner  <tanner@real-time.com>
  *
- * 	* playback.c (pbmain):  Converted enter_ship.wav
+ *  * playback.c (pbmain):  Converted enter_ship.wav
  *
- * 	* input.c (Key113): Converted self_destruct.wav
+ *  * input.c (Key113): Converted self_destruct.wav
  *
- * 	* input.c (Key109): Converted message.wav
+ *  * input.c (Key109): Converted message.wav
  *
- * 	* local.c (DrawMisc): Converted warning.wav
+ *  * local.c (DrawMisc): Converted warning.wav
  *
- * 	* local.c (DrawPlasmaTorps): Converted plasma_hit.wav
+ *  * local.c (DrawPlasmaTorps): Converted plasma_hit.wav
  *
- * 	* local.c (DrawTorps): Converted torp_hit.wav
+ *  * local.c (DrawTorps): Converted torp_hit.wav
  *
- * 	* sound.h: added EXPLOSION_OTHER_WAV, PHASER_OTHER_WAV,
- * 	FIRE_TORP_OTHER. and the code to load these new sounds.
+ *  * sound.h: added EXPLOSION_OTHER_WAV, PHASER_OTHER_WAV,
+ *  FIRE_TORP_OTHER. and the code to load these new sounds.
  *
- * 	* local.c (DrawShips): Converted cloak.wav, uncloak.wav,
- * 	shield_down.wav, shield_up.wav, explosion.wav,
- * 	explosion_other.wav, phaser.wav, phaser_other.wav
+ *  * local.c (DrawShips): Converted cloak.wav, uncloak.wav,
+ *  shield_down.wav, shield_up.wav, explosion.wav,
+ *  explosion_other.wav, phaser.wav, phaser_other.wav
  *
- * 	* cowmain.c (cowmain): Converted enter_ship.wav and engine.wav
+ *  * cowmain.c (cowmain): Converted enter_ship.wav and engine.wav
  *
- * 	* sound.c: added isDirectory to check that the sounddir is
- * 	actually a directory.
+ *  * sound.c: added isDirectory to check that the sounddir is
+ *  actually a directory.
  *
  * Tue Jun 11 01:10:51 2002  Bob Tanner  <tanner@real-time.com>
  *
- * 	* system.mk.in: Added SDL_CFLAGS, SDL_CONFIG, SDL_LIBS,
- * 	SDL_MIXER_LIBS
+ *  * system.mk.in: Added SDL_CFLAGS, SDL_CONFIG, SDL_LIBS,
+ *  SDL_MIXER_LIBS
  *
- * 	* sound.c: Added HAVE_SDL wrapper, initialization of SDL system,
- * 	opening of audio device, and loading of 17 cow sounds.
+ *  * sound.c: Added HAVE_SDL wrapper, initialization of SDL system,
+ *  opening of audio device, and loading of 17 cow sounds.
  *
- * 	* cowmain.c (cowmain): HAVE_SDL wrapper to Init_Sound using SDL. I
- * 	moved the Init_Sound method to right after readdefaults() so the
- * 	intro can start playing ASAP.
+ *  * cowmain.c (cowmain): HAVE_SDL wrapper to Init_Sound using SDL. I
+ *  moved the Init_Sound method to right after readdefaults() so the
+ *  intro can start playing ASAP.
  *
- * 	* configure.in: Added AC_CANONICAL_SYSTEM, added check for SDL,
- * 	add check for SDL_mixer.
+ *  * configure.in: Added AC_CANONICAL_SYSTEM, added check for SDL,
+ *  add check for SDL_mixer.
  *
- * 	* config.h.in: add HAVE_SDL
+ *  * config.h.in: add HAVE_SDL
  *
- * 	* spike: See spike/README for details
+ *  * spike: See spike/README for details
  *
  * Revision 1.4  2002/06/13 03:58:41  tanner
  * The changes for sound are mostly isolated in local.c, just a few other changes
  * in the commit.
  *
- * 	* playback.c (pbmain):  Converted enter_ship.wav
+ *  * playback.c (pbmain):  Converted enter_ship.wav
  *
- * 	* input.c (Key113): Converted self_destruct.wav
+ *  * input.c (Key113): Converted self_destruct.wav
  *
- * 	* input.c (Key109): Converted message.wav
+ *  * input.c (Key109): Converted message.wav
  *
  * Revision 1.3  2002/06/13 03:45:19  tanner
  * Wed Jun 12 22:35:44 2002  Bob Tanner  <tanner@real-time.com>
  *
- * 	* local.c (DrawMisc): Converted warning.wav
+ *  * local.c (DrawMisc): Converted warning.wav
  *
- * 	* local.c (DrawPlasmaTorps): Converted plasma_hit.wav
+ *  * local.c (DrawPlasmaTorps): Converted plasma_hit.wav
  *
- * 	* local.c (DrawTorps): Converted torp_hit.wav
+ *  * local.c (DrawTorps): Converted torp_hit.wav
  *
- * 	* sound.h: added EXPLOSION_OTHER_WAV, PHASER_OTHER_WAV,
- * 	FIRE_TORP_OTHER. and the code to load these new sounds.
+ *  * sound.h: added EXPLOSION_OTHER_WAV, PHASER_OTHER_WAV,
+ *  FIRE_TORP_OTHER. and the code to load these new sounds.
  *
- * 	* local.c (DrawShips): Converted cloak.wav, uncloak.wav,
- * 	shield_down.wav, shield_up.wav, explosion.wav,
- * 	explosion_other.wav, phaser.wav, phaser_other.wav
+ *  * local.c (DrawShips): Converted cloak.wav, uncloak.wav,
+ *  shield_down.wav, shield_up.wav, explosion.wav,
+ *  explosion_other.wav, phaser.wav, phaser_other.wav
  *
- * 	* cowmain.c (cowmain): Converted enter_ship.wav and engine.wav
+ *  * cowmain.c (cowmain): Converted enter_ship.wav and engine.wav
  *
- * 	* sound.c: added isDirectory to check that the sounddir is
- * 	actually a directory.
+ *  * sound.c: added isDirectory to check that the sounddir is
+ *  actually a directory.
  *
  * Revision 1.2  2002/06/11 05:55:13  tanner
  * Following XP made a simple change.

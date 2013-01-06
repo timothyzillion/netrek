@@ -22,7 +22,7 @@
 /* forward decl */
 void    optionaction(W_Event * data);
 
-int     notdone;				 /* not done flag */
+int     notdone;         /* not done flag */
 
 #ifdef ROTATERACE
 static int old_rotate, old_rotate_deg;
@@ -89,10 +89,10 @@ static char *dashboardoptions[] =
 /* useful for options that are an int with a range */
 struct int_range
   {
-    int     min_value;				 /* value is >= this */
-    int     max_value;				 /* value is <= this */
-    int     increment;				 /* a click raises/lowers * * 
-						  * this amount */
+    int     min_value;         /* value is >= this */
+    int     max_value;         /* value is <= this */
+    int     increment;         /* a click raises/lowers * *
+              * this amount */
   };
 
 static char *phaserdispmess[] =
@@ -118,43 +118,43 @@ static char *phaserstatmess[] =
 struct option
   {
     int     op_num;
-    char   *op_text;				 /* text to display when on */
-    int    *op_option;				 /* variable to test/modify * 
-						  * 
-						  * * (optional) */
-    W_Window *op_targetwin;			 /* target window to * *
-						  * map/unmap (optional) */
-    char   *op_string;				 /* string to modify * *
-						  * (optional) */
-    int     op_size;				 /* size of *op_string * *
-						  * (optional) */
-    char  **op_array;				 /* array of strings to * *
-						  * switch between */
-    struct int_range *op_range;			 /* struct definint an * *
-						  * integer range option */
+    char   *op_text;         /* text to display when on */
+    int    *op_option;         /* variable to test/modify *
+              *
+              * * (optional) */
+    W_Window *op_targetwin;      /* target window to * *
+              * map/unmap (optional) */
+    char   *op_string;         /* string to modify * *
+              * (optional) */
+    int     op_size;         /* size of *op_string * *
+              * (optional) */
+    char  **op_array;        /* array of strings to * *
+              * switch between */
+    struct int_range *op_range;      /* struct definint an * *
+              * integer range option */
   };
 
 /* for the paged options menus */
 struct option_menu
   {
-    int     page_num;				 /* page number of this menu */
+    int     page_num;        /* page number of this menu */
     struct option_menu *Next;
-    struct option *menu;			 /* pointers to arrary of * * 
-						  * options */
-    int     numopt;				 /* number of options in this
-						  * * * menu page */
-    int     updated;				 /* 1 if options can be * *
-						  * changed externally */
+    struct option *menu;       /* pointers to arrary of * *
+              * options */
+    int     numopt;        /* number of options in this
+              * * * menu page */
+    int     updated;         /* 1 if options can be * *
+              * changed externally */
   };
 
 /* pointer to first entry in the options menu list */
 struct option_menu *FirstMenu = NULL;
-struct option_menu *CurrentMenu = NULL;		 /* menu currently looked at */
-int     MenuPage = 0;				 /* current menu page */
-int     MaxOptions = 0;				 /* maximum number of options
+struct option_menu *CurrentMenu = NULL;    /* menu currently looked at */
+int     MenuPage = 0;        /* current menu page */
+int     MaxOptions = 0;        /* maximum number of options
 
-						  * 
-						  * * * in all menu pages */
+              *
+              * * * in all menu pages */
 struct int_range MenuPages =
 {0, 1, 1};
 
@@ -385,11 +385,11 @@ optionwindow(void)
     {
       MaxOptions = InitOptionMenus();
       if (MaxOptions < 0)
-	{
-	  fprintf(stderr, "InitOptionMenus() error %s!\n", MaxOptions);
-	  notdone = 0;
-	  return;
-	}
+  {
+    fprintf(stderr, "InitOptionMenus() error %s!\n", MaxOptions);
+    notdone = 0;
+    return;
+  }
     }
 
   /* Create window big enough to hold option windows */
@@ -397,7 +397,7 @@ optionwindow(void)
     {
 
       optionWin = W_MakeMenu("option", TWINSIDE + 10, -BORDER + 10, OPTIONLEN,
-			     MaxOptions, baseWin, OPTIONBORDER);
+           MaxOptions, baseWin, OPTIONBORDER);
       W_SetWindowKeyDownHandler(optionWin, optionaction);
       W_SetWindowButtonHandler(optionWin, optionaction);
       W_DefineArrowCursor(optionWin);
@@ -426,7 +426,7 @@ RefreshOptions(void)
   if (option->numopt < MaxOptions)
     for (i = option->numopt; i < MaxOptions; i++)
       {
-	OptionClear(i);
+  OptionClear(i);
       }
 }
 
@@ -450,10 +450,10 @@ optionredrawtarget(W_Window win)
   for (op = CurrentMenu->menu; op->op_text; op++)
     {
       if (op->op_targetwin && win == *op->op_targetwin)
-	{
-	  optionrefresh(op);
-	  break;
-	}
+  {
+    optionrefresh(op);
+    break;
+  }
     }
 }
 
@@ -468,10 +468,10 @@ optionredrawoption(int *ip)
   for (op = CurrentMenu->menu; op->op_num >= 0; op++)
     {
       if (ip == op->op_option)
-	{
-	  optionrefresh(op);
-	  break;
-	}
+  {
+    optionrefresh(op);
+    break;
+  }
     }
 }
 
@@ -489,7 +489,7 @@ optionrefresh(register struct option *op)
       (void) sprintf(buf, op->op_text, op->op_string);
     }
   else if (op->op_array)
-    {						 /* Array of strings */
+    {            /* Array of strings */
       strcpy(buf, op->op_array[*op->op_option]);
     }
   else if (op->op_range)
@@ -502,21 +502,21 @@ optionrefresh(register struct option *op)
       if (op->op_option)
 
 #ifdef HAVE_XPM
-	if (op->op_size)			 /* Pixmap Bit Value */
-	  on = !(*op->op_option & op->op_size);
-	else
+  if (op->op_size)       /* Pixmap Bit Value */
+    on = !(*op->op_option & op->op_size);
+  else
 #endif
 
-	  on = *op->op_option;			 /* use int for status */
+    on = *op->op_option;       /* use int for status */
       else if (op->op_targetwin)
-	on = W_IsMapped(*op->op_targetwin);	 /* use window for status */
+  on = W_IsMapped(*op->op_targetwin);  /* use window for status */
       else
-	on = 1;					 /* shouldn't happen */
+  on = 1;          /* shouldn't happen */
 
       if (!on)
-	strcpy(buf, "Don't ");
+  strcpy(buf, "Don't ");
       else
-	buf[0] = '\0';
+  buf[0] = '\0';
       strcat(buf, op->op_text);
     }
 
@@ -548,168 +548,168 @@ void    optionaction(W_Event * data)
   if (op->op_string == 0)
     {
       if (data->type == W_EV_KEY)
-	return;
+  return;
     }
   else
     {
       if (data->type == W_EV_BUTTON)
-	return;
+  return;
       switch (data->key)
-	{
+  {
 
-	case '\b':				 /* delete character */
-	case '\177':
-	  cp = op->op_string;
-	  i = strlen(cp);
-	  if (i > 0)
-	    {
-	      cp += i - 1;
-	      *cp = '\0';
-	    }
-	  break;
+  case '\b':         /* delete character */
+  case '\177':
+    cp = op->op_string;
+    i = strlen(cp);
+    if (i > 0)
+      {
+        cp += i - 1;
+        *cp = '\0';
+      }
+    break;
 
-	case '\027':				 /* word erase */
-	  cp = op->op_string;
-	  i = strlen(cp);
-	  /* back up over blanks */
-	  while (--i >= 0 && isspace(cp[i]))
-	    ;
-	  i++;
-	  /* back up over non-blanks */
-	  while (--i >= 0 && !isspace(cp[i]))
-	    ;
-	  i++;
-	  cp[i] = '\0';
-	  break;
+  case '\027':         /* word erase */
+    cp = op->op_string;
+    i = strlen(cp);
+    /* back up over blanks */
+    while (--i >= 0 && isspace(cp[i]))
+      ;
+    i++;
+    /* back up over non-blanks */
+    while (--i >= 0 && !isspace(cp[i]))
+      ;
+    i++;
+    cp[i] = '\0';
+    break;
 
-	case '\025':				 /* kill line */
-	case '\030':
-	  op->op_string[0] = '\0';
-	  break;
+  case '\025':         /* kill line */
+  case '\030':
+    op->op_string[0] = '\0';
+    break;
 
-	default:				 /* add character to the list 
-						  * 
-						  */
-	  if (data->key < 32 || data->key > 127)
-	    break;
-	  cp = op->op_string;
-	  i = strlen(cp);
-	  if (i < (op->op_size - 1) && !iscntrl(data->key))
-	    {
-	      cp += i;
-	      cp[1] = '\0';
-	      cp[0] = data->key;
-	    }
-	  else
-	    W_Beep();
-	  break;
-	}
+  default:         /* add character to the list
+              *
+              */
+    if (data->key < 32 || data->key > 127)
+      break;
+    cp = op->op_string;
+    i = strlen(cp);
+    if (i < (op->op_size - 1) && !iscntrl(data->key))
+      {
+        cp += i;
+        cp[1] = '\0';
+        cp[0] = data->key;
+      }
+    else
+      W_Beep();
+    break;
+  }
     }
 
   /* Toggle int, if it exists */
   if (op->op_array)
     {
       if (data->key == W_RBUTTON)
-	{
-	  (*op->op_option)++;
-	  if (*(op->op_array)[*op->op_option] == '\0')
-	    {
-	      *op->op_option = 0;
-	    }
-	}
+  {
+    (*op->op_option)++;
+    if (*(op->op_array)[*op->op_option] == '\0')
+      {
+        *op->op_option = 0;
+      }
+  }
       else if (data->key == W_MBUTTON)
-	{
-	  /* set option number to zero on the middle key to ease shutoff */
-	  *op->op_option = 0;
-	}
+  {
+    /* set option number to zero on the middle key to ease shutoff */
+    *op->op_option = 0;
+  }
       else if (data->key == W_LBUTTON)
-	{
-	  /* if left button, decrease option  */
-	  (*op->op_option)--;
-	  /* if decreased too far, set to top option */
-	  if (*(op->op_option) < 0)
-	    {
-	      *op->op_option = 0;
-	      while (*(op->op_array)[*op->op_option] != '\0')
-		{
-		  (*op->op_option)++;
-		}
-	      (*op->op_option)--;
-	    }
-	}
+  {
+    /* if left button, decrease option  */
+    (*op->op_option)--;
+    /* if decreased too far, set to top option */
+    if (*(op->op_option) < 0)
+      {
+        *op->op_option = 0;
+        while (*(op->op_array)[*op->op_option] != '\0')
+    {
+      (*op->op_option)++;
+    }
+        (*op->op_option)--;
+      }
+  }
 
 
       /* Actions to be taken when certain options are selected. (Yes, this is
        * * * a hack). */
 
       if (op->op_option == &plistStyle)
-	{
-	  if (plistCustomLayout == 0 && plistStyle == 0)
-	    plistStyle = (data->key == W_LBUTTON) ? PLISTLASTSTYLE : 1;
+  {
+    if (plistCustomLayout == 0 && plistStyle == 0)
+      plistStyle = (data->key == W_LBUTTON) ? PLISTLASTSTYLE : 1;
 
-	  RedrawPlayerList();
-	}
+    RedrawPlayerList();
+  }
       else if (op->op_option == &showgalactic)
-	{
-	  redrawall = 1;
-	}
+  {
+    redrawall = 1;
+  }
 
 #ifdef ROTATERACE
       else if (rotate != old_rotate)
-	{
-	  register i;
-	  register struct planet *l;
-	  register struct player *j;
+  {
+    register i;
+    register struct planet *l;
+    register struct player *j;
 
-	  redrawall = 1;
-	  reinitPlanets = 1;
+    redrawall = 1;
+    reinitPlanets = 1;
 
-	  for (i = 0, l = planets; i < MAXPLANETS; i++, l++)
-	    {
-	      if (rotate)
-		{
-		  rotate_deg = -old_rotate_deg + rotate * 64;
-		  rotate_coord(&l->pl_x, &l->pl_y, rotate_deg, GWIDTH / 2, GWIDTH / 2);
-		  rotate_deg = rotate * 64;
-		}
-	      else
-		{
-		  rotate_deg = -old_rotate_deg;
-		  rotate_coord(&l->pl_x, &l->pl_y, rotate_deg, GWIDTH / 2, GWIDTH / 2);
-		  rotate_deg = 0;
-		}
-	    }
+    for (i = 0, l = planets; i < MAXPLANETS; i++, l++)
+      {
+        if (rotate)
+    {
+      rotate_deg = -old_rotate_deg + rotate * 64;
+      rotate_coord(&l->pl_x, &l->pl_y, rotate_deg, GWIDTH / 2, GWIDTH / 2);
+      rotate_deg = rotate * 64;
+    }
+        else
+    {
+      rotate_deg = -old_rotate_deg;
+      rotate_coord(&l->pl_x, &l->pl_y, rotate_deg, GWIDTH / 2, GWIDTH / 2);
+      rotate_deg = 0;
+    }
+      }
 
-	  /* we could wait for the server to do this but looks better if we * 
-	   * 
-	   * * do it now. */
-	  for (i = 0, j = players; i < MAXPLAYER; i++, j++)
-	    {
-	      if (j->p_status != PALIVE)
-		continue;
-	      if (rotate)
-		{
-		  rotate_deg = -old_rotate_deg + rotate * 64;
-		  rotate_coord(&j->p_x, &j->p_y, rotate_deg,
-			       GWIDTH / 2, GWIDTH / 2);
-		  rotate_dir(&j->p_dir, rotate_deg);
+    /* we could wait for the server to do this but looks better if we *
+     *
+     * * do it now. */
+    for (i = 0, j = players; i < MAXPLAYER; i++, j++)
+      {
+        if (j->p_status != PALIVE)
+    continue;
+        if (rotate)
+    {
+      rotate_deg = -old_rotate_deg + rotate * 64;
+      rotate_coord(&j->p_x, &j->p_y, rotate_deg,
+             GWIDTH / 2, GWIDTH / 2);
+      rotate_dir(&j->p_dir, rotate_deg);
 
-		  rotate_deg = rotate * 64;
-		}
-	      else
-		{
-		  rotate_deg = -old_rotate_deg;
-		  rotate_coord(&j->p_x, &j->p_y, rotate_deg,
-			       GWIDTH / 2, GWIDTH / 2);
-		  rotate_dir(&j->p_dir, rotate_deg);
-		  rotate_deg = 0;
-		}
-	    }
-	  /* phasers/torps/etc .. wait for server */
+      rotate_deg = rotate * 64;
+    }
+        else
+    {
+      rotate_deg = -old_rotate_deg;
+      rotate_coord(&j->p_x, &j->p_y, rotate_deg,
+             GWIDTH / 2, GWIDTH / 2);
+      rotate_dir(&j->p_dir, rotate_deg);
+      rotate_deg = 0;
+    }
+      }
+    /* phasers/torps/etc .. wait for server */
 
-	  old_rotate = rotate;
-	  old_rotate_deg = rotate_deg;
-	}
+    old_rotate = rotate;
+    old_rotate_deg = rotate_deg;
+  }
 #endif
 
     }
@@ -720,22 +720,22 @@ void    optionaction(W_Event * data)
   else if (op->op_range)
     {
       if (data->key == W_RBUTTON)
-	{
-	  (*op->op_option) += op->op_range->increment;
-	}
+  {
+    (*op->op_option) += op->op_range->increment;
+  }
       else if (data->key == W_MBUTTON)
-	{
-	  (*op->op_option) = op->op_range->min_value;
-	}
+  {
+    (*op->op_option) = op->op_range->min_value;
+  }
       else if (data->key == W_LBUTTON)
-	{
-	  (*op->op_option) -= op->op_range->increment;
-	}
+  {
+    (*op->op_option) -= op->op_range->increment;
+  }
       /* wrap value around within option range */
       if (*(op->op_option) > op->op_range->max_value)
-	*(op->op_option) = op->op_range->min_value;
+  *(op->op_option) = op->op_range->min_value;
       if (*(op->op_option) < op->op_range->min_value)
-	*(op->op_option) = op->op_range->max_value;
+  *(op->op_option) = op->op_range->max_value;
     }
 
 
@@ -747,12 +747,12 @@ void    optionaction(W_Event * data)
   else if ((op->op_option) && (op->op_size))
     {
       if (!(pixMissing & op->op_size))
-	{
-	  *op->op_option ^= op->op_size;
+  {
+    *op->op_option ^= op->op_size;
 
-	  if (op->op_size & (NO_MAP_PIX | NO_BG_PIX | NO_HALOS))
-	    redrawall = 1;
-	}
+    if (op->op_size & (NO_MAP_PIX | NO_BG_PIX | NO_HALOS))
+      redrawall = 1;
+  }
     }
 #endif
 
@@ -764,13 +764,13 @@ void    optionaction(W_Event * data)
        * * is a hack). */
 
       if (op->op_option == &showPlanetOwner)
-	redrawall = 1;
+  redrawall = 1;
       else if (op->op_option == &partitionPlist)
-	RedrawPlayerList();
+  RedrawPlayerList();
       else if (op->op_option == &sortPlayers)
-	RedrawPlayerList();
+  RedrawPlayerList();
       else if (op->op_option == &sortMyTeamFirst)
-	RedrawPlayerList();
+  RedrawPlayerList();
     }
 
   /* Map/unmap window, if it exists */
@@ -778,38 +778,38 @@ void    optionaction(W_Event * data)
   if (op->op_targetwin)
     {
       if (W_IsMapped(*op->op_targetwin))
-	W_UnmapWindow(*op->op_targetwin);
+  W_UnmapWindow(*op->op_targetwin);
       else
-	{
-	  W_MapWindow(*op->op_targetwin);
+  {
+    W_MapWindow(*op->op_targetwin);
 
-	  if (*op->op_targetwin == udpWin)
-	    udpwindow();
-	  if (*op->op_targetwin == pStats)
-	    redrawPStats();
-	  if (*op->op_targetwin == netstatWin)
-	    nswindow();
-	  if (*op->op_targetwin == spWin)
-	    spwindow();
+    if (*op->op_targetwin == udpWin)
+      udpwindow();
+    if (*op->op_targetwin == pStats)
+      redrawPStats();
+    if (*op->op_targetwin == netstatWin)
+      nswindow();
+    if (*op->op_targetwin == spWin)
+      spwindow();
 
 #ifdef XTREKRC_HELP
-	  if (defWin && *op->op_targetwin == defWin)
-	    showdef();
+    if (defWin && *op->op_targetwin == defWin)
+      showdef();
 #endif
 
 #ifdef SOUND
-	  if (*op->op_targetwin == soundWin)
-	    soundwindow();
+    if (*op->op_targetwin == soundWin)
+      soundwindow();
 #endif
 
 #ifdef DOC_WIN
-	  if (docwin && *op->op_targetwin == docwin)
-	    showdocs(0);
+    if (docwin && *op->op_targetwin == docwin)
+      showdocs(0);
 
-	  if (xtrekrcwin && *op->op_targetwin == xtrekrcwin)
-	    showxtrekrc(0);
+    if (xtrekrcwin && *op->op_targetwin == xtrekrcwin)
+      showxtrekrc(0);
 #endif
-	}
+  }
     }
 
   /* deal with possible menu change */
@@ -851,13 +851,13 @@ optiondone(void)
   for (str = newkeys; *str != '\0'; str += 2)
     {
       if ((*str >= 32 && *str < 127) || *str == 'O')
-	{
-	  if (*(str + 1) == '\0')
-	    break;
-	  mystats->st_keymap[*str - 32] = *(str + 1);
-	}
+  {
+    if (*(str + 1) == '\0')
+      break;
+    mystats->st_keymap[*str - 32] = *(str + 1);
+  }
       if (*(str + 1) == '\0')
-	break;
+  break;
     }
   *newkeys = '\0';
 
@@ -867,9 +867,9 @@ optiondone(void)
       lastUpdateSpeed = updatespeed;
     }
 
-  sendOptionsPacket();				 /* update server as to the * 
-						  * 
-						  * * client's options */
+  sendOptionsPacket();         /* update server as to the *
+              *
+              * * client's options */
 }
 
 /* set up menus linked list */
@@ -895,9 +895,9 @@ int
   for (i = 0, CurrentMenu = FirstMenu; CurrentMenu != NULL;
        i++, CurrentMenu = CurrentMenu->Next)
     {
-      CurrentMenu->page_num = i;		 /* repage the menus.. */
+      CurrentMenu->page_num = i;     /* repage the menus.. */
       if (CurrentMenu->numopt > maxopts)
-	maxopts = CurrentMenu->numopt;
+  maxopts = CurrentMenu->numopt;
     }
   CurrentMenu = FirstMenu;
   Menus_Range.max_value = i - 1;
@@ -929,7 +929,7 @@ AddOptMenu(struct option * NewMenu, int updated)
   else
     {
       for (i = 0, menuptr = FirstMenu; menuptr->Next != NULL; menuptr = menuptr->Next)
-	i++;
+  i++;
       menuptr->Next = newmenu;
     }
   newmenu->page_num = i;
@@ -959,8 +959,8 @@ int
 UpdateOptions(void)
 {
   if (notdone == 0)
-    return;					 /* don't update if menu * *
-						  * isn't in use */
+    return;          /* don't update if menu * *
+              * isn't in use */
   if (CurrentMenu->updated)
     RefreshOptions();
 }

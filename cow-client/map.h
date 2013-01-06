@@ -11,19 +11,19 @@
  * Revision 1.1.1.1  1998/11/01 17:24:10  siegl
  * COW 3.0 initial revision
  * */
- 
+
 #ifndef h_map
 #define h_map
-	
+
 
 /*
  *  Global Variables:
  *
- *  redrawall		-- Erase and redraw the galactic?
- *  redrawPlayer[]	-- Flag for each player on whether their position
- *				on the galactic is not out of date.
+ *  redrawall   -- Erase and redraw the galactic?
+ *  redrawPlayer[]  -- Flag for each player on whether their position
+ *        on the galactic is not out of date.
  */
- 
+
 extern int redrawall;
 extern unsigned char redrawPlayer[];
 
@@ -42,7 +42,7 @@ void map(void);
 /*
  *  Update the 'galactic' map.
  */
- 
- 
+
+
 #endif /*defined h_map */
 

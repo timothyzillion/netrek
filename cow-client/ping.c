@@ -27,33 +27,33 @@
 
 /* These are used only in pingstats.c */
 
-int     ping_iloss_sc = 0;			 /* inc % loss 0--100, server
+int     ping_iloss_sc = 0;       /* inc % loss 0--100, server
 
-						  * 
-						  * * * to client */
-int     ping_iloss_cs = 0;			 /* inc % loss 0--100, client
+              *
+              * * * to client */
+int     ping_iloss_cs = 0;       /* inc % loss 0--100, client
 
-						  * 
-						  * * * to server */
-int     ping_tloss_sc = 0;			 /* total % loss 0--100, *
+              *
+              * * * to server */
+int     ping_tloss_sc = 0;       /* total % loss 0--100, *
 
-						  * 
-						  * * server to client */
-int     ping_tloss_cs = 0;			 /* total % loss 0--100, *
+              *
+              * * server to client */
+int     ping_tloss_cs = 0;       /* total % loss 0--100, *
 
-						  * 
-						  * * client to server */
-int     ping_lag = 0;				 /* delay in ms of last ping */
-int     ping_av = 0;				 /* rt time */
-int     ping_sd = 0;				 /* std deviation */
+              *
+              * * client to server */
+int     ping_lag = 0;        /* delay in ms of last ping */
+int     ping_av = 0;         /* rt time */
+int     ping_sd = 0;         /* std deviation */
 
 static int sum, n;
 static int M, var;
 static double s2;
 
-void    handlePing(struct ping_spacket *packet)	 /* SP_PING */
+void    handlePing(struct ping_spacket *packet)  /* SP_PING */
 {
-  ping = 1;					 /* we got a ping */
+  ping = 1;          /* we got a ping */
 
   /* printf("ping received at %d (lag: %d)\n", msetime(), (int)packet->lag); */
   sendServerPingResponse((int) packet->number);
@@ -65,7 +65,7 @@ void    handlePing(struct ping_spacket *packet)	 /* SP_PING */
 
   calc_lag();
 
-  if (W_IsMapped(pStats))			 /* pstat window */
+  if (W_IsMapped(pStats))      /* pstat window */
     updatePStats();
 }
 
@@ -104,7 +104,7 @@ stopPing(void)
 }
 
 
-sendServerPingResponse(int number)		 /* CP_PING_RESPONSE */
+sendServerPingResponse(int number)     /* CP_PING_RESPONSE */
 
 {
   struct ping_cpacket packet;

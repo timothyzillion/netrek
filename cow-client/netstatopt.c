@@ -39,7 +39,7 @@ nsrefresh(int i)
 
     case NETSTAT_SWITCH:
       sprintf(buf, "%sollect network stats",
-	      netstat ? "C" : "Don't c");
+        netstat ? "C" : "Don't c");
       color = textColor;
       break;
     case NETSTAT_RESET:
@@ -82,84 +82,84 @@ void    nsaction(W_Event * data)
 
     case NETSTAT_SWITCH:
       if (data->type == W_EV_BUTTON)
-	{
-	  if (netstat)
-	    {
-	      netstat = 0;
-	      W_UnmapWindow(lMeter);
-	    }
-	  else
-	    {
-	      netstat = 1;
-	      ns_init(5);
-	    }
-	}
+  {
+    if (netstat)
+      {
+        netstat = 0;
+        W_UnmapWindow(lMeter);
+      }
+    else
+      {
+        netstat = 1;
+        ns_init(5);
+      }
+  }
       nsrefresh(NETSTAT_SWITCH);
       break;
 
     case NETSTAT_RESET:
       if (data->type == W_EV_BUTTON)
-	{
-	  ns_init(0);
-	  nsrefresh(NETSTAT_TOTAL);
-	  nsrefresh(NETSTAT_LOCAL);
-	  nsrefresh(NETSTAT_FAILURES);
-	}
+  {
+    ns_init(0);
+    nsrefresh(NETSTAT_TOTAL);
+    nsrefresh(NETSTAT_LOCAL);
+    nsrefresh(NETSTAT_FAILURES);
+  }
       break;
 
     case NETSTAT_NFTHRESH:
       if (data->type == W_EV_KEY)
-	{
-	  switch (data->key)
-	    {
-	    case '\b':
-	    case '\177':
-	      cp = ns_get_nfthresh_s();
-	      i = strlen(cp);
-	      if (i > 0)
-		{
-		  cp += i - 1;
-		  *cp = '\0';
-		}
-	      break;
-	    case '\025':
-	    case '\030':
-	      ns_set_nfthresh_s("");
-	      break;
+  {
+    switch (data->key)
+      {
+      case '\b':
+      case '\177':
+        cp = ns_get_nfthresh_s();
+        i = strlen(cp);
+        if (i > 0)
+    {
+      cp += i - 1;
+      *cp = '\0';
+    }
+        break;
+      case '\025':
+      case '\030':
+        ns_set_nfthresh_s("");
+        break;
 
-	    default:
-	      if (data->key >= '0' && data->key <= '9')
-		{
-		  cp = ns_get_nfthresh_s();
-		  i = strlen(cp);
-		  if (i < 4)
-		    {
-		      cp += i;
-		      cp[1] = '\0';
-		      cp[0] = data->key;
-		    }
-		}
-	      break;
-	    }
-	  nsrefresh(NETSTAT_NFTHRESH);
-	}
+      default:
+        if (data->key >= '0' && data->key <= '9')
+    {
+      cp = ns_get_nfthresh_s();
+      i = strlen(cp);
+      if (i < 4)
+        {
+          cp += i;
+          cp[1] = '\0';
+          cp[0] = data->key;
+        }
+    }
+        break;
+      }
+    nsrefresh(NETSTAT_NFTHRESH);
+  }
       break;
 
 
 
     case NETSTAT_DONE:
       if (data->type == W_EV_BUTTON)
-	{
-	  if (sscanf(ns_get_nfthresh_s(), "%d", &v) != 1)
-	    {
-	      ns_set_nfthresh_s(NETSTAT_DF_NFT_S);
-	      ns_set_nfthresh(NETSTAT_DF_NFT);
-	    }
-	  else
-	    ns_set_nfthresh(v);
+  {
+    if (sscanf(ns_get_nfthresh_s(), "%d", &v) != 1)
+      {
+        ns_set_nfthresh_s(NETSTAT_DF_NFT_S);
+        ns_set_nfthresh(NETSTAT_DF_NFT);
+      }
+    else
+      ns_set_nfthresh(v);
 
-	  nsdone();
-	}
+    nsdone();
+  }
       break;
     }
 }

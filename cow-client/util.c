@@ -32,10 +32,10 @@ angdist(unsigned char x, unsigned char y)
 
 /* * Find the object nearest mouse.  Returns a pointer to an * obtype
  * structure.  This is used for info and locking on. *
- * 
+ *
  * Because we are never interested in it, this function will * never return your
  * own ship as the target. *
- * 
+ *
  * Finally, this only works on the two main windows */
 
 struct obtype *
@@ -76,51 +76,51 @@ struct obtype *
   if (targtype & TARG_PLANET)
     {
       for (i = 0, k = &planets[i]; i < MAXPLANETS; i++, k++)
-	{
-	  dist = hypot((double) (x - k->pl_x), (double) (y - k->pl_y));
-	  if (dist < closedist)
-	    {
-	      _target.o_type = PLANETTYPE;
-	      _target.o_num = i;
-	      closedist = dist;
-	    }
+  {
+    dist = hypot((double) (x - k->pl_x), (double) (y - k->pl_y));
+    if (dist < closedist)
+      {
+        _target.o_type = PLANETTYPE;
+        _target.o_num = i;
+        closedist = dist;
+      }
 
-	}
+  }
     }
 
   if (targtype & (TARG_PLAYER | TARG_FRIEND | TARG_ENEMY))
     {
       for (i = 0, j = &players[i]; i < MAXPLAYER; i++, j++)
-	{
-	  if (j->p_status != PALIVE)
-	    continue;
-	  if ((j->p_flags & PFCLOAK) && (!(targtype & TARG_CLOAK)))
-	    continue;
-	  if (j == me && !(targtype & TARG_SELF))
-	    continue;
-	  friendly = friendlyPlayer(j);
-	  if (friendly && (targtype & TARG_ENEMY))
-	    continue;
-	  if (!friendly && (targtype & TARG_FRIEND))
-	    continue;
+  {
+    if (j->p_status != PALIVE)
+      continue;
+    if ((j->p_flags & PFCLOAK) && (!(targtype & TARG_CLOAK)))
+      continue;
+    if (j == me && !(targtype & TARG_SELF))
+      continue;
+    friendly = friendlyPlayer(j);
+    if (friendly && (targtype & TARG_ENEMY))
+      continue;
+    if (!friendly && (targtype & TARG_FRIEND))
+      continue;
 
-	  dist = hypot((double) (x - j->p_x), (double) (y - j->p_y));
-	  if (dist < closedist)
-	    {
-	      _target.o_type = PLAYERTYPE;
-	      _target.o_num = i;
-	      closedist = dist;
-	    }
-	}
+    dist = hypot((double) (x - j->p_x), (double) (y - j->p_y));
+    if (dist < closedist)
+      {
+        _target.o_type = PLAYERTYPE;
+        _target.o_num = i;
+        closedist = dist;
+      }
+  }
     }
 
   if (closedist == GWIDTH)
-    {						 /* Didn't get one.  bad news 
-						  * 
-						  */
+    {            /* Didn't get one.  bad news
+              *
+              */
       _target.o_type = PLAYERTYPE;
-      _target.o_num = me->p_no;			 /* Return myself.  Oh * *
-						  * well... */
+      _target.o_num = me->p_no;      /* Return myself.  Oh * *
+              * well... */
       return (&_target);
     }
   else
@@ -144,7 +144,7 @@ struct rusage *buf;
 #include <sys/signal.h>
 /* int (* signal(sig, funct))() int sig; int (*funct)(); { struct sigvec vec,
  * oldvec;
- * 
+ *
  * sigvector(sig, 0, &vec); vec.sv_handler = funct; sigvector(sig, &vec, (struct
  * sigvec *) 0); } */
 #endif /* hpux */
@@ -153,10 +153,10 @@ troop_capacity(void)
 {
   if (me->p_ship.s_type == ASSAULT)
     return (((me->p_kills * 3) > me->p_ship.s_maxarmies) ?
-	    me->p_ship.s_maxarmies : (int) (me->p_kills * 3));
+      me->p_ship.s_maxarmies : (int) (me->p_kills * 3));
   else if (me->p_ship.s_type != STARBASE)
     return (((me->p_kills * 2) > me->p_ship.s_maxarmies) ?
-	    me->p_ship.s_maxarmies : (int) (me->p_kills * 2));
+      me->p_ship.s_maxarmies : (int) (me->p_kills * 2));
   else
     return me->p_ship.s_maxarmies;
 }

@@ -7,48 +7,48 @@
  * Revision 1.10.2.1  2002/06/13 04:10:16  tanner
  * Wed Jun 12 22:52:13 2002  Bob Tanner  <tanner@real-time.com>
  *
- * 	* playback.c (pbmain):  Converted enter_ship.wav
+ *  * playback.c (pbmain):  Converted enter_ship.wav
  *
- * 	* input.c (Key113): Converted self_destruct.wav
+ *  * input.c (Key113): Converted self_destruct.wav
  *
- * 	* input.c (Key109): Converted message.wav
+ *  * input.c (Key109): Converted message.wav
  *
- * 	* local.c (DrawMisc): Converted warning.wav
+ *  * local.c (DrawMisc): Converted warning.wav
  *
- * 	* local.c (DrawPlasmaTorps): Converted plasma_hit.wav
+ *  * local.c (DrawPlasmaTorps): Converted plasma_hit.wav
  *
- * 	* local.c (DrawTorps): Converted torp_hit.wav
+ *  * local.c (DrawTorps): Converted torp_hit.wav
  *
- * 	* sound.h: added EXPLOSION_OTHER_WAV, PHASER_OTHER_WAV,
- * 	FIRE_TORP_OTHER. and the code to load these new sounds.
+ *  * sound.h: added EXPLOSION_OTHER_WAV, PHASER_OTHER_WAV,
+ *  FIRE_TORP_OTHER. and the code to load these new sounds.
  *
- * 	* local.c (DrawShips): Converted cloak.wav, uncloak.wav,
- * 	shield_down.wav, shield_up.wav, explosion.wav,
- * 	explosion_other.wav, phaser.wav, phaser_other.wav
+ *  * local.c (DrawShips): Converted cloak.wav, uncloak.wav,
+ *  shield_down.wav, shield_up.wav, explosion.wav,
+ *  explosion_other.wav, phaser.wav, phaser_other.wav
  *
- * 	* cowmain.c (cowmain): Converted enter_ship.wav and engine.wav
+ *  * cowmain.c (cowmain): Converted enter_ship.wav and engine.wav
  *
- * 	* sound.c: added isDirectory to check that the sounddir is
- * 	actually a directory.
+ *  * sound.c: added isDirectory to check that the sounddir is
+ *  actually a directory.
  *
  * Tue Jun 11 01:10:51 2002  Bob Tanner  <tanner@real-time.com>
  *
- * 	* system.mk.in: Added SDL_CFLAGS, SDL_CONFIG, SDL_LIBS,
- * 	SDL_MIXER_LIBS
+ *  * system.mk.in: Added SDL_CFLAGS, SDL_CONFIG, SDL_LIBS,
+ *  SDL_MIXER_LIBS
  *
- * 	* sound.c: Added HAVE_SDL wrapper, initialization of SDL system,
- * 	opening of audio device, and loading of 17 cow sounds.
+ *  * sound.c: Added HAVE_SDL wrapper, initialization of SDL system,
+ *  opening of audio device, and loading of 17 cow sounds.
  *
- * 	* cowmain.c (cowmain): HAVE_SDL wrapper to Init_Sound using SDL. I
- * 	moved the Init_Sound method to right after readdefaults() so the
- * 	intro can start playing ASAP.
+ *  * cowmain.c (cowmain): HAVE_SDL wrapper to Init_Sound using SDL. I
+ *  moved the Init_Sound method to right after readdefaults() so the
+ *  intro can start playing ASAP.
  *
- * 	* configure.in: Added AC_CANONICAL_SYSTEM, added check for SDL,
- * 	add check for SDL_mixer.
+ *  * configure.in: Added AC_CANONICAL_SYSTEM, added check for SDL,
+ *  add check for SDL_mixer.
  *
- * 	* config.h.in: add HAVE_SDL
+ *  * config.h.in: add HAVE_SDL
  *
- * 	* spike: See spike/README for details
+ *  * spike: See spike/README for details
  *
  * Revision 1.11  2002/06/11 05:55:13  tanner
  * Following XP made a simple change.
@@ -57,7 +57,7 @@
  *
  * Revision 1.10  2001/04/28 04:03:56  quozl
  * change -U to also adopt a local port number for TCP mode.
- * 		-- Benjamin `Quisar' Lerman  <quisar@quisar.ambre.net>
+ *    -- Benjamin `Quisar' Lerman  <quisar@quisar.ambre.net>
  *
  * Revision 1.9  2000/11/07 20:24:05  ahn
  * Add patch from Crist Clark <cjclark@alum.mit.edu>
@@ -227,99 +227,99 @@ main2(int argc, char **argv)
   while (*argv)
     {
       if (**argv == '-')
-	++ * argv;
+  ++ * argv;
       else
-	break;
+  break;
 
       argc--;
       ptr = *argv++;
       while (*ptr)
-	{
-	  switch (*ptr)
-	    {
+  {
+    switch (*ptr)
+      {
 
-	    case 'C':				 /* character name */
-	      (void) STRNCPY(pseudo, *argv, sizeof(pseudo));
-	      argv++;
-	      argc--;
-	      break;
+      case 'C':        /* character name */
+        (void) STRNCPY(pseudo, *argv, sizeof(pseudo));
+        argv++;
+        argc--;
+        break;
 
-	    case 'A':				 /* authorization password */
-	      (void) STRNCPY(defpasswd, *argv, sizeof(defpasswd));
-	      argv++;
-	      argc--;
-	      break;
+      case 'A':        /* authorization password */
+        (void) STRNCPY(defpasswd, *argv, sizeof(defpasswd));
+        argv++;
+        argc--;
+        break;
 
-	    case 'u':
-	      usage++;
-	      break;
-	    case 'c':
-	      checking = 1;
-	      break;
-	    case 's':
-	      if (*argv)
-		{
-		  xtrekPort = atoi(*argv);
-		  passive = 1;
-		  argv++;
-		  argc--;
-		}
-	      break;
+      case 'u':
+        usage++;
+        break;
+      case 'c':
+        checking = 1;
+        break;
+      case 's':
+        if (*argv)
+    {
+      xtrekPort = atoi(*argv);
+      passive = 1;
+      argv++;
+      argc--;
+    }
+        break;
 
 #ifdef RECORDGAME
-	    case 'F':
-	      inplayback = 1;
+      case 'F':
+        inplayback = 1;
               if (*(ptr+1) == 'i')
                   pb_create_index = 1;
-	      /* No break */
-	    case 'f':
-	      recordFileName = *argv;
-	      argv++;
-	      argc--;
-	      break;
+        /* No break */
+      case 'f':
+        recordFileName = *argv;
+        argv++;
+        argc--;
+        break;
 #endif
 
-	    case 'l':
-	      logFileName = *argv;
+      case 'l':
+        logFileName = *argv;
               logmess = 1;
-	      argv++;
-	      argc--;
-	      break;
-	    case 'p':
-	      if (*argv)
-		{
-		  xtrekPort = atoi(*argv);
-		  argv++;
-		  argc--;
-		}
-	      break;
-	    case 'd':
-	      display_host = *argv;
-	      argc--;
-	      argv++;
-	      break;
+        argv++;
+        argc--;
+        break;
+      case 'p':
+        if (*argv)
+    {
+      xtrekPort = atoi(*argv);
+      argv++;
+      argc--;
+    }
+        break;
+      case 'd':
+        display_host = *argv;
+        argc--;
+        argv++;
+        break;
 
 #ifdef META
-	    case 'm': /* use multiple metaservers by UDP */
-	      if (usemeta && usemeta != 1)
-		{
-		  fputs("The options -k and -m and -M are mutually exclusive\n",
-			stderr);
-		  err++;
-		}
-	      usemeta = 1;
-	      break;
+      case 'm': /* use multiple metaservers by UDP */
+        if (usemeta && usemeta != 1)
+    {
+      fputs("The options -k and -m and -M are mutually exclusive\n",
+      stderr);
+      err++;
+    }
+        usemeta = 1;
+        break;
 
-	    case 'k': /* use metaserver cache from prior -M usage */
-	      if (usemeta && usemeta != 2)
-		{
-		  fputs("The options -k and -m and -M are mutually exclusive\n",
-			stderr);
-		  err++;
-		}
-	      usemeta = 2;
-	      break;
- 
+      case 'k': /* use metaserver cache from prior -M usage */
+        if (usemeta && usemeta != 2)
+    {
+      fputs("The options -k and -m and -M are mutually exclusive\n",
+      stderr);
+      err++;
+    }
+        usemeta = 2;
+        break;
+
            case 'M': /* use single metaserver by TCP */
              if (usemeta && usemeta != 3)
                {
@@ -332,153 +332,153 @@ main2(int argc, char **argv)
 #endif
 
 #ifdef RSA
-	    case 'o':
-	      RSA_Client = -1;			 /* will be reset leter, set
-						  * * * negative here * to
-						  * flag * * that it should
-						  * override * * xtrekrc */
-	      printf("Using standard binary verification\n");
-	      break;
-	    case 'R':
-	      RSA_Client = -2;			 /* will be reset leter, set
-						  * * * negative here * to
-						  * flag * * that it should
-						  * override * * xtrekrc */
-	      printf("Using RSA verification\n");
-	      break;
+      case 'o':
+        RSA_Client = -1;       /* will be reset leter, set
+              * * * negative here * to
+              * flag * * that it should
+              * override * * xtrekrc */
+        printf("Using standard binary verification\n");
+        break;
+      case 'R':
+        RSA_Client = -2;       /* will be reset leter, set
+              * * * negative here * to
+              * flag * * that it should
+              * override * * xtrekrc */
+        printf("Using RSA verification\n");
+        break;
 #else
-	    case 'R':
-	      printf("This client does not support RSA verification\n");
-	    case 'o':
-	      printf("Using standard binary verification\n");
-	      break;
+      case 'R':
+        printf("This client does not support RSA verification\n");
+      case 'o':
+        printf("Using standard binary verification\n");
+        break;
 #endif
 
-	    case 'h':
-	      servertmp = *argv;
+      case 'h':
+        servertmp = *argv;
 
 #ifdef GATEWAY
-	      gw_mach = *argv;
+        gw_mach = *argv;
 #endif
 
-	      argc--;
-	      argv++;
-	      break;
+        argc--;
+        argv++;
+        break;
 
 #ifdef GATEWAY
-	    case 'H':
-	      hset++;
+      case 'H':
+        hset++;
               read_servers();
               serverName = gateway;
-	      netaddr = strToNetaddr(*argv);
-	      /* netaddrstr = *argv; */
-	      argc--;
-	      argv++;
-	      break;
+        netaddr = strToNetaddr(*argv);
+        /* netaddrstr = *argv; */
+        argc--;
+        argv++;
+        break;
 #endif
 
-	    case 'U':
-	      if ((baseLocalPort = atoi(*argv)) == 0)
-		{
-		  fprintf(stderr, "Error: -U requires a port number\n");
-		  exit(1);
-		}
-	      argc--;
-	      argv++;
-	      break;
+      case 'U':
+        if ((baseLocalPort = atoi(*argv)) == 0)
+    {
+      fprintf(stderr, "Error: -U requires a port number\n");
+      exit(1);
+    }
+        argc--;
+        argv++;
+        break;
 
 #ifdef PACKET_LOG
-	    case 'P':
-	      log_packets++;
-	      break;
+      case 'P':
+        log_packets++;
+        break;
 #endif
 
-	    case 'G':
-	      if (*argv)
-		{
-		  ghoststart++;
-		  ghost_pno = atoi(*argv);
-		  printf("Emergency restart being attempted...\n");
-		  argv++;
-		  argc--;
-		}
-	      break;
+      case 'G':
+        if (*argv)
+    {
+      ghoststart++;
+      ghost_pno = atoi(*argv);
+      printf("Emergency restart being attempted...\n");
+      argv++;
+      argc--;
+    }
+        break;
 
-	    case 't':
-	      title = *argv;
-	      argc--;
-	      argv++;
-	      break;
-	    case 'r':
-	      deffile = *argv;
-	      argv++;
-	      argc--;
-	      break;
+      case 't':
+        title = *argv;
+        argc--;
+        argv++;
+        break;
+      case 'r':
+        deffile = *argv;
+        argv++;
+        argc--;
+        break;
 
-	    case 'D':
-	      debug++;
-	      break;
-	    case 'v':
-	      printf("%s\n", cowid);
-	      printf("Compile options used: %s\n", cflags);
-	      printf("Compiled on %s by %s\n", cdate, cwho);
-	      printf("%s\n", cbugs);
+      case 'D':
+        debug++;
+        break;
+      case 'v':
+        printf("%s\n", cowid);
+        printf("Compile options used: %s\n", cflags);
+        printf("Compiled on %s by %s\n", cdate, cwho);
+        printf("%s\n", cbugs);
 
 #ifdef RSA
-	      printf("RSA key installed: %s --- Created by: %s\n", key_name, client_creator);
-	      printf("     Client type: %s\n", client_type);
-	      printf("     Client arch: %s\n", client_arch);
-	      printf("     Key permutation date: %s\n", client_key_date);
-	      printf("     Comments: %s\n", client_comments);
+        printf("RSA key installed: %s --- Created by: %s\n", key_name, client_creator);
+        printf("     Client type: %s\n", client_type);
+        printf("     Client arch: %s\n", client_arch);
+        printf("     Key permutation date: %s\n", client_key_date);
+        printf("     Comments: %s\n", client_comments);
 #endif
 
 #ifdef EXPIRE
-	      printf("THIS CLIENT WILL EXPIRE ON %s\n", exptime);
+        printf("THIS CLIENT WILL EXPIRE ON %s\n", exptime);
 #endif
 
-	      exit(0);
-	      break;
+        exit(0);
+        break;
 
 #ifdef IGNORE_SIGNALS_SEGV_BUS
-	    case 'i':
-	      printf("Ignoring signals SIGSEGV and SIGBUS\n");
-	      ignore_signals = -1;
-	      break;
+      case 'i':
+        printf("Ignoring signals SIGSEGV and SIGBUS\n");
+        ignore_signals = -1;
+        break;
 #endif
 
 #ifndef WIN32
-	    case 'n':
-	      takeNearest = 1;
-	      break;
+      case 'n':
+        takeNearest = 1;
+        break;
 #endif
 
 #ifdef HAVE_XPM
-	    case 'b':
-	      pixMissing |= NO_PIXMAPS;
-	      break;
+      case 'b':
+        pixMissing |= NO_PIXMAPS;
+        break;
 #endif
 
 #ifdef TOOLS
-	    case 'L':
-	      sprintf(url, upgradeURL, arch);
-	      break;
+      case 'L':
+        sprintf(url, upgradeURL, arch);
+        break;
 
-	    case 'V':
-	      sprintf(url, releaseURL, mvers, PATCHLEVEL);
-	      break;
+      case 'V':
+        sprintf(url, releaseURL, mvers, PATCHLEVEL);
+        break;
 
-	    case 'B':
-	      sprintf(url, bugURL, mvers, PATCHLEVEL, arch);
-	      break;
+      case 'B':
+        sprintf(url, bugURL, mvers, PATCHLEVEL, arch);
+        break;
 #endif
 
-	    default:
-	      fprintf(stderr, "%s: unknown option '%c'\n", name, *ptr);
-	      err++;
-	      break;
-	    }
-	  ptr++;
-	}
+      default:
+        fprintf(stderr, "%s: unknown option '%c'\n", name, *ptr);
+        err++;
+        break;
+      }
+    ptr++;
+  }
     }
 
 #ifdef TOOLS
@@ -488,7 +488,7 @@ main2(int argc, char **argv)
 
       initDefaults(deffile);
       if (getdefault("wwwlink") != NULL)
-	wwwlink = getdefault("wwwlink");
+  wwwlink = getdefault("wwwlink");
 
       sprintf(webcall, wwwlink, url);
       system(webcall);
@@ -534,12 +534,12 @@ main2(int argc, char **argv)
 
 #ifdef GATEWAY
   if (!hset)
-    use_trekhopd = 0;				 /* allow use via normal * *
-						  * connections */
+    use_trekhopd = 0;        /* allow use via normal * *
+              * connections */
   if (netaddr == 0)
     {
       fprintf(stderr,
-	      "netrek: no remote address set (-H).  Restricted server will not work.\n");
+        "netrek: no remote address set (-H).  Restricted server will not work.\n");
     }
 #endif
 

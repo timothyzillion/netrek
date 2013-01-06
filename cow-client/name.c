@@ -16,14 +16,14 @@ main (int argc, char **argv)
   {
     switch (argv[1][0])
     {
-      case '1':	
-	printf("%d",LIBMAJOR);
-	break;
+      case '1':
+  printf("%d",LIBMAJOR);
+  break;
       case '2':
-	printf("%d",LIBMINOR);
+  printf("%d",LIBMINOR);
         break;
       case 'p':
-	printf("%d",PATCHLEVEL);
+  printf("%d",PATCHLEVEL);
         break;
       default: ;
     }

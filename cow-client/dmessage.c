@@ -1,7 +1,6 @@
 
-
 /* dmessage.c
- * 
+ *
  * for the client of a socket based protocol.
  *
  * $Log: dmessage.c,v $
@@ -62,8 +61,8 @@ dmessage(char *message, unsigned char flags, unsigned char from, unsigned char t
     }
   if (censorMessages)
     if ((flags != kill) && (flags != killp) &&
-	(flags != killa) && (flags != bomb) &&
-	(flags != take) && (flags != destroy))
+  (flags != killa) && (flags != bomb) &&
+  (flags != take) && (flags != destroy))
       censor(message);
 
   /* aha! A new type distress/macro call came in. parse it appropriately */
@@ -74,11 +73,11 @@ dmessage(char *message, unsigned char flags, unsigned char from, unsigned char t
 
 #ifdef BEEPLITE
       if (UseLite)
-	rcdlite(&dist);
+  rcdlite(&dist);
 #endif
 
       if (len <= 0)
-	return;
+  return;
       flags ^= MDISTR;
     }
 
@@ -86,72 +85,72 @@ dmessage(char *message, unsigned char flags, unsigned char from, unsigned char t
   if (niftyNewMessages)
     {
       if (logmess)
-	{
-	  if (logFile != NULL)
-	    {
-	      fprintf(logFile, "%s: %s\n", timebuf, message);
-	      fflush(logFile);
-	    }
-	  else
-	    {
-	      printf("%s: %s\n", timebuf, message);
-	    }
-	}
+  {
+    if (logFile != NULL)
+      {
+        fprintf(logFile, "%s: %s\n", timebuf, message);
+        fflush(logFile);
+      }
+    else
+      {
+        printf("%s: %s\n", timebuf, message);
+      }
+  }
       if (!(logmess && logFile == NULL) && flags == conq)
-	{
-	  /* output conquer stuff to stdout in addition to message window */
-	  fprintf(stdout, "%s\n", message);
-	  if (instr(message, "kill"))
-	    {
-	      fprintf(stdout, "NOTE: The server here does not properly set message flags\n");
-	      fprintf(stdout, "You should probably pester the server god to update....\n");
-	    }
-	}
+  {
+    /* output conquer stuff to stdout in addition to message window */
+    fprintf(stdout, "%s\n", message);
+    if (instr(message, "kill"))
+      {
+        fprintf(stdout, "NOTE: The server here does not properly set message flags\n");
+        fprintf(stdout, "You should probably pester the server god to update....\n");
+      }
+  }
       if (flags == (MCONFIG + MINDIV + MVALID))
-	{
-	  if (from == 255)
-	    CheckFeatures(message);
-	  return;
-	}
+  {
+    if (from == 255)
+      CheckFeatures(message);
+    return;
+  }
       if ((flags == team) || (flags == take) || (flags == destroy))
-	{
-	  W_WriteText(messwt, 0, 0, color, message, len, shipFont(me));
-	  if ((flags == team) &&
-	      !strncmp(message + 10, "     ", 5) && (message[15] == 0))
-	    {
-	      printf("dmessage:flags==team PIG call from=%d\n", from);
-	      pmessage(cowid, from, MINDIV);
-	    }
-	}
+  {
+    W_WriteText(messwt, 0, 0, color, message, len, shipFont(me));
+    if ((flags == team) &&
+        !strncmp(message + 10, "     ", 5) && (message[15] == 0))
+      {
+        printf("dmessage:flags==team PIG call from=%d\n", from);
+        pmessage(cowid, from, MINDIV);
+      }
+  }
 
       else if ((flags == kill) || (flags == killp) ||
-	       (flags == killa) || (flags == bomb))
-	{
-	  W_WriteText(messwk, 0, 0, color, message, len, 0);
-	  if (!reportKills)
-	    return;				 /* HW */
-	}
+         (flags == killa) || (flags == bomb))
+  {
+    W_WriteText(messwk, 0, 0, color, message, len, 0);
+    if (!reportKills)
+      return;        /* HW */
+  }
 
       else if (flags & MINDIV)
-	{
-	  W_WriteText(messwi, 0, 0, color, message, len, 0);
-	  if (!strncmp(message + 10, "     ", 5) && (message[15] == 0))
-	    {
-	      printf("dmessage:MINDIV PIG call from=%d\n", from);
-	      pmessage(cowid, from, MINDIV);
-	    }
-	}
+  {
+    W_WriteText(messwi, 0, 0, color, message, len, 0);
+    if (!strncmp(message + 10, "     ", 5) && (message[15] == 0))
+      {
+        printf("dmessage:MINDIV PIG call from=%d\n", from);
+        pmessage(cowid, from, MINDIV);
+      }
+  }
       else
-	{					 /* if we don't know where *
-						  * * the message beLONGs by
-						  * * * this time, stick it
-						  * in * * the all board... */
-	  W_WriteText(messwa, 0, 0, color, message, len, 0);
-	  if (!strncmp(message + 10, "     ", 5) && (message[15] == 0))
-	    {
-	      pmessage(cowid, from, MINDIV);
-	    }
-	}
+  {          /* if we don't know where *
+              * * the message beLONGs by
+              * * * this time, stick it
+              * in * * the all board... */
+    W_WriteText(messwa, 0, 0, color, message, len, 0);
+    if (!strncmp(message + 10, "     ", 5) && (message[15] == 0))
+      {
+        pmessage(cowid, from, MINDIV);
+      }
+  }
       W_WriteText(reviewWin, 0, 0, color, message, len, 0);
 
     }
@@ -162,97 +161,97 @@ dmessage(char *message, unsigned char flags, unsigned char from, unsigned char t
        * * * HAVE to.  yuk, blech, ptooie... */
 
       if ((strncmp(message, "GOD->ALL", 8) == 0 &&
-	   (instr(message, "was kill") ||
-	    instr(message, "killed by"))) ||
-	  (*message != ' ' && instr(message, "We are being attacked")))
-	{
-	  W_WriteText(messwk, 0, 0, color, message, len, 0);
-	  if (!reportKills)
-	    return;
-	  W_WriteText(reviewWin, 0, 0, color, message, len, 0);
-	  if (logmess)
-	    {
-	      if (logFile != NULL)
-		{
-		  fprintf(logFile, "%s ", timebuf);
-		  fprintf(logFile, "%s\n", message);
-		  fflush(logFile);
-		}
-	      else
-		{
-		  printf("%s ", message);
-		  printf("%s\n", timebuf);
-		}
-	    }
-	  return;
-	}
+     (instr(message, "was kill") ||
+      instr(message, "killed by"))) ||
+    (*message != ' ' && instr(message, "We are being attacked")))
+  {
+    W_WriteText(messwk, 0, 0, color, message, len, 0);
+    if (!reportKills)
+      return;
+    W_WriteText(reviewWin, 0, 0, color, message, len, 0);
+    if (logmess)
+      {
+        if (logFile != NULL)
+    {
+      fprintf(logFile, "%s ", timebuf);
+      fprintf(logFile, "%s\n", message);
+      fflush(logFile);
+    }
+        else
+    {
+      printf("%s ", message);
+      printf("%s\n", timebuf);
+    }
+      }
+    return;
+  }
       switch (flags & (MTEAM | MINDIV | MALL))
-	{
-	case MTEAM:
-	  W_WriteText(messwt, 0, 0, color, message, len, 0);
-	  if (!strncmp(message + 10, "     ", 5) && (message[15] == 0))
-	    {
-	      pmessage(cowid, from, MINDIV);
-	    }
-	  if (logmess)
-	    {
-	      if (logFile != NULL)
-		{
-		  fprintf(logFile, "%s ", timebuf);
-		  fprintf(logFile, "%s\n", message);
-		  fflush(logFile);
-		}
-	      else
-		{
-		  printf("%s ", message);
-		  printf("%s\n", timebuf);
-		}
-	    }
-	  break;
-	case MINDIV:
-	  if (!(flags & MCONFIG))
-	    W_WriteText(messwi, 0, 0, color, message, len, 0);
-	  if (!strncmp(message + 10, "     ", 5) && (message[15] == 0))
-	    {
-	      pmessage(cowid, from, MINDIV);
-	    }
-	  if (logmess)
-	    {
-	      if (logFile != NULL)
-		{
-		  fprintf(logFile, "%s ", timebuf);
-		  fprintf(logFile, "%s\n", message);
-		  fflush(logFile);
-		}
-	      else
-		{
-		  printf("%s ", message);
-		  printf("%s\n", timebuf);
-		}
-	    }
-	  break;
-	default:
-	  W_WriteText(messwa, 0, 0, color, message, len, 0);
-	  if (!strncmp(message + 10, "     ", 5) && (message[15] == 0))
-	    {
-	      pmessage(cowid, from, MINDIV);
-	    }
-	  if (logmess)
-	    {
-	      if (logFile != NULL)
-		{
-		  fprintf(logFile, "%s ", timebuf);
-		  fprintf(logFile, "%s\n", message);
-		  fflush(logFile);
-		}
-	      else
-		{
-		  printf("%s", message);
-		  printf("%s\n", timebuf);
-		}
-	    }
-	  break;
-	}
+  {
+  case MTEAM:
+    W_WriteText(messwt, 0, 0, color, message, len, 0);
+    if (!strncmp(message + 10, "     ", 5) && (message[15] == 0))
+      {
+        pmessage(cowid, from, MINDIV);
+      }
+    if (logmess)
+      {
+        if (logFile != NULL)
+    {
+      fprintf(logFile, "%s ", timebuf);
+      fprintf(logFile, "%s\n", message);
+      fflush(logFile);
+    }
+        else
+    {
+      printf("%s ", message);
+      printf("%s\n", timebuf);
+    }
+      }
+    break;
+  case MINDIV:
+    if (!(flags & MCONFIG))
+      W_WriteText(messwi, 0, 0, color, message, len, 0);
+    if (!strncmp(message + 10, "     ", 5) && (message[15] == 0))
+      {
+        pmessage(cowid, from, MINDIV);
+      }
+    if (logmess)
+      {
+        if (logFile != NULL)
+    {
+      fprintf(logFile, "%s ", timebuf);
+      fprintf(logFile, "%s\n", message);
+      fflush(logFile);
+    }
+        else
+    {
+      printf("%s ", message);
+      printf("%s\n", timebuf);
+    }
+      }
+    break;
+  default:
+    W_WriteText(messwa, 0, 0, color, message, len, 0);
+    if (!strncmp(message + 10, "     ", 5) && (message[15] == 0))
+      {
+        pmessage(cowid, from, MINDIV);
+      }
+    if (logmess)
+      {
+        if (logFile != NULL)
+    {
+      fprintf(logFile, "%s ", timebuf);
+      fprintf(logFile, "%s\n", message);
+      fflush(logFile);
+    }
+        else
+    {
+      printf("%s", message);
+      printf("%s\n", timebuf);
+    }
+      }
+    break;
+  }
       W_WriteText(reviewWin, 0, 0, color, message, len, 0);
     }
 }
@@ -266,7 +265,7 @@ instr(char *string1, char *string2)
   for (s = string1; *s != 0; s++)
     {
       if (*s == *string2 && strncmp(s, string2, length) == 0)
-	return (1);
+  return (1);
     }
   return (0);
 }

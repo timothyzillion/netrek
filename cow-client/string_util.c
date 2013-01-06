@@ -1,9 +1,9 @@
 
 /* string_util.c
- * 
+ *
  * The client actually uses lots of string functions, mostly to format the
  * information it displays.  This module provides housing for all these
- * string functions. 
+ * string functions.
  *
  * $Log: string_util.c,v $
  * Revision 1.1.1.1  1998/11/01 17:24:11  siegl
@@ -28,22 +28,22 @@ char   *itoapad(int val, char *result, int pad, int prec)
   for (i = 100000000, j = 0; i && h <= prec; i /= 10, j++)
     {
       if ((9 - prec) > j && too_big)
-	continue;
+  continue;
       else if (h)
-	{
-	  j = 0;
-	  too_big = 0;
-	  h = 0;
-	}
+  {
+    j = 0;
+    too_big = 0;
+    h = 0;
+  }
 
       result[j] = (val % (i * 10)) / i + '0';
 
       if (result[j] != '0' && !lead_digit)
-	lead_digit = 1;
+  lead_digit = 1;
 
       if (!lead_digit && !pad)
-	if ((result[j] = (val % (i * 10)) / i + '0') == '0')
-	  result[j] = ' ';
+  if ((result[j] = (val % (i * 10)) / i + '0') == '0')
+    result[j] = ' ';
     }
 
   if (val == 0)
@@ -95,14 +95,14 @@ char   *
       STRNCPY(&(buf[width - len]), from, len);
 
       for (i = 0; i < (width - len); i++)
-	buf[i] = ' ';
+  buf[i] = ' ';
     }
   else
     {
       STRNCPY(buf, from, len);
 
       for (i = len; i < width; i++)
-	buf[i] = ' ';
+  buf[i] = ' ';
     }
 
   return (buf);

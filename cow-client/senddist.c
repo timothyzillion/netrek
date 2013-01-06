@@ -117,20 +117,20 @@ emergency(enum dist_type i, W_Event * data)
       len = makedistress(dist, cry, distmacro[dist->distype].macro);
 
       if (len > 0)
-	{
+  {
 
-	  /* klude alert */
-	  info = cry;
+    /* klude alert */
+    info = cry;
 
-	  if (strncmp((char *) getaddr2(MTEAM, recip), cry, 8) == 0)
-	    {
-	      /* this means we should _strip_ the leading bit because it's *
-	       * * redundant */
-	      info = cry + 9;
-	    }
+    if (strncmp((char *) getaddr2(MTEAM, recip), cry, 8) == 0)
+      {
+        /* this means we should _strip_ the leading bit because it's *
+         * * redundant */
+        info = cry + 9;
+      }
 
-	  pmessage(info, recip, group);
-	}
+    pmessage(info, recip, group);
+  }
     }
 
   free(dist);
@@ -158,7 +158,7 @@ pmacro(int mnum, char who, W_Event * data)
   if (keys[0] != '\0')
     {
       if (pm = INDEX((char *) keys, who))
-	who = macroKeys[((int) pm) - ((int) keys)].dest;
+  who = macroKeys[((int) pm) - ((int) keys)].dest;
     }
 #endif
 
@@ -186,13 +186,13 @@ pmacro(int mnum, char who, W_Event * data)
 
 #ifdef MULTILINE_MACROS
       if (multiline_enabled &&
-	  (macro[mnum].type == NEWMULTIM))
-	pmessage(cry, recip, group | MMACRO);
+    (macro[mnum].type == NEWMULTIM))
+  pmessage(cry, recip, group | MMACRO);
 
       else
 #endif /* MULTILINE_MACROS */
 
-	pmessage(cry, recip, group);
+  pmessage(cry, recip, group);
     }
 
   free(dist);

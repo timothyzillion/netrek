@@ -42,11 +42,11 @@ void    DisplayMessage()
 #ifdef XTRA_MESSAGE_UI
   if (HUDoffset)
     W_WriteText(w, 5, HUDoffset, textColor,
-		outmessage, strlen(outmessage), W_RegularFont);
+    outmessage, strlen(outmessage), W_RegularFont);
 #endif
 
   W_WriteText(messagew, 5, 5, textColor,
-	      outmessage, strlen(outmessage), W_RegularFont);
+        outmessage, strlen(outmessage), W_RegularFont);
 }
 void    AddChar(char *twochar)
 {
@@ -54,11 +54,11 @@ void    AddChar(char *twochar)
 #ifdef XTRA_MESSAGE_UI
   if (HUDoffset)
     W_WriteText(w, 5 + W_Textwidth * lcount, HUDoffset, textColor,
-		twochar, 2, W_RegularFont);
+    twochar, 2, W_RegularFont);
 #endif
 
   W_WriteText(messagew, 5 + W_Textwidth * lcount, 5, textColor,
-	      twochar, 2, W_RegularFont);
+        twochar, 2, W_RegularFont);
 }
 void    BlankChar(int HUDoffsetcol, int len)
 {
@@ -66,11 +66,11 @@ void    BlankChar(int HUDoffsetcol, int len)
 #ifdef XTRA_MESSAGE_UI
   if (HUDoffset)
     W_ClearArea(w, 5 + W_Textwidth * (HUDoffsetcol), HUDoffset,
-		W_Textwidth * (len), W_Textheight);
+    W_Textwidth * (len), W_Textheight);
 #endif
 
   W_ClearArea(messagew, 5 + W_Textwidth * (HUDoffsetcol), 5,
-	      W_Textwidth * (len), W_Textheight);
+        W_Textwidth * (len), W_Textheight);
 }
 void    DrawCursor(int col)
 {
@@ -78,11 +78,11 @@ void    DrawCursor(int col)
 #ifdef XTRA_MESSAGE_UI
   if (HUDoffset)
     W_WriteText(w, 5 + W_Textwidth * (col), HUDoffset,
-		textColor, &cursor, 1, W_RegularFont);
+    textColor, &cursor, 1, W_RegularFont);
 #endif
 
   W_WriteText(messagew, 5 + W_Textwidth * (col), 5,
-	      textColor, &cursor, 1, W_RegularFont);
+        textColor, &cursor, 1, W_RegularFont);
 }
 
 
@@ -100,47 +100,47 @@ void    smessage(char ichar)
 #ifdef XTRA_MESSAGE_UI
       /* Figure out where to put the message on the local */
       switch (messageHUD)
-	{
-	case 1:
-	  HUDoffset = 5;
-	  break;
-	case 2:
-	  HUDoffset = W_WindowHeight(w) - W_Textheight - 5;
-	  break;
-	default:
-	  HUDoffset = 0;
-	}
+  {
+  case 1:
+    HUDoffset = 5;
+    break;
+  case 2:
+    HUDoffset = W_WindowHeight(w) - W_Textheight - 5;
+    break;
+  default:
+    HUDoffset = 0;
+  }
 #endif
 
       /* Put the proper recipient in the window */
 
 #ifdef TOOLS
       if (keys[0] != '\0')
-	{
-	  if (pm = INDEX((char *) keys, ichar))
-	    ichar = macroKeys[((int) pm) - ((int) keys)].dest;
-	}
+  {
+    if (pm = INDEX((char *) keys, ichar))
+      ichar = macroKeys[((int) pm) - ((int) keys)].dest;
+  }
 #endif
 
       if ((ichar == 't') || (ichar == 'T'))
-	addr = teamlet[me->p_team];
+  addr = teamlet[me->p_team];
       else
-	addr = ichar;
+  addr = ichar;
       addr_str = getaddr(addr);
       if (addr_str == 0)
-	{
-	  /* print error message */
-	  messpend = 0;
-	  message_off();
-	  return;
-	}
+  {
+    /* print error message */
+    messpend = 0;
+    message_off();
+    return;
+  }
       strcat(outmessage, addr_str);
       lcount = ADDRLEN;
       DrawCursor(ADDRLEN);
       while (strlen(outmessage) < ADDRLEN)
-	{
-	  strcat(outmessage, " ");
-	}
+  {
+    strcat(outmessage, " ");
+  }
       strcat(outmessage, "_");
 
       /* Display the header */
@@ -162,143 +162,143 @@ void    smessage(char ichar)
 
   switch ((unsigned char) ichar & ~(0x80))
     {
-    case '\b':					 /* character erase */
+    case '\b':           /* character erase */
     case '\177':
       if (--lcount < ADDRLEN)
-	{
-	  lcount = ADDRLEN;
-	  break;
-	}
+  {
+    lcount = ADDRLEN;
+    break;
+  }
       BlankChar(lcount + 1, 1);
       DrawCursor(lcount);
       outmessage[lcount + 1] = '\0';
       outmessage[lcount] = cursor;
       break;
 
-    case '\033':				 /* abort message */
+    case '\033':         /* abort message */
       BlankChar(0, lcount + 1);
       mdisplayed = 0;
       messpend = 0;
       message_off();
       for (i = 0; i < 80; i++)
-	{
-	  outmessage[i] = '\0';
-	}
+  {
+    outmessage[i] = '\0';
+  }
       break;
 
     case 23:
       while (--lcount >= ADDRLEN)
-	{
-	  BlankChar(lcount + 1, 1);
-	  DrawCursor(lcount);
-	  outmessage[lcount + 1] = '\0';
-	  outmessage[lcount] = cursor;
-	}
+  {
+    BlankChar(lcount + 1, 1);
+    DrawCursor(lcount);
+    outmessage[lcount + 1] = '\0';
+    outmessage[lcount] = cursor;
+  }
       lcount = ADDRLEN;
       break;
-    case '\r':					 /* send message */
+    case '\r':           /* send message */
       buf[lcount - ADDRLEN] = '\0';
       messpend = 0;
       for (i = 0; i < 80; i++)
-	{
-	  outmessage[i] = '\0';
-	}
+  {
+    outmessage[i] = '\0';
+  }
       switch (addr)
-	{
-	case 'A':
-	  pmessage(buf, 0, MALL);
-	  break;
-	case 'F':
-	  pmessage(buf, FED, MTEAM);
-	  break;
-	case 'R':
-	  pmessage(buf, ROM, MTEAM);
-	  break;
-	case 'K':
-	  pmessage(buf, KLI, MTEAM);
-	  break;
-	case 'O':
-	  pmessage(buf, ORI, MTEAM);
-	  break;
-	case 'G':
-	  pmessage(buf, 0, MGOD);
-	  break;
+  {
+  case 'A':
+    pmessage(buf, 0, MALL);
+    break;
+  case 'F':
+    pmessage(buf, FED, MTEAM);
+    break;
+  case 'R':
+    pmessage(buf, ROM, MTEAM);
+    break;
+  case 'K':
+    pmessage(buf, KLI, MTEAM);
+    break;
+  case 'O':
+    pmessage(buf, ORI, MTEAM);
+    break;
+  case 'G':
+    pmessage(buf, 0, MGOD);
+    break;
 
 #ifdef TOOLS
-	case '!':
-	  pmessage(buf, 0, MTOOLS);
-	  break;
+  case '!':
+    pmessage(buf, 0, MTOOLS);
+    break;
 #endif
 
-	case 'M':
-	  pmessage(buf, 0, MMOO);
-	  break;
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':
-	  if (players[addr - '0'].p_status == PFREE)
-	    {
-	      warning("That player left the game. message not sent.");
-	      return;
-	    }
-	  pmessage(buf, addr - '0', MINDIV);
-	  break;
-	case 'a':
-	case 'b':
-	case 'c':
-	case 'd':
-	case 'e':
-	case 'f':
-	case 'g':
-	case 'h':
-	case 'i':
-	case 'j':
-	case 'k':
-	case 'l':
-	case 'm':
-	case 'n':
-	case 'o':
-	case 'p':
-	case 'q':
-	case 'r':
-	case 's':
-	case 't':
-	case 'u':
-	case 'v':
-	case 'w':
-	case 'x':
-	case 'y':
-	case 'z':
-	  if (players[addr - 'a' + 10].p_status == PFREE)
-	    {
-	      warning("That player left the game. message not sent.");
-	      return;
-	    }
-	  pmessage(buf, addr - 'a' + 10, MINDIV);
-	  break;
-	default:
-	  warning("Not legal recipient");
-	}
+  case 'M':
+    pmessage(buf, 0, MMOO);
+    break;
+  case '0':
+  case '1':
+  case '2':
+  case '3':
+  case '4':
+  case '5':
+  case '6':
+  case '7':
+  case '8':
+  case '9':
+    if (players[addr - '0'].p_status == PFREE)
+      {
+        warning("That player left the game. message not sent.");
+        return;
+      }
+    pmessage(buf, addr - '0', MINDIV);
+    break;
+  case 'a':
+  case 'b':
+  case 'c':
+  case 'd':
+  case 'e':
+  case 'f':
+  case 'g':
+  case 'h':
+  case 'i':
+  case 'j':
+  case 'k':
+  case 'l':
+  case 'm':
+  case 'n':
+  case 'o':
+  case 'p':
+  case 'q':
+  case 'r':
+  case 's':
+  case 't':
+  case 'u':
+  case 'v':
+  case 'w':
+  case 'x':
+  case 'y':
+  case 'z':
+    if (players[addr - 'a' + 10].p_status == PFREE)
+      {
+        warning("That player left the game. message not sent.");
+        return;
+      }
+    pmessage(buf, addr - 'a' + 10, MINDIV);
+    break;
+  default:
+    warning("Not legal recipient");
+  }
       BlankChar(0, lcount + 1);
       mdisplayed = 0;
       lcount = 0;
       break;
 
-    default:					 /* add character */
+    default:           /* add character */
       if (lcount >= 79)
-	{
-	  W_Beep();
-	  break;
-	}
+  {
+    W_Beep();
+    break;
+  }
       if (iscntrl((unsigned char) ichar & ~(0x80)))
-	break;
+  break;
       twochar[0] = ichar;
       twochar[1] = cursor;
       AddChar(twochar);
@@ -383,10 +383,10 @@ char   *
     case '8':
     case '9':
       if (players[who - '0'].p_status == PFREE)
-	{
-	  warning("Slot is not alive.");
-	  return 0;
-	}
+  {
+    warning("Slot is not alive.");
+    return 0;
+  }
       return (getaddr2(MINDIV, who - '0'));
       break;
     case 'a':
@@ -416,15 +416,15 @@ char   *
     case 'y':
     case 'z':
       if (who - 'a' + 10 > MAXPLAYER)
-	{
-	  warning("Player is not in game");
-	  return (0);
-	}
+  {
+    warning("Player is not in game");
+    return (0);
+  }
       if (players[who - 'a' + 10].p_status == PFREE)
-	{
-	  warning("Slot is not alive.");
-	  return 0;
-	}
+  {
+    warning("Slot is not alive.");
+    return 0;
+  }
 
       return (getaddr2(MINDIV, who - 'a' + 10));
       break;
@@ -450,16 +450,16 @@ char   *
       break;
     case MINDIV:
       if (maskrecip)
-	{
-	  (void) sprintf(&addrmesg[5], "?? ");
-	  maskrecip = 0;
-	}
+  {
+    (void) sprintf(&addrmesg[5], "?? ");
+    maskrecip = 0;
+  }
       else
-	{
-	  /* printf("smessage:getaddr2 recip=%d\n",recip); */
-	  (void) sprintf(&addrmesg[5], "%c%c ",
-			 teamlet[players[recip].p_team], shipnos[recip]);
-	}
+  {
+    /* printf("smessage:getaddr2 recip=%d\n",recip); */
+    (void) sprintf(&addrmesg[5], "%c%c ",
+       teamlet[players[recip].p_team], shipnos[recip]);
+  }
 
       break;
     case MGOD:
@@ -565,10 +565,10 @@ int
     case '8':
     case '9':
       if (players[addr - '0'].p_status == PFREE)
-	{
-	  warning("That player left the game. message not sent.");
-	  return 0;
-	}
+  {
+    warning("That player left the game. message not sent.");
+    return 0;
+  }
       *recip = addr - '0';
       return (MINDIV);
       break;
@@ -599,10 +599,10 @@ int
     case 'y':
     case 'z':
       if (players[addr - 'a' + 10].p_status == PFREE)
-	{
-	  warning("That player left the game. message not sent.");
-	  return 0;
-	}
+  {
+    warning("That player left the game. message not sent.");
+    return 0;
+  }
       *recip = addr - 'a' + 10;
       return (MINDIV);
       break;

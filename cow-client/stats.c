@@ -14,26 +14,26 @@
 #include "struct.h"
 #include "data.h"
 
-#define	MIN(a,b)	(((a) < (b)) ? (a) : (b))
+#define MIN(a,b)  (((a) < (b)) ? (a) : (b))
 
-#define	BX_OFF()	((textWidth + 1) * W_Textwidth + S_IBORDER)
-#define	BY_OFF(line)	((line) * (W_Textheight + S_IBORDER) + S_IBORDER)
-#define	TX_OFF(len)	((textWidth - len) * W_Textwidth + S_IBORDER)
-#define	TY_OFF(line)	BY_OFF(line)
+#define BX_OFF()  ((textWidth + 1) * W_Textwidth + S_IBORDER)
+#define BY_OFF(line)  ((line) * (W_Textheight + S_IBORDER) + S_IBORDER)
+#define TX_OFF(len) ((textWidth - len) * W_Textwidth + S_IBORDER)
+#define TY_OFF(line)  BY_OFF(line)
 
-#define STAT_WIDTH		160
-#define STAT_HEIGHT		BY_OFF(NUM_SLIDERS)
-#define STAT_BORDER		2
-#define S_IBORDER		5
-#define STAT_X			422
-#define STAT_Y			13
+#define STAT_WIDTH    160
+#define STAT_HEIGHT   BY_OFF(NUM_SLIDERS)
+#define STAT_BORDER   2
+#define S_IBORDER   5
+#define STAT_X      422
+#define STAT_Y      13
 
-#define SL_WID			\
-	(STAT_WIDTH - 2 * S_IBORDER - (textWidth + 1) * W_Textwidth)
-#define SL_HEI			(W_Textheight)
+#define SL_WID      \
+  (STAT_WIDTH - 2 * S_IBORDER - (textWidth + 1) * W_Textwidth)
+#define SL_HEI      (W_Textheight)
 
-#define NUM_ELS(a)		(sizeof (a) / sizeof (*(a)))
-#define NUM_SLIDERS		NUM_ELS(sliders)
+#define NUM_ELS(a)    (sizeof (a) / sizeof (*(a)))
+#define NUM_SLIDERS   NUM_ELS(sliders)
 
 typedef struct slider
   {
@@ -67,7 +67,7 @@ static SLIDER sliders[] =
 
 #ifdef ARMY_SLIDER
   {"Armies", 0, 10, 0, 10},
-#endif						 /* ARMY_SLIDER */
+#endif             /* ARMY_SLIDER */
 
 };
 
@@ -90,8 +90,8 @@ initStats(void)
   sliders[5].var = &(me->p_etemp);
 
 #ifdef ARMY_SLIDER
-  sliders[6].var = &(me->p_armies);		 /* note -- changed p_armies
-						  * * * to int */
+  sliders[6].var = &(me->p_armies);    /* note -- changed p_armies
+              * * * to int */
 #endif /* ARMY_SLIDER */
 
   for (i = 0; i < NUM_SLIDERS; i++)
@@ -116,8 +116,8 @@ void    redrawStats(void)
   for (i = 0; i < NUM_SLIDERS; i++)
     {
       W_WriteText(statwin, TX_OFF(sliders[i].label_length), TY_OFF(i),
-		  textColor, sliders[i].label, sliders[i].label_length,
-		  W_RegularFont);
+      textColor, sliders[i].label, sliders[i].label_length,
+      W_RegularFont);
       box(0, BX_OFF() - 1, BY_OFF(i) - 1, SL_WID + 2, SL_HEI + 2, borderColor);
       sliders[i].lastVal = 0;
     }
@@ -135,43 +135,43 @@ updateStats(void)
       s = &sliders[i];
       value = *(s->var);
       if (value < s->min)
-	value = s->min;
+  value = s->min;
       else if (value > s->max)
-	value = s->max;
+  value = s->max;
       if (value == s->lastVal)
-	continue;
+  continue;
       diff = value - s->lastVal;
       if (diff < 0)
-	{
-	  old_x = s->lastVal * SL_WID / s->diff;
-	  new_x = value * SL_WID / s->diff;
-	  box(1, BX_OFF() + new_x, BY_OFF(i), old_x - new_x, SL_HEI, backColor);
+  {
+    old_x = s->lastVal * SL_WID / s->diff;
+    new_x = value * SL_WID / s->diff;
+    box(1, BX_OFF() + new_x, BY_OFF(i), old_x - new_x, SL_HEI, backColor);
 
-	  if (s->lastVal >= s->low_red && value < s->low_red)
-	    box(1, BX_OFF(), BY_OFF(i), new_x, SL_HEI, warningColor);
-	  else if (s->lastVal > s->high_red && value <= s->high_red)
-	    box(1, BX_OFF(), BY_OFF(i), new_x, SL_HEI, myColor);
-	}
+    if (s->lastVal >= s->low_red && value < s->low_red)
+      box(1, BX_OFF(), BY_OFF(i), new_x, SL_HEI, warningColor);
+    else if (s->lastVal > s->high_red && value <= s->high_red)
+      box(1, BX_OFF(), BY_OFF(i), new_x, SL_HEI, myColor);
+  }
       else
-	{
-	  if (value < s->low_red)
-	    color = warningColor;
-	  else if (value > s->high_red)
-	    {
-	      color = warningColor;
-	      if (s->lastVal <= s->high_red)
-		s->lastVal = 0;
-	    }
-	  else
-	    {
-	      color = myColor;
-	      if (s->lastVal < s->low_red)
-		s->lastVal = 0;
-	    }
-	  old_x = s->lastVal * SL_WID / s->diff;
-	  new_x = value * SL_WID / s->diff;
-	  box(1, BX_OFF() + old_x, BY_OFF(i), new_x - old_x, SL_HEI, color);
-	}
+  {
+    if (value < s->low_red)
+      color = warningColor;
+    else if (value > s->high_red)
+      {
+        color = warningColor;
+        if (s->lastVal <= s->high_red)
+    s->lastVal = 0;
+      }
+    else
+      {
+        color = myColor;
+        if (s->lastVal < s->low_red)
+    s->lastVal = 0;
+      }
+    old_x = s->lastVal * SL_WID / s->diff;
+    new_x = value * SL_WID / s->diff;
+    box(1, BX_OFF() + old_x, BY_OFF(i), new_x - old_x, SL_HEI, color);
+  }
       s->lastVal = value;
     }
 }

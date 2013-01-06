@@ -5,7 +5,7 @@ struct
    unsigned char r,g,b;
    }
 xclrs[] =
-   {      
+   {
    "snow",  255,  250,  250,
    "GhostWhite",  248,  248,  255,
    "WhiteSmoke",  245,  245,  245,

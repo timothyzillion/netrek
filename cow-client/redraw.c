@@ -51,7 +51,7 @@ intrupt(fd_set * readfds)
 
     needredraw |=
 
-	readFromServer(readfds);
+  readFromServer(readfds);
 
   t = msetime();
   if (needredraw && (t >= lastredraw + redrawDelay * 100))
@@ -61,8 +61,8 @@ intrupt(fd_set * readfds)
       lastread = time(NULL);
       redraw();
 
-      updateMaxStats(0);			 /* Update the max stats * *
-						  * <isae> */
+      updateMaxStats(0);       /* Update the max stats * *
+              * <isae> */
 
 #ifdef WIN32
       W_FlushScrollingWindow(messwa);
@@ -98,8 +98,8 @@ redraw(void)
       warncount = 0;
     }
 
-  run_clock(lastread);				 /* for hosers who don't know
-						  * * * what a Xclock is */
+  run_clock(lastread);         /* for hosers who don't know
+              * * * what a Xclock is */
   clearLocal();
 
 #ifdef BEEPLITE
@@ -109,35 +109,35 @@ redraw(void)
 
       tts_timer--;
       if (!tts_timer)
-	{
-	  /* timed out */
-	  W_EraseTTSText(w, TWINSIDE, tts_pos, last_width);
-	  last_width = 0;
-	}
+  {
+    /* timed out */
+    W_EraseTTSText(w, TWINSIDE, tts_pos, last_width);
+    last_width = 0;
+  }
       else if (tts_timer == tts_time - 1 && last_width)
-	{
-	  /* first draw -- erase previous */
-	  W_EraseTTSText(w, TWINSIDE, tts_pos, last_width);
-	  /* draw new */
-	  W_WriteTTSText(w, TWINSIDE, tts_pos, tts_width, lastIn,
-			 tts_len);
-	  last_width = tts_width;
-	}
+  {
+    /* first draw -- erase previous */
+    W_EraseTTSText(w, TWINSIDE, tts_pos, last_width);
+    /* draw new */
+    W_WriteTTSText(w, TWINSIDE, tts_pos, tts_width, lastIn,
+       tts_len);
+    last_width = tts_width;
+  }
       else
-	{
-	  /* regular draw */
-	  W_WriteTTSText(w, TWINSIDE, tts_pos, tts_width, lastIn, tts_len);
-	  last_width = tts_width;
-	}
+  {
+    /* regular draw */
+    W_WriteTTSText(w, TWINSIDE, tts_pos, tts_width, lastIn, tts_len);
+    last_width = tts_width;
+  }
     }
 #endif
 
-  local();					 /* redraw local window */
+  local();           /* redraw local window */
 
   /* XFIX */
   W_FlushLineCaches(w);
 
-  if (newDashboard)				 /* 6/2/93 LAB */
+  if (newDashboard)        /* 6/2/93 LAB */
     if (newDashboard == old_db)
       db_redraw(0);
     else
@@ -177,8 +177,8 @@ stline(int flag)
   /* Instead of one sprintf, we do all this by hand for optimization */
 
   if (flag)
-    whichbuf = 0;				 /* We must completely * *
-						  * refresh */
+    whichbuf = 0;        /* We must completely * *
+              * refresh */
 
   if (whichbuf != 2)
     {
@@ -225,7 +225,7 @@ stline(int flag)
   buf[14] = '0' + ((me->p_speed % 100) / 10);
   if (buf[14] == '0')
     buf[14] = ' ';
-  buf[15] = '0' + (me->p_speed % 10);		 /* speed */
+  buf[15] = '0' + (me->p_speed % 10);    /* speed */
   buf[16] = ' ';
   buf[17] = ' ';
   buf[18] = '0' + (me->p_damage / 100);
@@ -320,41 +320,41 @@ stline(int flag)
       whichbuf = 1;
     }
   else
-    {						 /* Hacks to make it print *
-						  * * only what is necessary */
+    {            /* Hacks to make it print *
+              * * only what is necessary */
       whichbuf = 3 - whichbuf;
       j = -1;
       for (i = 0; i < 64; i++)
-	{
-	  if (*(buf++) != *(oldbuf++))
-	    {
-	      /* Different string */
-	      if (j == -1)
-		{
-		  k = i;
-		  s = buf - 1;
-		}
-	      j = 0;
-	    }
-	  else
-	    {
-	      /* Same string */
-	      if (j == -1)
-		continue;
-	      j++;
-	      if (j == 20)
-		{				 /* Random number */
-		  W_WriteText(tstatw, 50 + W_Textwidth * k, 16, textColor,
-			      s, i - k - 19, W_RegularFont);
-		  j = -1;
-		}
-	    }
-	}
+  {
+    if (*(buf++) != *(oldbuf++))
+      {
+        /* Different string */
+        if (j == -1)
+    {
+      k = i;
+      s = buf - 1;
+    }
+        j = 0;
+      }
+    else
+      {
+        /* Same string */
+        if (j == -1)
+    continue;
+        j++;
+        if (j == 20)
+    {        /* Random number */
+      W_WriteText(tstatw, 50 + W_Textwidth * k, 16, textColor,
+            s, i - k - 19, W_RegularFont);
+      j = -1;
+    }
+      }
+  }
       if (j != -1)
-	{
-	  W_WriteText(tstatw, 50 + W_Textwidth * k, 16, textColor, s, i - k - j,
-		      W_RegularFont);
-	}
+  {
+    W_WriteText(tstatw, 50 + W_Textwidth * k, 16, textColor, s, i - k - j,
+          W_RegularFont);
+  }
     }
 }
 
@@ -364,16 +364,16 @@ stline(int flag)
 
 void    redrawTstats(void)
 {
-  if (newDashboard)				 /* 6/2/93 LAB */
+  if (newDashboard)        /* 6/2/93 LAB */
     db_redraw(1);
   else
     {
       W_ClearWindow(tstatw);
-      stline(1);				 /* This is for refresh. We * 
-						  * 
-						  * * redraw player stats too 
-						  */
-      updateMaxStats(1);			 /* <isae> Seperated it */
+      stline(1);         /* This is for refresh. We *
+              *
+              * * redraw player stats too
+              */
+      updateMaxStats(1);       /* <isae> Seperated it */
     }
 }
 
@@ -410,10 +410,10 @@ updateMaxStats(int redraw)
 
   if (me->p_ship.s_type == ASSAULT)
     troop_capacity = (((kills * 3) > me->p_ship.s_maxarmies) ?
-		      me->p_ship.s_maxarmies : (int) (kills * 3));
+          me->p_ship.s_maxarmies : (int) (kills * 3));
   else if (me->p_ship.s_type != STARBASE)
     troop_capacity = (((kills * 2) > me->p_ship.s_maxarmies) ?
-		      me->p_ship.s_maxarmies : (int) (kills * 2));
+          me->p_ship.s_maxarmies : (int) (kills * 2));
   else
     troop_capacity = me->p_ship.s_maxarmies;
 
@@ -430,11 +430,11 @@ updateMaxStats(int redraw)
   "Flags        Warp Dam Shd Torps  Kills Armies   Fuel  Wtemp Etemp  Time");
   W_WriteText(tstatw, 50, 5, textColor, buf, strlen(buf), W_RegularFont);
   sprintf(buf,
-	"Maximum:   %2d/%2d  %3d %3d              %2d/%2d  %6d   %3d   %3d",
-	  maxspeed, me->p_ship.s_maxspeed,
-	  me->p_ship.s_maxdamage, me->p_ship.s_maxshield,
-	  troop_capacity, me->p_ship.s_maxarmies,
-	  me->p_ship.s_maxfuel, me->p_ship.s_maxwpntemp / 10,
-	  me->p_ship.s_maxegntemp / 10);
+  "Maximum:   %2d/%2d  %3d %3d              %2d/%2d  %6d   %3d   %3d",
+    maxspeed, me->p_ship.s_maxspeed,
+    me->p_ship.s_maxdamage, me->p_ship.s_maxshield,
+    troop_capacity, me->p_ship.s_maxarmies,
+    me->p_ship.s_maxfuel, me->p_ship.s_maxwpntemp / 10,
+    me->p_ship.s_maxegntemp / 10);
   W_WriteText(tstatw, 50, 27, textColor, buf, strlen(buf), W_RegularFont);
 }

@@ -1,6 +1,6 @@
 /*
    playerlist.h
-   
+
    All functions which update the playerlist should include this
    header file.
  *
@@ -22,7 +22,7 @@
 
 /*
    Global Variables
-   
+
    partitionPlist    : Separate the goodies from baddies in the sorted list?
    plistCustomLayout : The value of `playerlist' in the defaults file.
    plistReorder      : True only if the order of the playerlist is out of date.
@@ -31,7 +31,7 @@
    sortMyTeamFirst   : Should my team go first or second in the sorted list?
    sortPlayers       : Should the player list be sorted?
    updatePlayer[plr] : The playerlist entry for "plr" is old.
-   
+
    plistHasHostile   : True if "Hostile" is a field in the current list.
    plistHasSpeed     : True if "Speed" is true in the current playerlist.
 */
@@ -44,8 +44,8 @@ extern int plistUpdated;
 extern int sortMyTeamFirst;
 extern int sortPlayers;
 extern char updatePlayer[MAXPLAYER+1];
-					
-#ifdef PLIST2					
+
+#ifdef PLIST2
 extern int plistHasHostile = FALSE;
 extern int plistHasSpeed = FALSE;
 #endif
@@ -58,8 +58,8 @@ extern int plistHasSpeed = FALSE;
 
 /*
    void PlistNoteUpdate(i)
-	int i;
-	
+  int i;
+
    Note the update of a player so that the entry in the player list
    can be update.
 */
@@ -68,7 +68,7 @@ extern int plistHasSpeed = FALSE;
 
 /*
    void PlistNoteArrive(i)
-	int i;
+  int i;
 
    Note the arrive or leaving of a player from a team.  This
    call should also be made if a player changes teams.
@@ -78,8 +78,8 @@ extern int plistHasSpeed = FALSE;
 
 /*
    void PlistNoteHostile(i)
-	int i;
-	
+  int i;
+
    Note the change in war status of player `i'.  Only update if
    the war status is shown on the current player list.
 */
@@ -92,8 +92,8 @@ extern int plistHasSpeed = FALSE;
 
 /*
    void PlistNoteSpeed(i)
-	int i;
-	
+  int i;
+
    Note the change in speed of player `i'.  Only update if
    speed is shown on the current player list.
 */
@@ -107,11 +107,11 @@ extern int plistHasSpeed = FALSE;
 /*
    Function Declarations
 */
-					
+
 void InitPlayerList(void);
 /*
    Set the global variables associtated with the player list.
-   
+
    This should be called when the defaults file is loaded or reloaded.
 */
 
@@ -127,24 +127,24 @@ void RedrawPlayerList(void);
 /*
    Completly redraw the player list, rather than incrimentally updating
    the list as with UpdatePlayerList().
-   
+
    This function should be called if the plistStyle changes or if the
    window has just been revealed.
-   
+
    This function is called automatically from InitPlayerList.
 */
 
 
 /*
    void UpdatePlayerList()
-   
-   
+
+
    Update the player list.
-   
+
    This function works incrimentally.  If a dramatic change has taken
    place (i.e. if plistStyle changes) then RedrawPlayerList() should
    be called instead.
-   
+
    This function is called through a macro.  It is expected that 9
    times out of 10 the call will not do any work.  We can predict
    when work will be done by looking at "plistUpdated".  To avoid
@@ -152,7 +152,7 @@ void RedrawPlayerList(void);
    plistUpdated suggests that work will be done.
 */
 void UpdatePlistFn(void);
-#define UpdatePlayerList()	if (plistUpdated) UpdatePlistFn()
+#define UpdatePlayerList()  if (plistUpdated) UpdatePlistFn()
 
 
 #endif /* defined h_playerlist */

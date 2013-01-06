@@ -1,4 +1,3 @@
-
 #define myplanet000_width 30
 #define myplanet000_height 30
 static char myplanet000_bits[] =

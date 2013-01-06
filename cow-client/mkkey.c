@@ -119,9 +119,9 @@ extern int getpid();
 #define DEFAULT_FILE_RATIO       0.8
 
 /* fadden's World Famous random stuff */
-int rand_state = 0;		/* which state we're using */
-char rand_state1[256];		/* big honking state for random() */
-char rand_state2[256];		/* even more big honking state for random() */
+int rand_state = 0;   /* which state we're using */
+char rand_state1[256];    /* big honking state for random() */
+char rand_state2[256];    /* even more big honking state for random() */
 
 static MPTYPE zero;
 
@@ -131,14 +131,14 @@ static LONG random256()
 {
     unsigned LONG tmp;
 
-    rand_state = 1-rand_state;		/* alternate between generators */
-    if (rand_state)			/* select the appropriate state */
-	(void)setstate(rand_state1);
+    rand_state = 1-rand_state;    /* alternate between generators */
+    if (rand_state)     /* select the appropriate state */
+  (void)setstate(rand_state1);
     else
-	(void)setstate(rand_state2);
+  (void)setstate(rand_state2);
     tmp = RANDOM();
     return (tmp >> 24) ^ ((tmp >> 16)  & 0xff) ^ ((tmp >> 8) & 0xff)
-	^ (tmp & 0xff);
+  ^ (tmp & 0xff);
 }
 
 void rand_raw(str, num)
@@ -148,16 +148,16 @@ void rand_raw(str, num)
     int i;
 
     for (i = 0; i < num - 1; i++)
-	str[i] = random256();
+  str[i] = random256();
 
     /* force it to be num digits long */
     str[i] = 0;
     while (! str[i])
-	str[i] = random256();
+  str[i] = random256();
     i++;
 
     for (; i < SIZE; i++)
-	str[i] = 0;
+  str[i] = 0;
 }
 
 void raw_to_num(out, in)
@@ -174,16 +174,16 @@ void raw_to_num(out, in)
     assignItom(twofiftysix,256);
 
     for (i = 0; i < SIZE; i++) {
-	mult(temp, twofiftysix, temp);
+  mult(temp, twofiftysix, temp);
         assignItom(thisval,in[SIZE - i - 1]);
-	madd(temp, thisval, temp);
-	mfree(thisval);
+  madd(temp, thisval, temp);
+  mfree(thisval);
     }
     madd(temp, out, out); /* There is no copy function! */
     mfree(temp);
     mfree(twofiftysix);
 }
- 
+
 void num_to_raw(out, in)  /* Destroys in */
      unsigned char *out;
      MPTYPE in;
@@ -196,7 +196,7 @@ void num_to_raw(out, in)  /* Destroys in */
         if (!mcmp (in, zero))
           temp = 0;
         else
-	  sdiv(in, 256, in, &temp);
+    sdiv(in, 256, in, &temp);
         out[i] = temp & 0xFF;
     }
 }
@@ -216,20 +216,20 @@ int is_prime(n)
 
     /* 25 is quite a lot, actually */
     for (i = 0; i < 25; i++) {
-	/* 
-	 * We should choose a number that is between 0 and n, but this
-	 * works well enough.
-	 */
-	j = (short) RANDOM();
-	if (j < 0) j = (-j);
-	assignItom(temp1,j);
-	mp_pow(temp1, n, n, temp2);
-	if (mcmp(temp1, temp2)) {
-	    mfree(temp1);
-	    mfree(temp2);
-	    return (0);
-	}
-	mfree(temp1);
+  /*
+   * We should choose a number that is between 0 and n, but this
+   * works well enough.
+   */
+  j = (short) RANDOM();
+  if (j < 0) j = (-j);
+  assignItom(temp1,j);
+  mp_pow(temp1, n, n, temp2);
+  if (mcmp(temp1, temp2)) {
+      mfree(temp1);
+      mfree(temp2);
+      return (0);
+  }
+  mfree(temp1);
     }
     mfree(temp2);
     return (1);
@@ -272,28 +272,28 @@ static void invert(a, n, x)
     assignItom(temp,0);
     assignItom(temp2,0);
     for (i = 0; i < 3; i++)
-	assignItom(g[i],0);
+  assignItom(g[i],0);
     move(n, g[0]); move(a, g[1]);
     assignItom(v[0], 0); assignItom(v[1], 1); assignItom(v[2], 0);
     i = 1;
     while (mcmp(g[i], zero)) {
-	check_positive(g[iminus1]);
-	check_positive(g[i]);
-	mdiv(g[iminus1], g[i], y, g[iplus1]);
-	mult(y, v[i], temp);
-	move(v[iminus1], v[iplus1]);
-	msub(v[iplus1], temp, temp2);
-	move(temp2, v[iplus1]);
-	i = iplus1;
+  check_positive(g[iminus1]);
+  check_positive(g[i]);
+  mdiv(g[iminus1], g[i], y, g[iplus1]);
+  mult(y, v[i], temp);
+  move(v[iminus1], v[iplus1]);
+  msub(v[iplus1], temp, temp2);
+  move(temp2, v[iplus1]);
+  i = iplus1;
     }
     move(v[iminus1], x);
     while (mcmp(x, zero) < 0) {
-	madd(x, n, temp2);
-	move(temp2, x);
+  madd(x, n, temp2);
+  move(temp2, x);
     }
     for (i = 0; i < 3; i++) {
-	mfree(v[i]);
-	mfree(g[i]);
+  mfree(v[i]);
+  mfree(g[i]);
     }
     mfree(y);
     mfree(temp);
@@ -322,30 +322,30 @@ void verify_key(raw_public, raw_private, raw_global)
     assignItom(public,0);
     assignItom(private,0);
     assignItom(global,0);
-    
+
     printf("Testing key");
     fflush(stdout);
     raw_to_num(public, raw_public);
     raw_to_num(private, raw_private);
     raw_to_num(global, raw_global);
     for (i = 0; i < 50; i++) {
-	rand_raw(temp, SIZE - 1);
-	raw_to_num(orig_message, temp);
-	mp_pow(orig_message, private, global, crypt_text);
-	mp_pow(crypt_text, public, global, message);
-	if (mcmp(message, orig_message) != 0) {
-	    putchar('!');
-	    failures++;
-	} else {
-	    putchar('.');
-	}
-	fflush(stdout);
+  rand_raw(temp, SIZE - 1);
+  raw_to_num(orig_message, temp);
+  mp_pow(orig_message, private, global, crypt_text);
+  mp_pow(crypt_text, public, global, message);
+  if (mcmp(message, orig_message) != 0) {
+      putchar('!');
+      failures++;
+  } else {
+      putchar('.');
+  }
+  fflush(stdout);
     }
     if (failures == 0)
-	printf("key seems o.k.\n");
+  printf("key seems o.k.\n");
     else {
-	printf("\nSorry, key is bogus.\n");
-	exit(1);
+  printf("\nSorry, key is bogus.\n");
+  exit(1);
     }
     mfree(orig_message); mfree(message); mfree(crypt_text);
     mfree(public); mfree(private); mfree(global);
@@ -397,7 +397,7 @@ kgetstr(src, field, dest)
    int  l;
    if(!s)
       return 0;
-   
+
    s += strlen(field);
    l = strchr(s,SEP)-s;
    strncpy(dest, s, l);
@@ -412,8 +412,8 @@ kgetstr(src, field, dest)
 
 int
 kgetkey(src, field, dest)
-   
-   char                 *src, 
+
+   char                 *src,
                         *field;
    unsigned char        *dest;
 {
@@ -444,17 +444,17 @@ int scan_array_element(buffer, xp, np)
 {
     char* bp = buffer;
     while (*bp && isspace(*bp))
-	bp++;
+  bp++;
     if (*bp == '0' && *(bp+1) == 'x') {
-	if (sscanf(bp+2, "%x", xp) != 1)
-	    return 0;
-	bp += 2;
+  if (sscanf(bp+2, "%x", xp) != 1)
+      return 0;
+  bp += 2;
     } else if (sscanf(bp, "%d", xp) != 1)
-	return 0;
+  return 0;
     while (*bp && isxdigit(*bp))
-	bp++;
+  bp++;
     while (*bp && *bp != ',')
-	bp++;
+  bp++;
     bp++;
     *np = bp - buffer;
     return 1;
@@ -474,19 +474,19 @@ void get_array(buffer, name, data, len)
     start = (char*) strstr(buffer, name);
     if (start == NULL) goto err;
     while (*start && *start != '{')
-	start++;
+  start++;
     if (!*start) goto err;
     start++;
     for (i = 0; i < len; i++) {
-	if (scan_array_element(start, &x, &n) != 1)
-	    goto err;
-	data[i] = x;
-	start += n;
+  if (scan_array_element(start, &x, &n) != 1)
+      goto err;
+  data[i] = x;
+  start += n;
     }
     return;
  err:
     fprintf(stderr, "Ooops! Couldn't get array %s in keys.h file.\n",
-	    name);
+      name);
     exit(1);
 }
 
@@ -517,14 +517,14 @@ unsigned char* global;\n\
     mpz_init(&m_tmp);\n\
     for (i = 0; i < %d; i++) {\n\
         mpz_mul_2exp(&m_msg, &m_msg, 8);\n\
-	mpz_add_ui(&m_msg, &m_msg, in[%d-1-i]);\n\
+  mpz_add_ui(&m_msg, &m_msg, in[%d-1-i]);\n\
     }\n\
 ";
 
 static char* trailer = "\
     for (i = 0; i < %d; i++) {\n\
-	mpz_divmod_ui(&m_result, &m_tmp, &m_result, 256);\n\
-	*out++ = mpz_get_ui(&m_tmp);\n\
+  mpz_divmod_ui(&m_result, &m_tmp, &m_result, 256);\n\
+  *out++ = mpz_get_ui(&m_tmp);\n\
     }\n\
     mpz_clear(&m_msg);\n\
     mpz_clear(&m_result);\n\
@@ -543,14 +543,14 @@ void gen_key(fp, name, key, len)
     int i;
     unsigned LONG limb;
     for (i = len-4; i >= 0; i-= 4) {
-	limb = (key[i+3] << 24) + (key[i+2] << 16) + (key[i+1] << 8) + key[i];
-	fprintf(fp, "    mpz_mul_2exp(&m_%s, &m_%s, 32);\n", name, name);
-	fprintf(fp, "    mpz_add_ui(&m_%s, &m_%s, (unsigned LONG) 0x%x);\n",
-		name, name, limb);
+  limb = (key[i+3] << 24) + (key[i+2] << 16) + (key[i+1] << 8) + key[i];
+  fprintf(fp, "    mpz_mul_2exp(&m_%s, &m_%s, 32);\n", name, name);
+  fprintf(fp, "    mpz_add_ui(&m_%s, &m_%s, (unsigned LONG) 0x%x);\n",
+    name, name, limb);
     }
     fprintf(fp, "    if (%s != NULL) {\n", name);
     for (i = 0; i < len; i++)
-	fprintf(fp, "        %s[%d] = %d;\n", name, i, key[i]);
+  fprintf(fp, "        %s[%d] = %d;\n", name, i, key[i]);
     fprintf(fp, "    }\n");
 }
 
@@ -622,8 +622,8 @@ void gen_rsa_sequence(clientsfp, clients_basename, n_files,
 
     /* first, get a rough idea how many bits there are in raw_private */
     for (i = SIZE-1; i >= 0; --i) {
-	if (raw_private[i] != 0)
-	    break;
+  if (raw_private[i] != 0)
+      break;
     }
     n_bits = i * 8;
 
@@ -637,107 +637,107 @@ void gen_rsa_sequence(clientsfp, clients_basename, n_files,
     n_bits_in_section = -1;
     in_fp = 0;
     while (1) {
-	/* decide if we want to continue writing to wherever or to make
-	 * a change
-	 */
-	done = 0;
+  /* decide if we want to continue writing to wherever or to make
+   * a change
+   */
+  done = 0;
     finish:
-	if (done || (bit_in_section > n_bits_in_section)) {
-	    if (in_fp) {
-		fprintf(fp, per_box_trailer);
-		fclose(fp);
-		fprintf(clientsfp,
-			"    rsa_partial_box_%d(m, r, &m_global);\n",
-			file_no);
-		file_no++;
-		fp = clientsfp;
-		in_fp = 0;
-	    } else if (file_no < n_files) {
-		sprintf(buf, "%s_%d.c", clients_basename, file_no);
-		fp = fopen(buf, "w");
-		if (fp == NULL) {
-		    fprintf(stderr, "Couldn't open rsa box file \"%s\"!\n",
-			    buf);
-		    exit(1);
-		}
-		fprintf(fp, per_box_header, file_no);
-		fprintf(fp, rsa_box_defs);
-		in_fp = 1;
-	    }
-	    if (file_no == n_files)
-		n_bits_in_section = n_bits - bit;
-	    else {
-		int bits_remaining;
-		if (in_fp)
-		    ratio = file_ratio;
-		else
-		    ratio = 1.0 - file_ratio;
-		bits_remaining = n_bits - bit;
-		n_bits_in_section =
-		    (int) (ratio * (bits_remaining / (n_files - file_no)));
-		/* have n_bits_in_section vary by 50% */
-		n_bits_in_section = (5 * n_bits_in_section / 4 -
-				     ((random256() % n_bits_in_section) / 2));
-		printf("%d bits left, %d files left, %d bits in %s\n",
-		       bits_remaining, n_files - file_no, n_bits_in_section,
-		       in_fp ? buf : "main file");
-	    }
-	    bit_in_section = 0;
-	}
-	if (done)
-	    break;
-	
-	/* check if we're done */
-	done = 1;
-	for (i = 0; i < SIZE; i++)
-	    if (raw_private[i] != 0) {
-		done = 0;
-		break;
-	    }
-	if (done) goto finish;
-	fprintf(fp, "    /* real_j is %d, bit %d is %d */\n", real_j,
-		bit, raw_private[0] & 0x1);
-	for (j = 0; j < n_shells; j++) {
-	    if (j == real_j) {
-		if (raw_private[0] & 0x1)
-		    op = "X";
-		else
-		    op = 0;
-	    } else if ((random256() % 2) == 0) {
-		op = "X";
-	    } else {
-		op = "Y";
-	    }
-	    if (op != 0)
-		fprintf(fp, "    %s(&m[%d], &r[%d], g);\n", op, j, j);
-	}
-	for (j = 0; j < n_shells; j++) {
-	    if (j == real_j || ((random256() % 2) == 0)) {
-		op = "Y";
-	    } else {
-		op = "X";
-	    }
-	    fprintf(fp, "    %s(&m[%d], &r[%d], g);\n", op, j, j);
-	}
-	if ((random256() % (swap_steps + 1)) == 0) {
-	    for (j = 0; j < n_shells; j++) {
-		tmp = random256() % (j + 1);
-		if (real_j == tmp) {
-		    real_j = j;
-		} else if (real_j == j) {
-		    real_j = tmp;
-		}
-		fprintf(fp, "    SWAP(%d, %d);\n", j, tmp);
-	    }
-	}
-	for (i = 0; i < SIZE - 1; i++) {
-	    raw_private[i] >>= 1;
-	    if (raw_private[i+1] & 0x1)
-		raw_private[i] |= 0x80;
-	}
-	raw_private[SIZE-1] >>= 1;
-	bit++;
-	bit_in_section++;
+  if (done || (bit_in_section > n_bits_in_section)) {
+      if (in_fp) {
+    fprintf(fp, per_box_trailer);
+    fclose(fp);
+    fprintf(clientsfp,
+      "    rsa_partial_box_%d(m, r, &m_global);\n",
+      file_no);
+    file_no++;
+    fp = clientsfp;
+    in_fp = 0;
+      } else if (file_no < n_files) {
+    sprintf(buf, "%s_%d.c", clients_basename, file_no);
+    fp = fopen(buf, "w");
+    if (fp == NULL) {
+        fprintf(stderr, "Couldn't open rsa box file \"%s\"!\n",
+          buf);
+        exit(1);
+    }
+    fprintf(fp, per_box_header, file_no);
+    fprintf(fp, rsa_box_defs);
+    in_fp = 1;
+      }
+      if (file_no == n_files)
+    n_bits_in_section = n_bits - bit;
+      else {
+    int bits_remaining;
+    if (in_fp)
+        ratio = file_ratio;
+    else
+        ratio = 1.0 - file_ratio;
+    bits_remaining = n_bits - bit;
+    n_bits_in_section =
+        (int) (ratio * (bits_remaining / (n_files - file_no)));
+    /* have n_bits_in_section vary by 50% */
+    n_bits_in_section = (5 * n_bits_in_section / 4 -
+             ((random256() % n_bits_in_section) / 2));
+    printf("%d bits left, %d files left, %d bits in %s\n",
+           bits_remaining, n_files - file_no, n_bits_in_section,
+           in_fp ? buf : "main file");
+      }
+      bit_in_section = 0;
+  }
+  if (done)
+      break;
+
+  /* check if we're done */
+  done = 1;
+  for (i = 0; i < SIZE; i++)
+      if (raw_private[i] != 0) {
+    done = 0;
+    break;
+      }
+  if (done) goto finish;
+  fprintf(fp, "    /* real_j is %d, bit %d is %d */\n", real_j,
+    bit, raw_private[0] & 0x1);
+  for (j = 0; j < n_shells; j++) {
+      if (j == real_j) {
+    if (raw_private[0] & 0x1)
+        op = "X";
+    else
+        op = 0;
+      } else if ((random256() % 2) == 0) {
+    op = "X";
+      } else {
+    op = "Y";
+      }
+      if (op != 0)
+    fprintf(fp, "    %s(&m[%d], &r[%d], g);\n", op, j, j);
+  }
+  for (j = 0; j < n_shells; j++) {
+      if (j == real_j || ((random256() % 2) == 0)) {
+    op = "Y";
+      } else {
+    op = "X";
+      }
+      fprintf(fp, "    %s(&m[%d], &r[%d], g);\n", op, j, j);
+  }
+  if ((random256() % (swap_steps + 1)) == 0) {
+      for (j = 0; j < n_shells; j++) {
+    tmp = random256() % (j + 1);
+    if (real_j == tmp) {
+        real_j = j;
+    } else if (real_j == j) {
+        real_j = tmp;
+    }
+    fprintf(fp, "    SWAP(%d, %d);\n", j, tmp);
+      }
+  }
+  for (i = 0; i < SIZE - 1; i++) {
+      raw_private[i] >>= 1;
+      if (raw_private[i+1] & 0x1)
+    raw_private[i] |= 0x80;
+  }
+  raw_private[SIZE-1] >>= 1;
+  bit++;
+  bit_in_section++;
     }
     fprintf(fp, sequence_trailer, real_j, n_shells);
 }
@@ -788,7 +788,7 @@ static void usage()
 {
     int i;
     for (i = 0; usage_lines[i]; i++) {
-	printf("%s\n", usage_lines[i]);
+  printf("%s\n", usage_lines[i]);
     }
     exit(1);
 }
@@ -801,11 +801,11 @@ int main(argc, argv)
     MPTYPE one, two;
     unsigned char temp[SIZE];
     unsigned char raw_global[SIZE], raw_private[SIZE], raw_public[SIZE];
-    FILE* clientsfp;		/* clientsfp is the client source file */
-    FILE* keycapfp;		/* keycapfp is the keycap file */
-    FILE* skeycapfp;		/* skeycapfp is the keycap file with
-				 * the secret key included
-				 */
+    FILE* clientsfp;    /* clientsfp is the client source file */
+    FILE* keycapfp;   /* keycapfp is the keycap file */
+    FILE* skeycapfp;    /* skeycapfp is the keycap file with
+         * the secret key included
+         */
     int i, n, verify_only, n_shells, swap_steps, test_key, n_files;
     double file_ratio;
     char buf[200];
@@ -831,9 +831,9 @@ int main(argc, argv)
      */
     /*srandom(time(0) ^ (getpid()<<16) ^ getuid());*/
     (void) initstate(time(0) ^ (getpid()<<16) ^ getgid(),
-	rand_state1, 256);
+  rand_state1, 256);
     (void) initstate((getuid() ^ RANDOM()) | (time(0) % 65239) << 16,
-	rand_state2, 256);
+  rand_state2, 256);
     rand_state = 0;
 
     printf("mkkey version %s\n", version);
@@ -850,268 +850,268 @@ int main(argc, argv)
     test_key = 1;
     n = 1;
     while (argc > n) {
-	if (!strcmp(argv[n], "-h")) {
-	    keydoth = argv[n+1];
-	    n += 2;
-	} else if (!strcmp(argv[n], "-k")) {
-	    keycap = argv[n+1];
-	    n += 2;
-	} else if (!strcmp(argv[n], "-v")) {
-	    verify_only = 1;
-	    n++;
-	} else if (!strcmp(argv[n], "-n")) {
-	    n_shells = atoi(argv[n+1]);
-	    n += 2;
-	} else if (!strcmp(argv[n], "-s")) {
-	    swap_steps = atoi(argv[n+1]);
-	    n += 2;
-	} else if (!strcmp(argv[n], "-nt")) {
-	    test_key = 0;
-	    n++;
-	} else if (!strcmp(argv[n], "-b")) {
-	    clients_basename = argv[n+1];
-	    n += 2;
-	} else if (!strcmp(argv[n], "-f")) {
-	    n_files = atoi(argv[n+1]);
-	    n += 2;
-	} else if (!strcmp(argv[n], "-c")) {
-	    n_files = RANDOM() % 10+1;
-	    n++;
-	} else if (!strcmp(argv[n], "-r")) {
-	    sscanf(argv[n+1], "%lf", &file_ratio);
-	    n += 2;
-	} else
-	    break;
+  if (!strcmp(argv[n], "-h")) {
+      keydoth = argv[n+1];
+      n += 2;
+  } else if (!strcmp(argv[n], "-k")) {
+      keycap = argv[n+1];
+      n += 2;
+  } else if (!strcmp(argv[n], "-v")) {
+      verify_only = 1;
+      n++;
+  } else if (!strcmp(argv[n], "-n")) {
+      n_shells = atoi(argv[n+1]);
+      n += 2;
+  } else if (!strcmp(argv[n], "-s")) {
+      swap_steps = atoi(argv[n+1]);
+      n += 2;
+  } else if (!strcmp(argv[n], "-nt")) {
+      test_key = 0;
+      n++;
+  } else if (!strcmp(argv[n], "-b")) {
+      clients_basename = argv[n+1];
+      n += 2;
+  } else if (!strcmp(argv[n], "-f")) {
+      n_files = atoi(argv[n+1]);
+      n += 2;
+  } else if (!strcmp(argv[n], "-c")) {
+      n_files = RANDOM() % 10+1;
+      n++;
+  } else if (!strcmp(argv[n], "-r")) {
+      sscanf(argv[n+1], "%lf", &file_ratio);
+      n += 2;
+  } else
+      break;
     }
     if (keycap != NULL && keydoth != NULL) {
-	fprintf(stderr, "%s: can't use both a keys.h file and keycap file\n",
-		argv[0]);
-	usage();
+  fprintf(stderr, "%s: can't use both a keys.h file and keycap file\n",
+    argv[0]);
+  usage();
     }
     if (keycap == NULL && verify_only == 0 && (argc - n) !=5 && (argc - n) != 6) {
-	usage();
+  usage();
     }
     if (n_shells < 1) {
-	fprintf(stderr, "%s: number of shells must >= 1\n", argv[0]);
-	usage();
+  fprintf(stderr, "%s: number of shells must >= 1\n", argv[0]);
+  usage();
     }
     if (swap_steps < 0) {
-	fprintf(stderr,
-		"%s: average number of steps between stops must be >= 0\n",
-		argv[0]);
-	usage();
+  fprintf(stderr,
+    "%s: average number of steps between stops must be >= 0\n",
+    argv[0]);
+  usage();
     }
     if (n_files < 1) {
-	fprintf(stderr, "%s: number of files must be >= 1\n", argv[0]);
-	usage();
+  fprintf(stderr, "%s: number of files must be >= 1\n", argv[0]);
+  usage();
     }
     if (keycap == NULL) {
-	key_name = argv[n];
-	client_type = argv[n+1];
-	architecture = argv[n+2];
-	creator = argv[n+3];
-	comments = argv[n+4];
-	if (argv[n+5]) class = argv[n+5]; else class = "???";
+  key_name = argv[n];
+  client_type = argv[n+1];
+  architecture = argv[n+2];
+  creator = argv[n+3];
+  comments = argv[n+4];
+  if (argv[n+5]) class = argv[n+5]; else class = "???";
     }
-    
+
     printf("Source basename: \"%s\"\n", clients_basename);
     printf("Number of shells: %d\n", n_shells);
     printf("Number of steps between swaps: %d\n", swap_steps);
     printf("Number of files: %d\n", n_files);
     printf("Ratio of computation in files to main file: %lg\n", file_ratio);
-    
+
     if (keydoth == NULL && keycap == NULL) {
-	printf("Making new key, hold on....\n");
- 
+  printf("Making new key, hold on....\n");
+
 #ifdef __GNU_MP__
-	printf("(using GNU MP)\n");
+  printf("(using GNU MP)\n");
 #else
-	printf("(using the system's mp)\n");
+  printf("(using the system's mp)\n");
 #endif
-	
-	assignItom(one,1);
-	assignItom(two,2);
-	assignItom(x,0);
-	assignItom(y,0);
-	assignItom(global,0);
-	assignItom(private,0);
-	assignItom(public,0);
-	assignItom(xyminus1,0);
-	
-	/*
-	 * here we find x and y, two large primes
-	 */
-	rand_raw(temp, HALF);
-	temp[0] |= 1; /* force odd */
-	raw_to_num(x, temp);
-	while (! is_prime(x))
-	    madd(x, two, x);
-	check_positive(x);
-	assert(is_prime(x));
-	
-	rand_raw(temp, HALF);
-	temp[0] |= 1; /* force odd */
-	raw_to_num(y, temp);
-	while (! is_prime(y))
-	    madd(y, two, y);
-	check_positive(y);
-	assert(is_prime(y));
-	
-	/*
-	 * the private key is a large prime (it should be the larger
-	 * than x & y)
-	 */
-	rand_raw(temp, HALF + 1);
-	temp[0] |= 1; /* force odd */
-	raw_to_num(private, temp);
-	while (! is_prime(private))
-	    madd(private, two, private);
-	check_positive(private);
-	assert(is_prime(private));
-	if (mcmp(x, private) > 0) {
+
+  assignItom(one,1);
+  assignItom(two,2);
+  assignItom(x,0);
+  assignItom(y,0);
+  assignItom(global,0);
+  assignItom(private,0);
+  assignItom(public,0);
+  assignItom(xyminus1,0);
+
+  /*
+   * here we find x and y, two large primes
+   */
+  rand_raw(temp, HALF);
+  temp[0] |= 1; /* force odd */
+  raw_to_num(x, temp);
+  while (! is_prime(x))
+      madd(x, two, x);
+  check_positive(x);
+  assert(is_prime(x));
+
+  rand_raw(temp, HALF);
+  temp[0] |= 1; /* force odd */
+  raw_to_num(y, temp);
+  while (! is_prime(y))
+      madd(y, two, y);
+  check_positive(y);
+  assert(is_prime(y));
+
+  /*
+   * the private key is a large prime (it should be the larger
+   * than x & y)
+   */
+  rand_raw(temp, HALF + 1);
+  temp[0] |= 1; /* force odd */
+  raw_to_num(private, temp);
+  while (! is_prime(private))
+      madd(private, two, private);
+  check_positive(private);
+  assert(is_prime(private));
+  if (mcmp(x, private) > 0) {
 #ifdef HAVE_GMP2_H
-	  MPTYPE tmp; tmp[0] = x[0]; x[0] = private[0]; private[0] = tmp[0];
+    MPTYPE tmp; tmp[0] = x[0]; x[0] = private[0]; private[0] = tmp[0];
 #else
-	  MPTYPE tmp; tmp = x; x = private; private = tmp;
+    MPTYPE tmp; tmp = x; x = private; private = tmp;
 #endif
-	}
-	if (mcmp(y, private) > 0) {
+  }
+  if (mcmp(y, private) > 0) {
 #ifdef HAVE_GMP2_H
-	  MPTYPE tmp; tmp[0] = x[0]; x[0] = private[0]; private[0] = tmp[0];
+    MPTYPE tmp; tmp[0] = x[0]; x[0] = private[0]; private[0] = tmp[0];
 #else
-	  MPTYPE tmp; tmp = y; y = private; private = tmp;
+    MPTYPE tmp; tmp = y; y = private; private = tmp;
 #endif
-	}
-	assert(mcmp(private, x) > 0);
-	assert(mcmp(private, y) > 0);
+  }
+  assert(mcmp(private, x) > 0);
+  assert(mcmp(private, y) > 0);
 
-	/*
-	 * the modulus global is x * y
-	 */
-	mult(x, y, global);
-	check_positive(global);
+  /*
+   * the modulus global is x * y
+   */
+  mult(x, y, global);
+  check_positive(global);
 
-	/*
-	 * the public key is such that
-	 * (public * private) mod ((x - 1) * (y - 1)) == 1
-	 */
-	msub(x, one, x);
-	msub(y, one, y);
-	mult(x, y, xyminus1);
-	assert(!is_prime(xyminus1));
-	invert(private, xyminus1, public);
-	check_positive(public);
+  /*
+   * the public key is such that
+   * (public * private) mod ((x - 1) * (y - 1)) == 1
+   */
+  msub(x, one, x);
+  msub(y, one, y);
+  mult(x, y, xyminus1);
+  assert(!is_prime(xyminus1));
+  invert(private, xyminus1, public);
+  check_positive(public);
 
-	/* check to make sure the invert worked */
-	{
-	    MPTYPE ps;
-	    MPTYPE m;
-	    MPTYPE one;
-	    assignItom(ps,0);
-	    assignItom(one,1);
-	    assignItom(m,0);
-	    mult(private, public, ps);
-	    mmod(ps, xyminus1, m);
-	    if (mcmp(m, one) != 0) {
-		printf("Ooops! invert failed!\n");
-		exit(1);
-	    }
-	    mfree(ps); mfree(m); mfree(one);
-	}
+  /* check to make sure the invert worked */
+  {
+      MPTYPE ps;
+      MPTYPE m;
+      MPTYPE one;
+      assignItom(ps,0);
+      assignItom(one,1);
+      assignItom(m,0);
+      mult(private, public, ps);
+      mmod(ps, xyminus1, m);
+      if (mcmp(m, one) != 0) {
+    printf("Ooops! invert failed!\n");
+    exit(1);
+      }
+      mfree(ps); mfree(m); mfree(one);
+  }
 
-	/*
-	 * convert to raw format
-	 */
-	num_to_raw(raw_global, global);
-	num_to_raw(raw_public, public);
-	num_to_raw(raw_private, private);
+  /*
+   * convert to raw format
+   */
+  num_to_raw(raw_global, global);
+  num_to_raw(raw_public, public);
+  num_to_raw(raw_private, private);
 
-	/* cleanup */
-	mfree(one);
-	mfree(two);
-	mfree(x);
-	mfree(y);
-	mfree(global);
-	mfree(public);
-	mfree(private);
-	mfree(xyminus1);
+  /* cleanup */
+  mfree(one);
+  mfree(two);
+  mfree(x);
+  mfree(y);
+  mfree(global);
+  mfree(public);
+  mfree(private);
+  mfree(xyminus1);
     } else if (keydoth != NULL) {
-	FILE* fp = fopen(keydoth, "r");
-	char* buffer;
-	struct stat statbuf;
-	printf("Reading old key from keys.h file \"%s\"...\n", keydoth);
-	if (fp == NULL) {
-	    printf("%s: can't open keys.h file \"%s\"\n", argv[0],
-		   keydoth);
-	    perror("");
-	    exit(1);
-	}
-	if (fstat(fileno(fp), &statbuf) < 0) {
-	    perror("fstat");
-	    exit(1);
-	}
-	buffer = (char*) malloc(statbuf.st_size);
-	assert(buffer != NULL);
-	fread(buffer, 1, statbuf.st_size, fp);
-	fclose(fp);
-	get_array(buffer, "key_global", raw_global, SIZE);
-	get_array(buffer, "key_public", raw_public, SIZE);
-	get_array(buffer, "key_private", raw_private, SIZE);
-	free(buffer);
+  FILE* fp = fopen(keydoth, "r");
+  char* buffer;
+  struct stat statbuf;
+  printf("Reading old key from keys.h file \"%s\"...\n", keydoth);
+  if (fp == NULL) {
+      printf("%s: can't open keys.h file \"%s\"\n", argv[0],
+       keydoth);
+      perror("");
+      exit(1);
+  }
+  if (fstat(fileno(fp), &statbuf) < 0) {
+      perror("fstat");
+      exit(1);
+  }
+  buffer = (char*) malloc(statbuf.st_size);
+  assert(buffer != NULL);
+  fread(buffer, 1, statbuf.st_size, fp);
+  fclose(fp);
+  get_array(buffer, "key_global", raw_global, SIZE);
+  get_array(buffer, "key_public", raw_public, SIZE);
+  get_array(buffer, "key_private", raw_private, SIZE);
+  free(buffer);
     } else {
-	char* buffer;
-	struct stat statbuf;
-	FILE* fp = fopen(keycap, "r");
-	printf("Reading key from keycap file \"%s\"...\n", keycap);
-	if (fp == NULL) {
-	    printf("%s: can't open keycap file \"%s\"\n", argv[0], keycap);
-	    perror("");
-	    exit(1);
-	}
-	if (fstat(fileno(fp), &statbuf) < 0) {
-	    perror("fstat");
-	    exit(1);
-	}
-	buffer = (char*) malloc(statbuf.st_size);
-	assert(buffer != NULL);
-	fread(buffer, 1, statbuf.st_size, fp);
-	fclose(fp);
-	key_name = allocbuf();
-	client_type = allocbuf();
-	architecture = allocbuf();
-	creator = allocbuf();
-	created = allocbuf();
-	comments = allocbuf();
-	if (!kgetkeyname(buffer, key_name) ||
-	    !kgetstr(buffer, CLIENT_TYPE_FIELD, client_type) ||
-	    !kgetstr(buffer, CREATOR_FIELD, creator) ||
-	    !kgetstr(buffer, CREATED_FIELD, created) ||
-	    !kgetstr(buffer, ARCH_TYPE_FIELD, architecture) ||
-	    !kgetstr(buffer, COMMENTS_FIELD, comments) ||
-	    !kgetkey(buffer, GLOBAL_KEY_FIELD, raw_global) ||
-	    !kgetkey(buffer, PUBLIC_KEY_FIELD, raw_public) ||
-	    !kgetkey(buffer, SECRET_KEY_FIELD, raw_private)) {
-	    fprintf(stderr, "%s: can't parse keycap file \"%s\"\n", argv[0],
-		    keycap);
-	    exit(1);
-	}
-	free(buffer);
+  char* buffer;
+  struct stat statbuf;
+  FILE* fp = fopen(keycap, "r");
+  printf("Reading key from keycap file \"%s\"...\n", keycap);
+  if (fp == NULL) {
+      printf("%s: can't open keycap file \"%s\"\n", argv[0], keycap);
+      perror("");
+      exit(1);
+  }
+  if (fstat(fileno(fp), &statbuf) < 0) {
+      perror("fstat");
+      exit(1);
+  }
+  buffer = (char*) malloc(statbuf.st_size);
+  assert(buffer != NULL);
+  fread(buffer, 1, statbuf.st_size, fp);
+  fclose(fp);
+  key_name = allocbuf();
+  client_type = allocbuf();
+  architecture = allocbuf();
+  creator = allocbuf();
+  created = allocbuf();
+  comments = allocbuf();
+  if (!kgetkeyname(buffer, key_name) ||
+      !kgetstr(buffer, CLIENT_TYPE_FIELD, client_type) ||
+      !kgetstr(buffer, CREATOR_FIELD, creator) ||
+      !kgetstr(buffer, CREATED_FIELD, created) ||
+      !kgetstr(buffer, ARCH_TYPE_FIELD, architecture) ||
+      !kgetstr(buffer, COMMENTS_FIELD, comments) ||
+      !kgetkey(buffer, GLOBAL_KEY_FIELD, raw_global) ||
+      !kgetkey(buffer, PUBLIC_KEY_FIELD, raw_public) ||
+      !kgetkey(buffer, SECRET_KEY_FIELD, raw_private)) {
+      fprintf(stderr, "%s: can't parse keycap file \"%s\"\n", argv[0],
+        keycap);
+      exit(1);
+  }
+  free(buffer);
     }
 
     if (test_key)
-	verify_key(raw_public, raw_private, raw_global);
+  verify_key(raw_public, raw_private, raw_global);
     if (verify_only)
-	exit(0);
+  exit(0);
 
     if (keycap == NULL) {
-	keycapfp = fopen(key_name, "w");
-	assert(keycapfp != NULL);
-	strcpy(buf, key_name);
-	strcat(buf, ".secret");
-	skeycapfp = fopen(buf, "w");
-	assert(skeycapfp != NULL);
+  keycapfp = fopen(key_name, "w");
+  assert(keycapfp != NULL);
+  strcpy(buf, key_name);
+  strcat(buf, ".secret");
+  skeycapfp = fopen(buf, "w");
+  assert(skeycapfp != NULL);
     } else {
-	keycapfp = NULL;
+  keycapfp = NULL;
     }
 
     sprintf(buf, "%s.c", clients_basename);
@@ -1128,18 +1128,18 @@ int main(argc, argv)
     fprintf(clientsfp, "char client_creator[] = \"%s\";\n", creator);
     fprintf(clientsfp, "char client_comments[] = \"%s\";\n", comments);
     if (created == NULL) {
-	time(&today);
-	strftime(buf, sizeof(buf), "%B %Y", gmtime(&today));
-	created = buf;
+  time(&today);
+  strftime(buf, sizeof(buf), "%B %Y", gmtime(&today));
+  created = buf;
     }
     fprintf(clientsfp, "char client_key_date[] = \"%s\";\n", created);
     if (keycapfp != NULL) {
-	fprintf(keycapfp,
-		"%s:ct=%s:cr=%s:\\\n   :cd=%s:ar=%s:cl=%s:\\\n   :cm=%s:\\\n",
-		key_name, client_type, creator, buf, architecture, class, comments);
-	fprintf(skeycapfp,
-		"%s:ct=%s:cr=%s:\\\n   :cd=%s:ar=%s:cl=%s:\\\n   :cm=%s:\\\n",
-		key_name, client_type, creator, buf, architecture, class, comments);
+  fprintf(keycapfp,
+    "%s:ct=%s:cr=%s:\\\n   :cd=%s:ar=%s:cl=%s:\\\n   :cm=%s:\\\n",
+    key_name, client_type, creator, buf, architecture, class, comments);
+  fprintf(skeycapfp,
+    "%s:ct=%s:cr=%s:\\\n   :cd=%s:ar=%s:cl=%s:\\\n   :cm=%s:\\\n",
+    key_name, client_type, creator, buf, architecture, class, comments);
     }
 
     /*
@@ -1151,14 +1151,14 @@ int main(argc, argv)
      * write the global modulos
      */
     if (keycapfp != NULL) {
-	fprintf(keycapfp, "   :gk=");
-	fprintf(skeycapfp, "   :gk=");
-	for (i = 0; i < SIZE; i++) {
-	    fprintf(keycapfp, "%02x", (int) raw_global[i]);
-	    fprintf(skeycapfp, "%02x", (int) raw_global[i]);
-	}
-	fprintf(keycapfp, ":\\\n");
-	fprintf(skeycapfp, ":\\\n");
+  fprintf(keycapfp, "   :gk=");
+  fprintf(skeycapfp, "   :gk=");
+  for (i = 0; i < SIZE; i++) {
+      fprintf(keycapfp, "%02x", (int) raw_global[i]);
+      fprintf(skeycapfp, "%02x", (int) raw_global[i]);
+  }
+  fprintf(keycapfp, ":\\\n");
+  fprintf(skeycapfp, ":\\\n");
     }
     gen_key(clientsfp, "global", raw_global, SIZE);
 
@@ -1166,14 +1166,14 @@ int main(argc, argv)
      * write the public key
      */
     if (keycapfp != NULL) {
-	fprintf(keycapfp, "   :pk=");
-	fprintf(skeycapfp, "   :pk=");
-	for (i = 0; i < SIZE; i++) {
-	    fprintf(keycapfp, "%02x", (int) raw_public[i]);
-	    fprintf(skeycapfp, "%02x", (int) raw_public[i]);
-	}
-	fprintf(keycapfp, ":\n");
-	fprintf(skeycapfp, ":\\\n");
+  fprintf(keycapfp, "   :pk=");
+  fprintf(skeycapfp, "   :pk=");
+  for (i = 0; i < SIZE; i++) {
+      fprintf(keycapfp, "%02x", (int) raw_public[i]);
+      fprintf(skeycapfp, "%02x", (int) raw_public[i]);
+  }
+  fprintf(keycapfp, ":\n");
+  fprintf(skeycapfp, ":\\\n");
     }
     gen_key(clientsfp, "public", raw_public, SIZE);
 
@@ -1181,18 +1181,18 @@ int main(argc, argv)
      * write the private key
      */
     if (keycapfp != NULL) {
-	fprintf(skeycapfp, "   :sk=");
-	for (i = 0; i < SIZE; i++)
-	    fprintf(skeycapfp, "%02x", (int) raw_private[i]);
-	fprintf(skeycapfp, ":\n");
+  fprintf(skeycapfp, "   :sk=");
+  for (i = 0; i < SIZE; i++)
+      fprintf(skeycapfp, "%02x", (int) raw_private[i]);
+  fprintf(skeycapfp, ":\n");
     }
-    
+
     /*
      * write the sequence of computations that compute
      * (out ** private) mod global
      */
     gen_rsa_sequence(clientsfp, clients_basename, n_files,
-		     raw_private, n_shells, swap_steps, file_ratio);
+         raw_private, n_shells, swap_steps, file_ratio);
 
     /*
      * write the source trailer
@@ -1204,8 +1204,8 @@ int main(argc, argv)
     /* cleanup */
     fclose(clientsfp);
     if (keycapfp != NULL) {
-	fclose(keycapfp);
-	fclose(skeycapfp);
+  fclose(keycapfp);
+  fclose(skeycapfp);
     }
 
     exit(0);

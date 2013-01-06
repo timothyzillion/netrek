@@ -13,7 +13,7 @@
  *
  * Revision 1.7  2001/04/28 04:03:56  quozl
  * change -U to also adopt a local port number for TCP mode.
- * 		-- Benjamin `Quisar' Lerman  <quisar@quisar.ambre.net>
+ *    -- Benjamin `Quisar' Lerman  <quisar@quisar.ambre.net>
  *
  * Revision 1.6  2000/12/28 12:36:38  siegl
  * CVS info
@@ -59,38 +59,38 @@ struct message *messages;
 struct mctl *mctl;
 struct memory universe;
 
-int     ghoststart = 0;				 /* is this a ghostbust *
+int     ghoststart = 0;        /* is this a ghostbust *
 
-						  * 
-						  * * restart? */
-int     ghost_pno = 0;				 /* is this a ghostbust *
+              *
+              * * restart? */
+int     ghost_pno = 0;         /* is this a ghostbust *
 
-						  * 
-						  * * restart? */
-int     keepInfo = 15;				 /* how many updates to keep
+              *
+              * * restart? */
+int     keepInfo = 15;         /* how many updates to keep
 
-						  * 
-						  * * * infowins 6/1/93 LAB */
+              *
+              * * * infowins 6/1/93 LAB */
 int     showPlanetOwner = 0;
 
 int     phaserShrink = 0;
 int     theirPhaserShrink = 0;
 int     shrinkPhaserOnMiss = 0;
 
-int     newDashboard = 3;			 /* use new graphic *
+int     newDashboard = 3;      /* use new graphic *
 
-						  * 
-						  * * dashboard, 6/2/93 LAB */
-int     old_db = 3;				 /* should be same as *
+              *
+              * * dashboard, 6/2/93 LAB */
+int     old_db = 3;        /* should be same as *
 
-						  * 
-						  * * newDashboard */
-int     detCircle = 0;		/* Show det circle on tactical */
+              *
+              * * newDashboard */
+int     detCircle = 0;    /* Show det circle on tactical */
 int     fastQuit = 0;
-int     gen_distress = 0;			 /* generic distress/macro *
+int     gen_distress = 0;      /* generic distress/macro *
 
-						  * 
-						  * * system support */
+              *
+              * * system support */
 int     niftyNewMessages = 1;
 int     oldalert = 0;
 int     remap[16] =
@@ -98,21 +98,21 @@ int     remap[16] =
 int     messpend = 0;
 
 #ifdef XTRA_MESSAGE_UI
-int     messageHUD = 0;				 /* Show message being typed
+int     messageHUD = 0;        /* Show message being typed
 
-						  * 
-						  * * on the local display *
-						  *     */
-int     messHoldThresh = 0;			 /* Threshold value for
+              *
+              * * on the local display *
+              *     */
+int     messHoldThresh = 0;      /* Threshold value for
 
-						  * 
-						  * * putting a message on
-						  * hold  * (squared) */
-int     messMouseDelta = 0;			 /* To keep track of mouse
+              *
+              * * putting a message on
+              * hold  * (squared) */
+int     messMouseDelta = 0;      /* To keep track of mouse
 
-						  * 
-						  * * movement delta *
-						  * */
+              *
+              * * movement delta *
+              * */
 #endif
 int     lastcount = 0;
 int     mdisplayed = 0;
@@ -130,8 +130,8 @@ struct plupdate pl_update[MAXPLANETS];
 char    buttonmap[W_BUTTON_RANGE] =
 {'\0', '\0', '\0', '\0', '\0', '\0'};
 int     lastm = 0;
-int     delay = 0;				 /* delay for decaring war */
-int     rdelay = 0;				 /* delay for refitting */
+int     delay = 0;         /* delay for decaring war */
+int     rdelay = 0;        /* delay for refitting */
 int     namemode = 1;
 int     quittime = 60;
 int     showStats = 0;
@@ -145,12 +145,12 @@ int     messtime = 5;
 int     keeppeace = 0;
 
 #ifdef GATEWAY
-unsigned LONG netaddr = 0;			 /* for blessing */
+unsigned LONG netaddr = 0;       /* for blessing */
 
 #endif
 
-int     msgBeep = 1;				 /* ATM - msg beep */
-int     scanmapped = 0;				 /* ATM - scanners */
+int     msgBeep = 1;         /* ATM - msg beep */
+int     scanmapped = 0;        /* ATM - scanners */
 
 int     logmess = 0;
 int     continuetractor = 1;
@@ -169,10 +169,10 @@ char   *shipnos = "0123456789abcdefghijklmnopqrstuvwxyz";
 #ifndef RSA
 /* Um, not that I could find... SAC 1 Aug 1996 */
 /* Search for it in the rsa_box*.c files ... 007 15 Aug 1996 */
-int     sock = -1;				 /* randomized into RSA code
+int     sock = -1;         /* randomized into RSA code
 
-						  * 
-						  * *  08/24/95 [007] */
+              *
+              * *  08/24/95 [007] */
 #endif
 int     xtrekPort = -1;
 int     queuePos = -1;
@@ -189,123 +189,123 @@ int     rotate_deg = 0;
 int     loginAccept = -1;
 unsigned localflags = 0;
 int     tournMask = 15;
-int     nextSocket = 0;				 /* socket to use when we get
+int     nextSocket = 0;        /* socket to use when we get
 
-						  * 
-						  * * * ghostbusted... */
+              *
+              * * * ghostbusted... */
 char   *serverName = NULL;
 
-/* if there's an rc file, defaultsFile gets set by initDefaults; 
+/* if there's an rc file, defaultsFile gets set by initDefaults;
  * if there isn't one, we want to know */
 char    defaultsFile[80] = "";
 
 char   *myname = NULL;
 int     loggedIn = 0;
 int     reinitPlanets = 0;
-int     timerDelay = 200000;			 /* micro secs between *
+int     timerDelay = 200000;       /* micro secs between *
 
-						  * 
-						  * * updates */
-int     redrawDelay = 0;			 /* 1/10 secs beetween *
+              *
+              * * updates */
+int     redrawDelay = 0;       /* 1/10 secs beetween *
 
-						  * 
-						  * * redraws */
-int     reportKills = 1;			 /* report kill messages (in
+              *
+              * * redraws */
+int     reportKills = 1;       /* report kill messages (in
 
-						  * 
-						  * * * review window)? */
-int     phaserWindow = 0;			 /* What window to show
+              *
+              * * * review window)? */
+int     phaserWindow = 0;      /* What window to show
 
-						  * 
-						  * * phaser msgs in */
+              *
+              * * phaser msgs in */
 
 #ifdef PHASER_STATS
-int     phaserShowStats = 0;			 /* How to show phaser stats */
-int     phaserStatTry = 0;			 /* Try/attemps to phaser */
-int     phaserStatHit = 0;			 /* Number of hits */
+int     phaserShowStats = 0;       /* How to show phaser stats */
+int     phaserStatTry = 0;       /* Try/attemps to phaser */
+int     phaserStatHit = 0;       /* Number of hits */
 
 #endif
 int     censorMessages = 0;
 
 #ifdef RECORDGAME
-FILE   *recordFile = NULL;			 /* recorder: slurp packets * 
+FILE   *recordFile = NULL;       /* recorder: slurp packets *
 
-						  * 
-						  * 
-						  * * here */
-FILE   *recordIndexFile = NULL;			  
-FILE   *recordContextFile = NULL;			 
+              *
+              *
+              * * here */
+FILE   *recordIndexFile = NULL;
+FILE   *recordContextFile = NULL;
 
 int     playback = 0;
 
 #endif
 
-FILE   *logFile = NULL;				 /* log messages to this file 
+FILE   *logFile = NULL;        /* log messages to this file
 
-						  * 
-						  * 
-						  */
-int     scanplayer = 0;				 /* who to scan */
-int     showTractor = 1;			 /* show visible tractor *
+              *
+              *
+              */
+int     scanplayer = 0;        /* who to scan */
+int     showTractor = 1;       /* show visible tractor *
 
-						  * 
-						  * * beams */
-int     commMode = 0;				 /* UDP: 0=TCP only, 1=UDP *
+              *
+              * * beams */
+int     commMode = 0;        /* UDP: 0=TCP only, 1=UDP *
 
-						  * 
-						  * * updates */
-int     commModeReq = 0;			 /* UDP: req for comm *
+              *
+              * * updates */
+int     commModeReq = 0;       /* UDP: req for comm *
 
-						  * 
-						  * * protocol change */
-int     commStatus = 0;				 /* UDP: used when switching
+              *
+              * * protocol change */
+int     commStatus = 0;        /* UDP: used when switching
 
-						  * 
-						  * * * protocols */
-int     commSwitchTimeout = 0;			 /* UDP: don't wait forever */
-int     udpTotal = 1;				 /* UDP: total #of packets *
+              *
+              * * * protocols */
+int     commSwitchTimeout = 0;       /* UDP: don't wait forever */
+int     udpTotal = 1;        /* UDP: total #of packets *
 
-						  * 
-						  * * received */
-int     udpDropped = 0;				 /* UDP: count of packets *
+              *
+              * * received */
+int     udpDropped = 0;        /* UDP: count of packets *
 
-						  * 
-						  * * dropped */
-int     udpRecentDropped = 0;			 /* UDP: #of packets dropped
+              *
+              * * dropped */
+int     udpRecentDropped = 0;      /* UDP: #of packets dropped
 
-						  * 
-						  * * * recently */
-int     udpSock = -1;				 /* UDP: the socket */
-int     udpDebug = 0;				 /* UDP: debugging info *
+              *
+              * * * recently */
+int     udpSock = -1;        /* UDP: the socket */
+int     udpDebug = 0;        /* UDP: debugging info *
 
-						  * 
-						  * * on/off */
-int     udpClientSend = 1;			 /* UDP: send our packets *
+              *
+              * * on/off */
+int     udpClientSend = 1;       /* UDP: send our packets *
 
-						  * 
-						  * * using UDP? */
-int     udpClientRecv = 1;			 /* UDP: receive with simple
+              *
+              * * using UDP? */
+int     udpClientRecv = 1;       /* UDP: receive with simple
 
-						  * 
-						  * * * UDP */
-int     udpSequenceChk = 1;			 /* UDP: check sequence *
+              *
+              * * * UDP */
+int     udpSequenceChk = 1;      /* UDP: check sequence *
 
-						  * 
-						  * * numbers */
-int     weaponUpdate = 0;			 /* Have any weapon packets * 
+              *
+              * * numbers */
+int     weaponUpdate = 0;      /* Have any weapon packets *
 
-						  * 
-						  * 
-						  * * been received recently */
+              *
+              *
+              * * been received recently */
 
 #ifdef GATEWAY
-int     gw_serv_port, gw_port, gw_local_port;	 /* UDP */
-char   *gw_mach = NULL;				 /* UDP */
+int     gw_serv_port, gw_port, gw_local_port;  /* UDP */
+char   *gw_mach = NULL;        /* UDP */
 
 #endif
 
 /* for router-based firewalls, we need to tunnel through at a specific port */
-int     baseLocalPort = 0;			 /* UDP */
+int     baseLocalPort = 0;       /* UDP */
 
 int     debug = 0;
 
@@ -321,7 +321,7 @@ int     SBhours = 0;
 
 #ifdef SHORT_PACKETS
 int     why_dead = 0;
-int     tryShort = 1;				 /* for .xtrekrc option */
+int     tryShort = 1;        /* for .xtrekrc option */
 int     tryShort1 = 1;
 int     recv_short = 0;
 int     recv_mesg = 1;
@@ -340,16 +340,16 @@ W_Window netstatWin, lMeter;
 int     updatespeed = 5;
 
 #ifdef META
-char   *metaserver = "metaserver.netrek.org";	 /* US metaserver. */
-int     metaport = 3521;			 /* HAVE to use nicely *
+char   *metaserver = "metaserver.netrek.org";  /* US metaserver. */
+int     metaport = 3521;       /* HAVE to use nicely *
 
-						  * 
-						  * * formated version */
+              *
+              * * formated version */
 #endif
 
 
 #ifdef NBT
-struct macro_list macro[MAX_MACRO];		 /* NBT 2/26/93 */
+struct macro_list macro[MAX_MACRO];    /* NBT 2/26/93 */
 int     MacroMode = 0;
 int     macrocnt = 0;
 
@@ -378,15 +378,15 @@ W_Icon  shield, cloakicon;
 
 #endif
 
-W_Icon  tractbits, pressbits;			 /* ATM - visible tractor */
+W_Icon  tractbits, pressbits;      /* ATM - visible tractor */
 W_Icon  fed_bitmaps[NUM_TYPES][VIEWS], kli_bitmaps[NUM_TYPES][VIEWS], rom_bitmaps[NUM_TYPES][VIEWS],
         ori_bitmaps[NUM_TYPES][VIEWS], ind_bitmaps[NUM_TYPES][VIEWS], ROMVLVS_bitmap[VIEWS];
 W_Icon  bplanets[7];
 W_Icon  mbplanets[7];
 W_Icon  bplanets2[8];
 W_Icon  mbplanets2[8];
-W_Icon  bplanets3[NUM_PLANET_BITMAPS2];		 /* isae:  Added this */
-W_Icon  mbplanets3[NUM_PLANET_BITMAPS2];	 /* isae: Added this */
+W_Icon  bplanets3[NUM_PLANET_BITMAPS2];    /* isae:  Added this */
+W_Icon  mbplanets3[NUM_PLANET_BITMAPS2];   /* isae: Added this */
 W_Icon  noinfoplanet;
 
 /* jn - SMARTMACRO */
@@ -443,22 +443,22 @@ W_Window metaWin = NULL;
 
 #endif
 
-int     ping = 0;				 /* to ping or not to ping */
-LONG    packets_sent = 0;			 /* # all packets sent to *
+int     ping = 0;        /* to ping or not to ping */
+LONG    packets_sent = 0;      /* # all packets sent to *
 
-						  * 
-						  * * server */
-LONG    packets_received = 0;			 /* # all packets received */
+              *
+              * * server */
+LONG    packets_received = 0;      /* # all packets received */
 W_Window pStats = NULL;
 
 char    deathmessage[80];
-char    outmessage[85];				 /* 80 chars made sun4's core
+char    outmessage[85];        /* 80 chars made sun4's core
 
-						  * 
-						  * * * dump and I'm too lazy 
-						  * to * * calculate the
-						  * exact * * number required 
-						  * here */
+              *
+              * * * dump and I'm too lazy
+              * to * * calculate the
+              * exact * * number required
+              * here */
 char   *xdisplay_name = NULL;
 
 int     UseNewDistress = 0;
@@ -584,16 +584,16 @@ int     tts_max_len = 40;
 int     tts_width = 0;
 int     tts_timer = 0;
 int     tts_time = 25;
-int     tts_pos = TWINSIDE / 2 - 16;		 /* as found in redraw.c *
+int     tts_pos = TWINSIDE / 2 - 16;     /* as found in redraw.c *
 
-						  * 
-						  * * originally */
+              *
+              * * originally */
 char    lastIn[100];
 
 #endif /* BEEPLITE */
 
-#ifdef RCM					 /* Receiver configurable * * 
-						  * Server messages */
+#ifdef RCM           /* Receiver configurable * *
+              * Server messages */
 struct dmacro_list rcm_msg[] =
 {
   {'0', "none", "Unknown RCM message"},
@@ -632,10 +632,10 @@ int     extended_mouse = 0;
 
 #endif
 
-int     ignoreCaps = 1;				 /* Default is to ignore the
+int     ignoreCaps = 1;        /* Default is to ignore the
 
-						  * 
-						  * * * Capslock key SRS */
+              *
+              * * * Capslock key SRS */
 
 #ifdef MOUSE_AS_SHIFT
 /* KRP */

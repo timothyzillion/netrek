@@ -1,4 +1,3 @@
-
 #define emph_planet_seq_width 24
 #define emph_planet_seq_height 24
 #define emph_planet_seq_frames 5

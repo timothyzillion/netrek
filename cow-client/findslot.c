@@ -1,6 +1,5 @@
-
 /* findslot.c
- * 
+ *
  * Kevin Smith 03/23/88
  *
  * $Log: findslot.c,v $
@@ -28,8 +27,8 @@
 
 #define WAITWIDTH 180
 #define WAITHEIGHT 60
-#define WAITTITLE 15				 /* height of title for wait
-						  * * * window */
+#define WAITTITLE 15         /* height of title for wait
+              * * * window */
 
 extern void terminate(int error);
 
@@ -50,35 +49,35 @@ findslot(void)
     {
       socketPause();
       if (isServerDead())
-	{
+  {
 
 #if defined(SOUND) && !defined(HAVE_SDL)
-	  Exit_Sound();
+    Exit_Sound();
 #endif
 
-	  printf("Shit!  Ghostbusted!\n");
-	  terminate(0);
-	}
+    printf("Shit!  Ghostbusted!\n");
+    terminate(0);
+  }
       readFromServer(NULL);
       if (me != NULL)
-	{
-	  /* We are in! */
-	  ANNOUNCESOCKET;
-	  return (me->p_no);
-	}
+  {
+    /* We are in! */
+    ANNOUNCESOCKET;
+    return (me->p_no);
+  }
     }
 
   /* We have to wait.  Make appropriate windows, etc... */
 
   waitWin = W_MakeWindow("wait", 0, 0, WAITWIDTH, WAITHEIGHT, NULL, 2,
-			 foreColor);
+       foreColor);
   countWin = W_MakeWindow("count", WAITWIDTH / 3, WAITTITLE, WAITWIDTH / 3,
-			  WAITHEIGHT - WAITTITLE, waitWin, 1, foreColor);
+        WAITHEIGHT - WAITTITLE, waitWin, 1, foreColor);
   qwin = W_MakeWindow("waitquit", 0, WAITTITLE, WAITWIDTH / 3,
-		      WAITHEIGHT - WAITTITLE, waitWin, 1, foreColor);
+          WAITHEIGHT - WAITTITLE, waitWin, 1, foreColor);
   motdButtonWin = W_MakeWindow("motdbutton", 2 * WAITWIDTH / 3, WAITTITLE,
-			     WAITWIDTH / 3, WAITHEIGHT - WAITTITLE, waitWin,
-			       1, foreColor);
+           WAITWIDTH / 3, WAITHEIGHT - WAITTITLE, waitWin,
+             1, foreColor);
   W_MapWindow(waitWin);
   W_MapWindow(countWin);
   W_MapWindow(motdButtonWin);
@@ -86,7 +85,7 @@ findslot(void)
   if (mapMotd)
     {
       motdWin = W_MakeWindow("waitmotd", 1, WAITWIDTH + 1, TWINSIDE,
-			     TWINSIDE, 0, 2, foreColor);
+           TWINSIDE, 0, 2, foreColor);
       W_MapWindow(motdWin);
       showMotd(motdWin, WaitMotdLine);
     }
@@ -96,118 +95,118 @@ findslot(void)
       socketPause();
       readFromServer(NULL);
       if (isServerDead())
-	{
+  {
 
 #if defined(SOUND) && !defined(HAVE_SDL)
-	  Exit_Sound();
+    Exit_Sound();
 #endif
 
-	  printf("Damn, We've been ghostbusted!\n");
-	  terminate(0);
-	}
+    printf("Damn, We've been ghostbusted!\n");
+    terminate(0);
+  }
       while (W_EventsPending())
-	{
-	  W_NextEvent(&event);
-	  switch ((int) event.type)
-	    {
-	    case W_EV_BUTTON:
-	    case W_EV_KEY:
-	      if (mapMotd && event.Window == motdWin)
-		{
-		  if (event.key == ' ' || event.key == 'q')
-		    {
-		      W_DestroyWindow(motdWin);
-		      mapMotd = !mapMotd;
-		    }
-		  else
-		    {
-		      if (event.key == 'b')
-			{
-			  WaitMotdLine -= 28;
-			  WaitMotdLine = MAX(WaitMotdLine, 0);
-			}
-		      else
-			{
-			  WaitMotdLine += 28;
-			  /* scroll to start if it goes over */
-			  if (WaitMotdLine > MaxMotdLine)
-			    WaitMotdLine = 0;
-			}
-		      W_ClearWindow(motdWin);
-		      showMotd(motdWin, WaitMotdLine);
-		      break;
-		    }
-		}
-	      else if (event.Window == motdButtonWin)
-		{
-		  if (mapMotd)
-		    {
-		      W_DestroyWindow(motdWin);
-		    }
-		  else
-		    {
-		      motdWin = W_MakeWindow("waitmotd", 1, WAITWIDTH + 1,
-					     TWINSIDE, TWINSIDE, 0, 2,
-					     foreColor);
-		      W_MapWindow(motdWin);
-		      showMotd(motdWin, WaitMotdLine);
-		    }
-		  mapMotd = !mapMotd;
-		}
-	      else if (event.Window == qwin)
-		{
+  {
+    W_NextEvent(&event);
+    switch ((int) event.type)
+      {
+      case W_EV_BUTTON:
+      case W_EV_KEY:
+        if (mapMotd && event.Window == motdWin)
+    {
+      if (event.key == ' ' || event.key == 'q')
+        {
+          W_DestroyWindow(motdWin);
+          mapMotd = !mapMotd;
+        }
+      else
+        {
+          if (event.key == 'b')
+      {
+        WaitMotdLine -= 28;
+        WaitMotdLine = MAX(WaitMotdLine, 0);
+      }
+          else
+      {
+        WaitMotdLine += 28;
+        /* scroll to start if it goes over */
+        if (WaitMotdLine > MaxMotdLine)
+          WaitMotdLine = 0;
+      }
+          W_ClearWindow(motdWin);
+          showMotd(motdWin, WaitMotdLine);
+          break;
+        }
+    }
+        else if (event.Window == motdButtonWin)
+    {
+      if (mapMotd)
+        {
+          W_DestroyWindow(motdWin);
+        }
+      else
+        {
+          motdWin = W_MakeWindow("waitmotd", 1, WAITWIDTH + 1,
+               TWINSIDE, TWINSIDE, 0, 2,
+               foreColor);
+          W_MapWindow(motdWin);
+          showMotd(motdWin, WaitMotdLine);
+        }
+      mapMotd = !mapMotd;
+    }
+        else if (event.Window == qwin)
+    {
 
 #if defined(SOUND) && !defined(HAVE_SDL)
-		  Exit_Sound();
+      Exit_Sound();
 #endif
 
-		  printf("OK, bye!\n");
-		  terminate(0);
-		}
-	      break;
-	    case W_EV_EXPOSE:
-	      if (event.Window == waitWin)
-		{
-		  mapWaitWin(waitWin);
-		}
-	      else if (event.Window == motdWin)
-		{
-		  showMotd(motdWin, WaitMotdLine);
-		}
-	      else if (event.Window == qwin)
-		{
-		  mapWaitQuit(qwin);
-		}
-	      else if (event.Window == countWin)
-		{
-		  mapWaitCount(waitWin, countWin, queuePos);
-		}
-	      else if (event.Window == motdButtonWin)
-		{
-		  mapWaitMotdButton(motdButtonWin);
-		}
-	      break;
-	    default:
-	      break;
-	    }
-	}
+      printf("OK, bye!\n");
+      terminate(0);
+    }
+        break;
+      case W_EV_EXPOSE:
+        if (event.Window == waitWin)
+    {
+      mapWaitWin(waitWin);
+    }
+        else if (event.Window == motdWin)
+    {
+      showMotd(motdWin, WaitMotdLine);
+    }
+        else if (event.Window == qwin)
+    {
+      mapWaitQuit(qwin);
+    }
+        else if (event.Window == countWin)
+    {
+      mapWaitCount(waitWin, countWin, queuePos);
+    }
+        else if (event.Window == motdButtonWin)
+    {
+      mapWaitMotdButton(motdButtonWin);
+    }
+        break;
+      default:
+        break;
+      }
+  }
       if (queuePos != oldcount)
-	{
-	  mapWaitCount(waitWin, countWin, queuePos);
-	  oldcount = queuePos;
-	}
+  {
+    mapWaitCount(waitWin, countWin, queuePos);
+    oldcount = queuePos;
+  }
       if (me != NULL)
-	{
-	  W_DestroyWindow(waitWin);
-	  if (mapMotd)
-	    {
-	      W_DestroyWindow(motdWin);
-	    }
-	  ANNOUNCESOCKET;
-	  W_Beep();
-	  W_Beep();
-	  return (me->p_no);
-	}
+  {
+    W_DestroyWindow(waitWin);
+    if (mapMotd)
+      {
+        W_DestroyWindow(motdWin);
+      }
+    ANNOUNCESOCKET;
+    W_Beep();
+    W_Beep();
+    return (me->p_no);
+  }
     }
 }
 
@@ -242,7 +241,7 @@ mapWaitCount(W_Window waitWin, W_Window countWin, int count)
   if (count == -1)
     STRNCPY(buf, "?", 2);
   W_WriteText(countWin, WAITWIDTH / 6 - strlen(buf) * W_Textwidth / 2, 25,
-	      textColor, buf, strlen(buf), W_RegularFont);
+        textColor, buf, strlen(buf), W_RegularFont);
   sprintf(buf, "Q%d @ %s", count, serverName);
   W_SetWindowName(waitWin, buf);
 }

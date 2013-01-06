@@ -1,6 +1,6 @@
 /*
  * spopt.c
- * 
+ *
  * Functions to look after the Short Packet window.
  * *
  * * $Log: spopt.c,v $
@@ -27,7 +27,7 @@
 void    sprefresh(int i)
 /*
  * Refresh button i in the Short Packed Window.
- * 
+ *
  * Buttons are:
  * SPK_VFIELD           - Variable short packets.
  * SPK_MFIELD           - Messages.
@@ -44,7 +44,7 @@ void    sprefresh(int i)
 
     case SPK_VFIELD:
       sprintf(buf, "%seceive variable and short packets",
-	      recv_short ? "R" : "Don't r");
+        recv_short ? "R" : "Don't r");
       break;
     case SPK_MFIELD:
       sprintf(buf, "%seceive messages", recv_mesg ? "R" : "Don't r");
@@ -81,96 +81,96 @@ void    spaction(W_Event * data)
 
     case SPK_VFIELD:
       if (data->type == W_EV_BUTTON)
-	{
-	  if (recv_short)
-	    sendShortReq(SPK_VOFF);
-	  else
-	    sendShortReq(SPK_VON);
-	}
+  {
+    if (recv_short)
+      sendShortReq(SPK_VOFF);
+    else
+      sendShortReq(SPK_VON);
+  }
       break;
 
     case SPK_MFIELD:
       if (data->type == W_EV_BUTTON)
-	{
-	  if (recv_mesg)
-	    sendShortReq(SPK_MOFF);
-	  else
-	    sendShortReq(SPK_MON);
-	}
+  {
+    if (recv_mesg)
+      sendShortReq(SPK_MOFF);
+    else
+      sendShortReq(SPK_MON);
+  }
       break;
 
     case SPK_KFIELD:
       if (data->type == W_EV_BUTTON)
-	{
-	  if (recv_kmesg)
-	    sendShortReq(SPK_M_NOKILLS);
-	  else
-	    sendShortReq(SPK_M_KILLS);
-	}
+  {
+    if (recv_kmesg)
+      sendShortReq(SPK_M_NOKILLS);
+    else
+      sendShortReq(SPK_M_KILLS);
+  }
       break;
 
     case SPK_WFIELD:
       if (data->type == W_EV_BUTTON)
-	{
-	  if (recv_warn)
-	    sendShortReq(SPK_M_NOWARN);
-	  else
-	    sendShortReq(SPK_M_WARN);
-	}
+  {
+    if (recv_warn)
+      sendShortReq(SPK_M_NOWARN);
+    else
+      sendShortReq(SPK_M_WARN);
+  }
       break;
 
     case SPK_TFIELD:
       if (data->type == W_EV_KEY)
-	{
-	  switch (data->key)
-	    {
-	    case '\b':
-	    case '\177':
-	      cp = recv_threshold_s;
-	      i = strlen(cp);
-	      if (i > 0)
-		{
-		  cp += i - 1;
-		  *cp = '\0';
-		}
-	      break;
-	    case '\025':
-	    case '\030':
-	      recv_threshold_s[0] = '\0';
-	      break;
+  {
+    switch (data->key)
+      {
+      case '\b':
+      case '\177':
+        cp = recv_threshold_s;
+        i = strlen(cp);
+        if (i > 0)
+    {
+      cp += i - 1;
+      *cp = '\0';
+    }
+        break;
+      case '\025':
+      case '\030':
+        recv_threshold_s[0] = '\0';
+        break;
 
-	    default:
-	      if (data->key >= '0' && data->key <= '9')
-		{
-		  cp = recv_threshold_s;
-		  i = strlen(cp);
-		  if (i < 4)
-		    {
-		      cp += i;
-		      cp[1] = '\0';
-		      cp[0] = data->key;
-		    }
-		}
-	      break;
-	    }
-	  sprefresh(SPK_TFIELD);
-	}
+      default:
+        if (data->key >= '0' && data->key <= '9')
+    {
+      cp = recv_threshold_s;
+      i = strlen(cp);
+      if (i < 4)
+        {
+          cp += i;
+          cp[1] = '\0';
+          cp[0] = data->key;
+        }
+    }
+        break;
+      }
+    sprefresh(SPK_TFIELD);
+  }
       break;
 
     case SPK_DONE:
 
       if (data->type == W_EV_BUTTON)
-	{
-	  if (sscanf(recv_threshold_s, "%d", &v) != 1)
-	    strcpy(recv_threshold_s, "0");
-	  else if (recv_threshold != v)
-	    {
-	      recv_threshold = v;
-	      sendThreshold(recv_threshold);
-	    }
+  {
+    if (sscanf(recv_threshold_s, "%d", &v) != 1)
+      strcpy(recv_threshold_s, "0");
+    else if (recv_threshold != v)
+      {
+        recv_threshold = v;
+        sendThreshold(recv_threshold);
+      }
 
-	  spdone();
-	}
+    spdone();
+  }
       break;
 
     }

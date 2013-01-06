@@ -1,8 +1,7 @@
 
-
 /*
  * Copyright (c) 1983, 1993
- *	The Regents of the University of California.  All rights reserved.
+ *  The Regents of the University of California.  All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -14,8 +13,8 @@
  *    documentation and/or other materials provided with the distribution.
  * 3. All advertising materials mentioning features or use of this software
  *    must display the following acknowledgement:
- *	This product includes software developed by the University of
- *	California, Berkeley and its contributors.
+ *  This product includes software developed by the University of
+ *  California, Berkeley and its contributors.
  * 4. Neither the name of the University nor the names of its contributors
  *    may be used to endorse or promote products derived from this software
  *    without specific prior written permission.
@@ -34,7 +33,7 @@
  */
 
 #if defined(LIBC_SCCS) && !defined(lint)
-static char sccsid[] = "@(#)random.c	8.1 (Berkeley) 6/4/93";
+static char sccsid[] = "@(#)random.c  8.1 (Berkeley) 6/4/93";
 #endif /* LIBC_SCCS and not lint */
 
 #include <stdio.h>
@@ -90,36 +89,36 @@ void srandom ();
  * for the polynomial (actually a trinomial) that the R.N.G. is based on, and
  * the separation between the two lower order coefficients of the trinomial.
  */
-#define	TYPE_0		0	/* linear congruential */
-#define	BREAK_0		8
-#define	DEG_0		0
-#define	SEP_0		0
+#define TYPE_0    0 /* linear congruential */
+#define BREAK_0   8
+#define DEG_0   0
+#define SEP_0   0
 
-#define	TYPE_1		1	/* x**7 + x**3 + 1 */
-#define	BREAK_1		32
-#define	DEG_1		7
-#define	SEP_1		3
+#define TYPE_1    1 /* x**7 + x**3 + 1 */
+#define BREAK_1   32
+#define DEG_1   7
+#define SEP_1   3
 
-#define	TYPE_2		2	/* x**15 + x + 1 */
-#define	BREAK_2		64
-#define	DEG_2		15
-#define	SEP_2		1
+#define TYPE_2    2 /* x**15 + x + 1 */
+#define BREAK_2   64
+#define DEG_2   15
+#define SEP_2   1
 
-#define	TYPE_3		3	/* x**31 + x**3 + 1 */
-#define	BREAK_3		128
-#define	DEG_3		31
-#define	SEP_3		3
+#define TYPE_3    3 /* x**31 + x**3 + 1 */
+#define BREAK_3   128
+#define DEG_3   31
+#define SEP_3   3
 
-#define	TYPE_4		4	/* x**63 + x + 1 */
-#define	BREAK_4		256
-#define	DEG_4		63
-#define	SEP_4		1
+#define TYPE_4    4 /* x**63 + x + 1 */
+#define BREAK_4   256
+#define DEG_4   63
+#define SEP_4   1
 
 /*
  * Array versions of the above information to make code run faster --
  * relies on fact that TYPE_i == i.
  */
-#define	MAX_TYPES	5	/* max number of types above */
+#define MAX_TYPES 5 /* max number of types above */
 
 static int degrees[MAX_TYPES] =
 {DEG_0, DEG_1, DEG_2, DEG_3, DEG_4};
@@ -129,7 +128,7 @@ static int seps[MAX_TYPES] =
 /*
  * Initially, everything is set up as if from:
  *
- *	initstate(1, &randtbl, 128);
+ *  initstate(1, &randtbl, 128);
  *
  * Note that this initialization takes advantage of the fact that srandom()
  * advances the front and rear pointers 10*rand_deg times, and hence the
@@ -137,7 +136,7 @@ static int seps[MAX_TYPES] =
  * element of the state information, which contains info about the current
  * position of the rear pointer is just
  *
- *	MAX_TYPES * (rptr - state) + TYPE_3 == TYPE_3.
+ *  MAX_TYPES * (rptr - state) + TYPE_3 == TYPE_3.
  */
 
 static long randtbl[DEG_3 + 1] =
@@ -159,7 +158,7 @@ static long randtbl[DEG_3 + 1] =
  * efficient this way).  The pointers are left positioned as they would be
  * from the call
  *
- *	initstate(1, randtbl, 128);
+ *  initstate(1, randtbl, 128);
  *
  * (The position of the rear pointer, rptr, is really 0 (as explained above
  * in the initialization of randtbl) because the state table pointer is set
@@ -209,11 +208,11 @@ srandom (x)
       j = 1;
       state[0] = x;
       for (i = 1; i < rand_deg; i++)
-	state[i] = 1103515245 * state[i - 1] + 12345;
+  state[i] = 1103515245 * state[i - 1] + 12345;
       fptr = &state[rand_sep];
       rptr = &state[0];
       for (i = 0; i < 10 * rand_deg; i++)
-	(void) random ();
+  (void) random ();
     }
 }
 
@@ -238,9 +237,9 @@ srandom (x)
  */
 char *
 initstate (seed, arg_state, n)
-     unsigned int seed;		/* seed for R.N.G. */
-     char *arg_state;		/* pointer to state array */
-     int n;			/* # bytes of state info */
+     unsigned int seed;   /* seed for R.N.G. */
+     char *arg_state;   /* pointer to state array */
+     int n;     /* # bytes of state info */
 {
   register char *ostate = (char *) (&state[-1]);
 
@@ -251,7 +250,7 @@ initstate (seed, arg_state, n)
   if (n < BREAK_0)
     {
       (void) fprintf (stderr,
-		      "random: not enough state (%d bytes); ignored.\n", n);
+          "random: not enough state (%d bytes); ignored.\n", n);
       return (0);
     }
   if (n < BREAK_1)
@@ -284,8 +283,8 @@ initstate (seed, arg_state, n)
       rand_deg = DEG_4;
       rand_sep = SEP_4;
     }
-  state = &(((long *) arg_state)[1]);	/* first location */
-  end_ptr = &state[rand_deg];	/* must set end_ptr before srandom */
+  state = &(((long *) arg_state)[1]); /* first location */
+  end_ptr = &state[rand_deg]; /* must set end_ptr before srandom */
   srandom (seed);
   if (rand_type == TYPE_0)
     state[-1] = rand_type;
@@ -335,7 +334,7 @@ setstate (arg_state)
       break;
     default:
       (void) fprintf (stderr,
-		      "random: state info corrupted; not changed.\n");
+          "random: state info corrupted; not changed.\n");
     }
   state = &new_state[1];
   if (rand_type != TYPE_0)
@@ -343,7 +342,7 @@ setstate (arg_state)
       rptr = &state[rear];
       fptr = &state[(rear + rand_sep) % rand_deg];
     }
-  end_ptr = &state[rand_deg];	/* set end_ptr too */
+  end_ptr = &state[rand_deg]; /* set end_ptr too */
   return (ostate);
 }
 
@@ -374,14 +373,14 @@ random ()
   else
     {
       *fptr += *rptr;
-      i = (*fptr >> 1) & 0x7fffffff;	/* chucking least random bit */
+      i = (*fptr >> 1) & 0x7fffffff;  /* chucking least random bit */
       if (++fptr >= end_ptr)
-	{
-	  fptr = state;
-	  ++rptr;
-	}
+  {
+    fptr = state;
+    ++rptr;
+  }
       else if (++rptr >= end_ptr)
-	rptr = state;
+  rptr = state;
     }
   return (i);
 }

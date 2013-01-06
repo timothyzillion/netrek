@@ -1,10 +1,10 @@
 
 /* Socket.c
- * 
+ *
  * Kevin P. Smith 1/29/89 UDP stuff v1.0 by Andy McFadden  Feb-Apr 1992
- * 
+ *
  * UDP protocol v1.0
- * 
+ *
  * Routines to allow connection to the xtrek server.
  *
  * $Log: socket.c,v $
@@ -36,7 +36,7 @@
  *
  * Revision 1.5  2001/04/28 04:03:56  quozl
  * change -U to also adopt a local port number for TCP mode.
- * 		-- Benjamin `Quisar' Lerman  <quisar@quisar.ambre.net>
+ *    -- Benjamin `Quisar' Lerman  <quisar@quisar.ambre.net>
  *
  * Revision 1.4  1999/07/24 19:23:43  siegl
  * New default portSwap for UDP_PORTSWAP feature
@@ -75,10 +75,10 @@
 #include "map.h"
 #include "local.h"
 
-#ifdef WIN32					 /* socket garbage in case *
-						  * the client is not running 
-						  * 
-						  * * on NT */
+#ifdef WIN32           /* socket garbage in case *
+              * the client is not running
+              *
+              * * on NT */
 #define read(f,b,l) recv(f,b,l,0)
 #define write(f,b,l) send(f,b,l,0)
 #define close(s) closesocket(s)
@@ -95,20 +95,20 @@
  * 5000;         |what to tell the server to use int   gw_port        = 5001;
  * |where we will contact gw int   gw_local_port  = 5100;         |where we
  * expect gw to contact us
- * 
+ *
  * The client binds to "5100" and sends "5000" to the server (TCP).  The server
  * sees that and sends a UDP packet to gw on port udp5000, which passes it
  * through to port udp5100 on the client.  The client-gw gets the server's
  * host and port from recvfrom.  (The client can't use the same method since
  * these sockets are one-way only, so it connect()s to gw_port (udp5001) on
  * the gateway machine regardless of what the server sends.)
- * 
+ *
  * So all we need in .gwrc is: udp 5000 5001 tde.uts 5100
- * 
+ *
  * assuming the client is on tde.uts.  Note that a UDP declaration will work for
  * ANY server, but you need one per player, and the client has to have the
  * port numbers in advance.
- * 
+ *
  * If we're using a standard server, we're set.  If we're running through a
  * gatewayed server, we have to do some unpleasant work on the server side... */
 #endif
@@ -156,7 +156,7 @@ void    handleRSAKey(void *packet);
 #endif
 
 void    handleShipCap(struct ship_cap_spacket *packet);
-extern void handlePing(struct ping_spacket *packet);	/* ping.c */
+extern void handlePing(struct ping_spacket *packet);  /* ping.c */
 extern void terminate(int error);
 
 #ifdef SHORT_PACKETS
@@ -209,18 +209,18 @@ char    numofbits[256] =
  5, 5, 6, 5, 6, 6, 7, 5, 6, 6, 7, 6, 7, 7, 8};
 
 static int vtsize[9] =
-{4, 8, 8, 12, 12, 16, 20, 20, 24};		 /* How big is the torppacket 
+{4, 8, 8, 12, 12, 16, 20, 20, 24};     /* How big is the torppacket
 
-						  * 
-						  * 
-						  */
+              *
+              *
+              */
 static int vtdata[9] =
-{0, 3, 5, 7, 9, 12, 14, 16, 18};		 /* How big is Torpdata */
+{0, 3, 5, 7, 9, 12, 14, 16, 18};     /* How big is Torpdata */
 int     vtisize[9] =
-{4, 7, 9, 11, 13, 16, 18, 20, 22};		 /* 4 byte Header + torpdata */
+{4, 7, 9, 11, 13, 16, 18, 20, 22};     /* 4 byte Header + torpdata */
 
 /* S_P2 */
-int     shortversion = SHORTVERSION;		 /* Which version do we use? */
+int     shortversion = SHORTVERSION;     /* Which version do we use? */
 
 #endif /* SHORT_PACKETS */
 
@@ -233,216 +233,216 @@ void print_packet(char *packet, int size);
 
 struct packet_handler handlers[] =
 {
-  {0, NULL},					 /* record 0 */
-  {sizeof(struct mesg_spacket), handleMessage},	 /* SP_MESSAGE */
-  {sizeof(struct plyr_info_spacket), handlePlyrInfo},	/* SP_PLAYER_INFO */
-  {sizeof(struct kills_spacket), handleKills},	 /* SP_KILLS */
+  {0, NULL},           /* record 0 */
+  {sizeof(struct mesg_spacket), handleMessage},  /* SP_MESSAGE */
+  {sizeof(struct plyr_info_spacket), handlePlyrInfo}, /* SP_PLAYER_INFO */
+  {sizeof(struct kills_spacket), handleKills},   /* SP_KILLS */
   {sizeof(struct player_spacket), handlePlayer}, /* SP_PLAYER */
-  {sizeof(struct torp_info_spacket), handleTorpInfo},	/* SP_TORP_INFO */
-  {sizeof(struct torp_spacket), handleTorp},	 /* SP_TORP */
+  {sizeof(struct torp_info_spacket), handleTorpInfo}, /* SP_TORP_INFO */
+  {sizeof(struct torp_spacket), handleTorp},   /* SP_TORP */
   {sizeof(struct phaser_spacket), handlePhaser}, /* SP_PHASER */
-  {sizeof(struct plasma_info_spacket), handlePlasmaInfo},	/* SP_PLASMA_INFO 
-								 * 
-								 */
+  {sizeof(struct plasma_info_spacket), handlePlasmaInfo}, /* SP_PLASMA_INFO
+                 *
+                 */
   {sizeof(struct plasma_spacket), handlePlasma}, /* SP_PLASMA */
-  {sizeof(struct warning_spacket), handleWarning},	/* SP_WARNING */
-  {sizeof(struct motd_spacket), handleMotd},	 /* SP_MOTD */
-  {sizeof(struct you_spacket), handleSelf},	 /* SP_YOU */
-  {sizeof(struct queue_spacket), handleQueue},	 /* SP_QUEUE */
+  {sizeof(struct warning_spacket), handleWarning},  /* SP_WARNING */
+  {sizeof(struct motd_spacket), handleMotd},   /* SP_MOTD */
+  {sizeof(struct you_spacket), handleSelf},  /* SP_YOU */
+  {sizeof(struct queue_spacket), handleQueue},   /* SP_QUEUE */
   {sizeof(struct status_spacket), handleStatus}, /* SP_STATUS */
   {sizeof(struct planet_spacket), handlePlanet}, /* SP_PLANET */
   {sizeof(struct pickok_spacket), handlePickok}, /* SP_PICKOK */
-  {sizeof(struct login_spacket), handleLogin},	 /* SP_LOGIN */
-  {sizeof(struct flags_spacket), handleFlags},	 /* SP_FLAGS */
-  {sizeof(struct mask_spacket), handleMask},	 /* SP_MASK */
-  {sizeof(struct pstatus_spacket), handlePStatus},	/* SP_PSTATUS */
-  {sizeof(struct badversion_spacket), handleBadVersion},	/* SP_BADVERSION 
-								 * 
-								 */
-  {sizeof(struct hostile_spacket), handleHostile},	/* SP_HOSTILE */
-  {sizeof(struct stats_spacket), handleStats},	 /* SP_STATS */
-  {sizeof(struct plyr_login_spacket), handlePlyrLogin},		/* SP_PL_LOGIN 
-								 * 
-								 */
-  {sizeof(struct reserved_spacket), handleReserved},	/* SP_RESERVED */
-  {sizeof(struct planet_loc_spacket), handlePlanetLoc},		/* SP_PLANET_LOC 
-								 * 
-								 */
+  {sizeof(struct login_spacket), handleLogin},   /* SP_LOGIN */
+  {sizeof(struct flags_spacket), handleFlags},   /* SP_FLAGS */
+  {sizeof(struct mask_spacket), handleMask},   /* SP_MASK */
+  {sizeof(struct pstatus_spacket), handlePStatus},  /* SP_PSTATUS */
+  {sizeof(struct badversion_spacket), handleBadVersion},  /* SP_BADVERSION
+                 *
+                 */
+  {sizeof(struct hostile_spacket), handleHostile},  /* SP_HOSTILE */
+  {sizeof(struct stats_spacket), handleStats},   /* SP_STATS */
+  {sizeof(struct plyr_login_spacket), handlePlyrLogin},   /* SP_PL_LOGIN
+                 *
+                 */
+  {sizeof(struct reserved_spacket), handleReserved},  /* SP_RESERVED */
+  {sizeof(struct planet_loc_spacket), handlePlanetLoc},   /* SP_PLANET_LOC
+                 *
+                 */
 
 #ifdef HANDLE_SCAN
-  {sizeof(struct scan_spacket), handleScan}	 /* SP_SCAN (ATM) */
+  {sizeof(struct scan_spacket), handleScan}  /* SP_SCAN (ATM) */
 #else
-  {0, dummy},					 /* won't be called */
+  {0, dummy},          /* won't be called */
 #endif
 
-  {sizeof(struct udp_reply_spacket), handleUdpReply},	/* SP_UDP_STAT */
-  {sizeof(struct sequence_spacket), handleSequence},	/* SP_SEQUENCE */
-  {sizeof(struct sc_sequence_spacket), handleSequence},		/* SP_SC_SEQUENCE 
-								 * 
-								 */
+  {sizeof(struct udp_reply_spacket), handleUdpReply}, /* SP_UDP_STAT */
+  {sizeof(struct sequence_spacket), handleSequence},  /* SP_SEQUENCE */
+  {sizeof(struct sc_sequence_spacket), handleSequence},   /* SP_SC_SEQUENCE
+                 *
+                 */
 
 #ifdef RSA
-  {sizeof(struct rsa_key_spacket), handleRSAKey},	/* SP_RSA_KEY */
+  {sizeof(struct rsa_key_spacket), handleRSAKey}, /* SP_RSA_KEY */
 #else
-  {0, dummy},					 /* #31, and dummy won't */
+  {0, dummy},          /* #31, and dummy won't */
 #endif
 
-  {0, dummy},					 /* 32 */
-  {0, dummy},					 /* 33 */
-  {0, dummy},					 /* 34 */
-  {0, dummy},					 /* 35 */
-  {0, dummy},					 /* 36 */
-  {0, dummy},					 /* 37 */
-  {0, dummy},					 /* 38 */
-  {sizeof(struct ship_cap_spacket), handleShipCap},	/* SP_SHIP_CAP */
+  {0, dummy},          /* 32 */
+  {0, dummy},          /* 33 */
+  {0, dummy},          /* 34 */
+  {0, dummy},          /* 35 */
+  {0, dummy},          /* 36 */
+  {0, dummy},          /* 37 */
+  {0, dummy},          /* 38 */
+  {sizeof(struct ship_cap_spacket), handleShipCap}, /* SP_SHIP_CAP */
 
 #ifdef SHORT_PACKETS
-  {sizeof(struct shortreply_spacket), handleShortReply},	/* SP_S_REPLY 
-								 * 
-								 */
-  {-1, handleSMessage},				 /* SP_S_MESSAGE */
-  {-1						 /* sizeof(struct *
-						  * warning_s_spacket) */ , handleSWarning},
-						 /* SP_S_WARNING */
-  {sizeof(struct youshort_spacket), handleSelfShort},	/* SP_S_YOU */
-  {sizeof(struct youss_spacket), handleSelfShip},	/* SP_S_YOU_SS */
-  {-1, /* variable */ handleVPlayer},		 /* SP_S_PLAYER */
+  {sizeof(struct shortreply_spacket), handleShortReply},  /* SP_S_REPLY
+                 *
+                 */
+  {-1, handleSMessage},        /* SP_S_MESSAGE */
+  {-1            /* sizeof(struct *
+              * warning_s_spacket) */ , handleSWarning},
+             /* SP_S_WARNING */
+  {sizeof(struct youshort_spacket), handleSelfShort}, /* SP_S_YOU */
+  {sizeof(struct youss_spacket), handleSelfShip}, /* SP_S_YOU_SS */
+  {-1, /* variable */ handleVPlayer},    /* SP_S_PLAYER */
 #else
-  {0, dummy},					 /* 40 */
-  {0, dummy},					 /* 41 */
-  {0, dummy},					 /* 42 */
-  {0, dummy},					 /* 43 */
-  {0, dummy},					 /* 44 */
-  {0, dummy},					 /* 45 */
+  {0, dummy},          /* 40 */
+  {0, dummy},          /* 41 */
+  {0, dummy},          /* 42 */
+  {0, dummy},          /* 43 */
+  {0, dummy},          /* 44 */
+  {0, dummy},          /* 45 */
 #endif
-  {sizeof(struct ping_spacket), handlePing},	 /* SP_PING */
+  {sizeof(struct ping_spacket), handlePing},   /* SP_PING */
 
 #ifdef SHORT_PACKETS
-  {-1, /* variable */ handleVTorp},		 /* SP_S_TORP */
-  {-1, handleVTorpInfo},			 /* SP_S_TORP_INFO */
-  {20, handleVTorp},				 /* SP_S_8_TORP */
-  {-1, handleVPlanet},				 /* SP_S_PLANET */
+  {-1, /* variable */ handleVTorp},    /* SP_S_TORP */
+  {-1, handleVTorpInfo},       /* SP_S_TORP_INFO */
+  {20, handleVTorp},         /* SP_S_8_TORP */
+  {-1, handleVPlanet},         /* SP_S_PLANET */
 #else
-  {0, dummy},					 /* 47 */
-  {0, dummy},					 /* 48 */
-  {0, dummy},					 /* 49 */
-  {0, dummy},					 /* 50 */
+  {0, dummy},          /* 47 */
+  {0, dummy},          /* 48 */
+  {0, dummy},          /* 49 */
+  {0, dummy},          /* 50 */
 #endif
 
-  {0, dummy},					 /* 51 */
-  {0, dummy},					 /* 52 */
-  {0, dummy},					 /* 53 */
-  {0, dummy},					 /* 54 */
-  {0, dummy},					 /* 55 */
+  {0, dummy},          /* 51 */
+  {0, dummy},          /* 52 */
+  {0, dummy},          /* 53 */
+  {0, dummy},          /* 54 */
+  {0, dummy},          /* 55 */
 
-#ifdef SHORT_PACKETS				 /* S_P2 */
-  {0, dummy},					 /* SP_S_SEQUENCE not yet * * 
-						  * implemented */
-  {-1, handleVPhaser},				 /* SP_S_PHASER */
-  {-1, handleVKills},				 /* SP_S_KILLS */
-  {sizeof(struct stats_s_spacket), handle_s_Stats},	/* SP_S_STATS */
+#ifdef SHORT_PACKETS         /* S_P2 */
+  {0, dummy},          /* SP_S_SEQUENCE not yet * *
+              * implemented */
+  {-1, handleVPhaser},         /* SP_S_PHASER */
+  {-1, handleVKills},        /* SP_S_KILLS */
+  {sizeof(struct stats_s_spacket), handle_s_Stats}, /* SP_S_STATS */
 #else
-  {0, dummy},					 /* 56 */
-  {0, dummy},					 /* 57 */
-  {0, dummy},					 /* 58 */
-  {0, dummy},					 /* 59 */
+  {0, dummy},          /* 56 */
+  {0, dummy},          /* 57 */
+  {0, dummy},          /* 58 */
+  {0, dummy},          /* 59 */
 #endif
 
 #ifdef FEATURE_PACKETS
-  {sizeof(struct feature_cpacket), handleFeature},	/* CP_FEATURE; 60 */
+  {sizeof(struct feature_cpacket), handleFeature},  /* CP_FEATURE; 60 */
 #endif
 
 };
 
 int     sizes[] =
 {
-  0,						 /* record 0 */
-  sizeof(struct mesg_cpacket),			 /* CP_MESSAGE */
-  sizeof(struct speed_cpacket),			 /* CP_SPEED */
-  sizeof(struct dir_cpacket),			 /* CP_DIRECTION */
-  sizeof(struct phaser_cpacket),		 /* CP_PHASER */
-  sizeof(struct plasma_cpacket),		 /* CP_PLASMA */
-  sizeof(struct torp_cpacket),			 /* CP_TORP */
-  sizeof(struct quit_cpacket),			 /* CP_QUIT */
-  sizeof(struct login_cpacket),			 /* CP_LOGIN */
-  sizeof(struct outfit_cpacket),		 /* CP_OUTFIT */
-  sizeof(struct war_cpacket),			 /* CP_WAR */
-  sizeof(struct practr_cpacket),		 /* CP_PRACTR */
-  sizeof(struct shield_cpacket),		 /* CP_SHIELD */
-  sizeof(struct repair_cpacket),		 /* CP_REPAIR */
-  sizeof(struct orbit_cpacket),			 /* CP_ORBIT */
-  sizeof(struct planlock_cpacket),		 /* CP_PLANLOCK */
-  sizeof(struct playlock_cpacket),		 /* CP_PLAYLOCK */
-  sizeof(struct bomb_cpacket),			 /* CP_BOMB */
-  sizeof(struct beam_cpacket),			 /* CP_BEAM */
-  sizeof(struct cloak_cpacket),			 /* CP_CLOAK */
-  sizeof(struct det_torps_cpacket),		 /* CP_DET_TORPS */
-  sizeof(struct det_mytorp_cpacket),		 /* CP_DET_MYTORP */
-  sizeof(struct copilot_cpacket),		 /* CP_COPILOT */
-  sizeof(struct refit_cpacket),			 /* CP_REFIT */
-  sizeof(struct tractor_cpacket),		 /* CP_TRACTOR */
-  sizeof(struct repress_cpacket),		 /* CP_REPRESS */
-  sizeof(struct coup_cpacket),			 /* CP_COUP */
-  sizeof(struct socket_cpacket),		 /* CP_SOCKET */
-  sizeof(struct options_cpacket),		 /* CP_OPTIONS */
-  sizeof(struct bye_cpacket),			 /* CP_BYE */
-  sizeof(struct dockperm_cpacket),		 /* CP_DOCKPERM */
-  sizeof(struct updates_cpacket),		 /* CP_UPDATES */
-  sizeof(struct resetstats_cpacket),		 /* CP_RESETSTATS */
-  sizeof(struct reserved_cpacket),		 /* CP_RESERVED */
+  0,             /* record 0 */
+  sizeof(struct mesg_cpacket),       /* CP_MESSAGE */
+  sizeof(struct speed_cpacket),      /* CP_SPEED */
+  sizeof(struct dir_cpacket),      /* CP_DIRECTION */
+  sizeof(struct phaser_cpacket),     /* CP_PHASER */
+  sizeof(struct plasma_cpacket),     /* CP_PLASMA */
+  sizeof(struct torp_cpacket),       /* CP_TORP */
+  sizeof(struct quit_cpacket),       /* CP_QUIT */
+  sizeof(struct login_cpacket),      /* CP_LOGIN */
+  sizeof(struct outfit_cpacket),     /* CP_OUTFIT */
+  sizeof(struct war_cpacket),      /* CP_WAR */
+  sizeof(struct practr_cpacket),     /* CP_PRACTR */
+  sizeof(struct shield_cpacket),     /* CP_SHIELD */
+  sizeof(struct repair_cpacket),     /* CP_REPAIR */
+  sizeof(struct orbit_cpacket),      /* CP_ORBIT */
+  sizeof(struct planlock_cpacket),     /* CP_PLANLOCK */
+  sizeof(struct playlock_cpacket),     /* CP_PLAYLOCK */
+  sizeof(struct bomb_cpacket),       /* CP_BOMB */
+  sizeof(struct beam_cpacket),       /* CP_BEAM */
+  sizeof(struct cloak_cpacket),      /* CP_CLOAK */
+  sizeof(struct det_torps_cpacket),    /* CP_DET_TORPS */
+  sizeof(struct det_mytorp_cpacket),     /* CP_DET_MYTORP */
+  sizeof(struct copilot_cpacket),    /* CP_COPILOT */
+  sizeof(struct refit_cpacket),      /* CP_REFIT */
+  sizeof(struct tractor_cpacket),    /* CP_TRACTOR */
+  sizeof(struct repress_cpacket),    /* CP_REPRESS */
+  sizeof(struct coup_cpacket),       /* CP_COUP */
+  sizeof(struct socket_cpacket),     /* CP_SOCKET */
+  sizeof(struct options_cpacket),    /* CP_OPTIONS */
+  sizeof(struct bye_cpacket),      /* CP_BYE */
+  sizeof(struct dockperm_cpacket),     /* CP_DOCKPERM */
+  sizeof(struct updates_cpacket),    /* CP_UPDATES */
+  sizeof(struct resetstats_cpacket),     /* CP_RESETSTATS */
+  sizeof(struct reserved_cpacket),     /* CP_RESERVED */
 
 #ifdef INCLUDE_SCAN
-  sizeof(struct scan_cpacket),			 /* CP_SCAN (ATM) */
+  sizeof(struct scan_cpacket),       /* CP_SCAN (ATM) */
 #else
   0,
 #endif
-  sizeof(struct udp_req_cpacket),		 /* CP_UDP_REQ */
-  sizeof(struct sequence_cpacket),		 /* CP_SEQUENCE */
+  sizeof(struct udp_req_cpacket),    /* CP_UDP_REQ */
+  sizeof(struct sequence_cpacket),     /* CP_SEQUENCE */
 
 #ifdef RSA
-  sizeof(struct rsa_key_cpacket),		 /* CP_RSA_KEY */
+  sizeof(struct rsa_key_cpacket),    /* CP_RSA_KEY */
 #else
-  0,						 /* 37 */
+  0,             /* 37 */
 #endif
 
-  0,						 /* 38 */
-  0,						 /* 39 */
-  0,						 /* 40 */
-  0,						 /* 41 */
+  0,             /* 38 */
+  0,             /* 39 */
+  0,             /* 40 */
+  0,             /* 41 */
 
 #ifdef PING
-  sizeof(struct ping_cpacket),			 /* CP_PING_RESPONSE */
+  sizeof(struct ping_cpacket),       /* CP_PING_RESPONSE */
 #else
   0,
 #endif
 
 #ifdef SHORT_PACKETS
-  sizeof(struct shortreq_cpacket),		 /* CP_S_REQ */
-  sizeof(struct threshold_cpacket),		 /* CP_S_THRS */
-  -1,						 /* CP_S_MESSAGE */
+  sizeof(struct shortreq_cpacket),     /* CP_S_REQ */
+  sizeof(struct threshold_cpacket),    /* CP_S_THRS */
+  -1,            /* CP_S_MESSAGE */
 #else
-  0,						 /* 43 */
-  0,						 /* 44 */
-  0,						 /* 45 */
+  0,             /* 43 */
+  0,             /* 44 */
+  0,             /* 45 */
 #endif
 
-  0,						 /* 46 */
-  0,						 /* 47 */
-  0,						 /* 48 */
-  0,						 /* 49 */
-  0,						 /* 50 */
-  0,						 /* 51 */
-  0,						 /* 52 */
-  0,						 /* 53 */
-  0,						 /* 54 */
-  0,						 /* 55 */
-  0,						 /* 56 */
-  0,						 /* 57 */
-  0,						 /* 58 */
-  0,						 /* 59 */
+  0,             /* 46 */
+  0,             /* 47 */
+  0,             /* 48 */
+  0,             /* 49 */
+  0,             /* 50 */
+  0,             /* 51 */
+  0,             /* 52 */
+  0,             /* 53 */
+  0,             /* 54 */
+  0,             /* 55 */
+  0,             /* 56 */
+  0,             /* 57 */
+  0,             /* 58 */
+  0,             /* 59 */
 
 #ifdef FEATURE_PACKETS
-  sizeof(struct feature_cpacket),		 /* CP_FEATURE; 60 */
+  sizeof(struct feature_cpacket),    /* CP_FEATURE; 60 */
 #endif
 
 };
@@ -454,11 +454,11 @@ int     sizes[] =
 #ifdef PACKET_LOG
 /* stuff useful for logging server packets to see how much bandwidth netrek
  * is really using */
-int     log_packets = 0;			 /* whether or not to be
-						  * logging packets */
-int     packet_log[NUM_PACKETS];		 /* number of packets logged */
+int     log_packets = 0;       /* whether or not to be
+              * logging packets */
+int     packet_log[NUM_PACKETS];     /* number of packets logged */
 int     outpacket_log[NUM_SIZES];
-int     ALL_BYTES = 0;				 /* To log all bytes */
+int     ALL_BYTES = 0;         /* To log all bytes */
 #endif /* PACKET_LOG */
 
 int     serverDead = 0;
@@ -471,10 +471,10 @@ static int udpServerPort = 0;
 static LONG serveraddr = 0;
 static LONG sequence = 0;
 static int drop_flag = 0;
-static int chan = -1;				 /* tells sequence checker *
+static int chan = -1;        /* tells sequence checker *
 
-						  * 
-						  * * where packet is from */
+              *
+              * * where packet is from */
 static short fSpeed, fDirection, fShield, fOrbit, fRepair, fBeamup, fBeamdown,
         fCloak, fBomb, fDockperm, fPhaser, fPlasma, fPlayLock, fPlanLock,
         fTractor, fRepress;
@@ -487,58 +487,58 @@ static short fSpeed, fDirection, fShield, fOrbit, fRepair, fBeamup, fBeamdown,
 void print_sp_s_torp(char *sbuf, int type)
 {
   unsigned char which, *data, infobitset, *infodata;
-  unsigned char bitset;         
+  unsigned char bitset;
   int     dx, dy;
   int     shiftvar;
   int     i;
   char    status, war;
-  register int shift = 0;                      /* How many torps are 
+  register int shift = 0;                      /* How many torps are
                                                 * * extracted (for shifting) */
 
   if ( (type == 1) || (type == 2) )
     {
       /* now we must find the data ... :-) */
       if (sbuf[0] == SP_S_8_TORP)
-	{						 /* MAX packet */
-	  bitset = 0xff;
-	  which = sbuf[1];
-	  data = &sbuf[2];
-	}
+  {            /* MAX packet */
+    bitset = 0xff;
+    which = sbuf[1];
+    data = &sbuf[2];
+  }
       else
-	{						 /* Normal Packet */
-	  bitset = sbuf[1];
-	  which = sbuf[2];
-	  data = &sbuf[3];
-	}
+  {            /* Normal Packet */
+    bitset = sbuf[1];
+    which = sbuf[2];
+    data = &sbuf[3];
+  }
       fprintf(stderr, "  bitset=0x%0X, which=%d, ", bitset, which);
 #ifdef CORRUPTED_PACKETS
       /* we probably should do something clever here - jmn */
 #endif
-      
+
       for (shift = 0, i = 0; i < 8; i++, bitset >>= 1)
-	{
-	  if (bitset & 01)
-	    {
-	      dx = (*data >> shift);
-	      data++;
-	      shiftvar = (unsigned char) *data;	 /* to silence gcc */
-	      shiftvar <<= (8 - shift);
-	      dx |= (shiftvar & 511);
-	      shift++;
-	      dy = (*data >> shift);
-	      data++;
-	      shiftvar = (unsigned char) *data;	 /* to silence gcc */
-	      shiftvar <<= (8 - shift);
-	      dy |= (shiftvar & 511);
-	      shift++;
-	      if (shift == 8)
-		{
-		  shift = 0;
-		  data++;
-		}
-	      fprintf(stderr, "dx=%d, dy=%d, ",dx, dy);
-	    }
-	}
+  {
+    if (bitset & 01)
+      {
+        dx = (*data >> shift);
+        data++;
+        shiftvar = (unsigned char) *data;  /* to silence gcc */
+        shiftvar <<= (8 - shift);
+        dx |= (shiftvar & 511);
+        shift++;
+        dy = (*data >> shift);
+        data++;
+        shiftvar = (unsigned char) *data;  /* to silence gcc */
+        shiftvar <<= (8 - shift);
+        dy |= (shiftvar & 511);
+        shift++;
+        if (shift == 8)
+    {
+      shift = 0;
+      data++;
+    }
+        fprintf(stderr, "dx=%d, dy=%d, ",dx, dy);
+      }
+  }
     }
   else if (type == 3)
     {
@@ -550,45 +550,45 @@ void print_sp_s_torp(char *sbuf, int type)
       data = &sbuf[4];
 
       fprintf(stderr, "  bitset=0x%0X, which=%d, infobitset=0x%0X, ",
-	      bitset, which, infobitset);
+        bitset, which, infobitset);
 
       infodata = &sbuf[vtisize[numofbits[(unsigned char) sbuf[1]]]];
-      
-      for (shift = 0, i = 0; i < 8; bitset >>= 1, infobitset >>= 1, i++)
-	{
-	  if (bitset & 01)
-	    {
-	      dx = (*data >> shift);
-	      data++;
-	      shiftvar = (unsigned char) *data;	 /* to silence gcc */
-	      shiftvar <<= (8 - shift);
-	      dx |= (shiftvar & 511);
-	      shift++;
-	      dy = (*data >> shift);
-	      data++;
-	      shiftvar = (unsigned char) *data;	 /* to silence gcc */
-	      shiftvar <<= (8 - shift);
-	      dy |= (shiftvar & 511);
-	      shift++;
-	      if (shift == 8)
-		{
-		  shift = 0;
-		  data++;
-		}
-	      fprintf(stderr, "dx=%d, dy=%d, ",dx, dy);
-	    } 
 
-	  /* Now the TorpInfo */
-	  if (infobitset & 01)
-	    {
-	      war = (unsigned char) *infodata & 15 /* 0x0f */ ;
-	      status = ((unsigned char) *infodata & 0xf0) >> 4;
-	      infodata++;
-	      fprintf(stderr, "war=0x%0X, status=0x%0X, ", war, status);
-	    }					 /* if */
-	  
-	}						 /* for */
-      
+      for (shift = 0, i = 0; i < 8; bitset >>= 1, infobitset >>= 1, i++)
+  {
+    if (bitset & 01)
+      {
+        dx = (*data >> shift);
+        data++;
+        shiftvar = (unsigned char) *data;  /* to silence gcc */
+        shiftvar <<= (8 - shift);
+        dx |= (shiftvar & 511);
+        shift++;
+        dy = (*data >> shift);
+        data++;
+        shiftvar = (unsigned char) *data;  /* to silence gcc */
+        shiftvar <<= (8 - shift);
+        dy |= (shiftvar & 511);
+        shift++;
+        if (shift == 8)
+    {
+      shift = 0;
+      data++;
+    }
+        fprintf(stderr, "dx=%d, dy=%d, ",dx, dy);
+      }
+
+    /* Now the TorpInfo */
+    if (infobitset & 01)
+      {
+        war = (unsigned char) *infodata & 15 /* 0x0f */ ;
+        status = ((unsigned char) *infodata & 0xf0) >> 4;
+        infodata++;
+        fprintf(stderr, "war=0x%0X, status=0x%0X, ", war, status);
+      }          /* if */
+
+  }            /* for */
+
     }
 }
 
@@ -601,7 +601,7 @@ resetForce(void)
 }
 
 /* If something we want to happen hasn't yet, send it again.
- * 
+ *
  * The low byte is the request, the high byte is a max count.  When the max
  * count reaches zero, the client stops trying.  Checking is done with a
  * macro for speed & clarity. */
@@ -652,10 +652,10 @@ checkForce(void)
   struct speed_cpacket speedReq;
   struct tractor_cpacket tractorReq;
 
-  FCHECK_VAL(me->p_speed, fSpeed, CP_SPEED);	 /* almost always repeats */
+  FCHECK_VAL(me->p_speed, fSpeed, CP_SPEED);   /* almost always repeats */
 
-#ifdef nodef					 /* not needed */
-  FCHECK_VAL(me->p_dir, fDirection, CP_DIRECTION);	/* (ditto) */
+#ifdef nodef           /* not needed */
+  FCHECK_VAL(me->p_dir, fDirection, CP_DIRECTION);  /* (ditto) */
 #endif
 
   FCHECK_FLAGS(PFSHIELD, fShield, CP_SHIELD);
@@ -666,12 +666,12 @@ checkForce(void)
   FCHECK_FLAGS(PFCLOAK, fCloak, CP_CLOAK);
   FCHECK_FLAGS(PFBOMB, fBomb, CP_BOMB);
   FCHECK_FLAGS(PFDOCKOK, fDockperm, CP_DOCKPERM);
-  FCHECK_VAL(phasers[me->p_no].ph_status, fPhaser, CP_PHASER);	/* bug: dir 0 
-								 * 
-								 */
-  FCHECK_VAL(plasmatorps[me->p_no].pt_status, fPlasma, CP_PLASMA);	/* (ditto) 
-									 * 
-									 */
+  FCHECK_VAL(phasers[me->p_no].ph_status, fPhaser, CP_PHASER);  /* bug: dir 0
+                 *
+                 */
+  FCHECK_VAL(plasmatorps[me->p_no].pt_status, fPlasma, CP_PLASMA);  /* (ditto)
+                   *
+                   */
   FCHECK_FLAGS(PFPLOCK, fPlayLock, CP_PLAYLOCK);
   FCHECK_FLAGS(PFPLLOCK, fPlanLock, CP_PLANLOCK);
 
@@ -699,9 +699,9 @@ connectToServer(int port)
     }
 
 #ifdef nodef
-  sleep(3);					 /* I think this is necessary
-						  * * * for some unknown
-						  * reason */
+  sleep(3);          /* I think this is necessary
+              * * * for some unknown
+              * reason */
 #endif
 
   printf("Waiting for connection (port %d). \n", port);
@@ -730,17 +730,17 @@ connectToServer(int port)
 #ifdef nodef
       sleep(10);
       if (bind(s, &addr, sizeof(addr)) < 0)
-	{
-	  sleep(10);
-	  if (bind(s, &addr, sizeof(addr)) < 0)
-	    {
-	      printf("I can't bind to port!\n");
-	      terminate(3);
-	    }
-	}
+  {
+    sleep(10);
+    if (bind(s, &addr, sizeof(addr)) < 0)
+      {
+        printf("I can't bind to port!\n");
+        terminate(3);
+      }
+  }
 #endif
 
-      perror("bind");				 /* NEW */
+      perror("bind");        /* NEW */
       terminate(1);
     }
   if (listen(s, 1) < 0)
@@ -749,7 +749,7 @@ connectToServer(int port)
   len = sizeof(naddr);
 
 tryagain:
-  timeout.tv_sec = 240;				 /* four minutes */
+  timeout.tv_sec = 240;        /* four minutes */
   timeout.tv_usec = 0;
   FD_ZERO(&readfds);
   FD_SET(s, &readfds);
@@ -776,7 +776,7 @@ tryagain:
   printf("Got connection.\n");
 
   close(s);
-  pickSocket(port);				 /* new socket != port */
+  pickSocket(port);        /* new socket != port */
 
 
   /* This is necessary; it tries to determine who the caller is, and set * *
@@ -793,15 +793,15 @@ tryagain:
       serveraddr = addr.sin_addr.s_addr;
       hp = gethostbyaddr((char *) &addr.sin_addr.s_addr, sizeof(LONG), AF_INET);
       if (hp != NULL)
-	{
-	  serverName = (char *) malloc(strlen(hp->h_name) + 1);
-	  strcpy(serverName, hp->h_name);
-	}
+  {
+    serverName = (char *) malloc(strlen(hp->h_name) + 1);
+    strcpy(serverName, hp->h_name);
+  }
       else
-	{
-	  serverName = (char *) malloc(strlen(inet_ntoa(addr.sin_addr)) + 1);
-	  strcpy(serverName, inet_ntoa(addr.sin_addr));
-	}
+  {
+    serverName = (char *) malloc(strlen(inet_ntoa(addr.sin_addr)) + 1);
+    strcpy(serverName, inet_ntoa(addr.sin_addr));
+  }
     }
   printf("Connection from server %s (0x%x)\n", serverName, serveraddr);
 
@@ -863,14 +863,14 @@ callServer(int port, char *server)
   if ((addr.sin_addr.s_addr = inet_addr(server)) == -1)
     {
       if ((hp = gethostbyname(server)) == NULL)
-	{
-	  printf("Who is %s?\n", server);
-	  terminate(0);
-	}
+  {
+    printf("Who is %s?\n", server);
+    terminate(0);
+  }
       else
-	{
-	  addr.sin_addr.s_addr = *(LONG *) hp->h_addr;
-	}
+  {
+    addr.sin_addr.s_addr = *(LONG *) hp->h_addr;
+  }
     }
   serveraddr = addr.sin_addr.s_addr;
 
@@ -887,7 +887,7 @@ callServer(int port, char *server)
     max_fd = sock + 1;
 
 #ifdef TREKHOPD
-  /* We use a different scheme from gw: we tell the server who we want to * * 
+  /* We use a different scheme from gw: we tell the server who we want to * *
    * connect to and what our local UDP port is; it picks its own UDP ports *
    * * and tells us what they are.  This is MUCH more flexible and avoids a *
    * * number of problems, and may come in handy if the blessed scheme
@@ -902,49 +902,49 @@ callServer(int port, char *server)
 
     if (use_trekhopd)
       {
-	msg.type = SP_MESSAGE;
-	msg.group = msg.indiv = msg.pad1 = 0;
-	ip = (int *) msg.mesg;
-	*(ip++) = htons(port_req);
-	*(ip++) = htons(gw_local_port);
-	STRNCPY(msg.mesg + 8, login, 8);
-	strcpy(msg.mesg + 16, host_req);
-	if (gwrite(s, &msg, sizeof(struct mesg_cpacket)) < 0)
-	  {
-	    fprintf(stderr, "trekhopd init failure\n");
-	    terminate(1);
-	  }
-	printf("--- trekhopd request sent, awaiting reply\n");
-	/* now block waiting for reply */
-	count = sizeof(struct mesg_spacket);
+  msg.type = SP_MESSAGE;
+  msg.group = msg.indiv = msg.pad1 = 0;
+  ip = (int *) msg.mesg;
+  *(ip++) = htons(port_req);
+  *(ip++) = htons(gw_local_port);
+  STRNCPY(msg.mesg + 8, login, 8);
+  strcpy(msg.mesg + 16, host_req);
+  if (gwrite(s, &msg, sizeof(struct mesg_cpacket)) < 0)
+    {
+      fprintf(stderr, "trekhopd init failure\n");
+      terminate(1);
+    }
+  printf("--- trekhopd request sent, awaiting reply\n");
+  /* now block waiting for reply */
+  count = sizeof(struct mesg_spacket);
 
-	for (buf = (char *) &reply; count; buf += n, count -= n)
-	  {
-	    if ((n = read(s, buf, count)) <= 0)
-	      {
-		perror("trekhopd read");
-		terminate(1);
-	      }
-	  }
+  for (buf = (char *) &reply; count; buf += n, count -= n)
+    {
+      if ((n = read(s, buf, count)) <= 0)
+        {
+    perror("trekhopd read");
+    terminate(1);
+        }
+    }
 
-	if (reply.type != SP_MESSAGE)
-	  {
-	    fprintf(stderr, "Got bogus reply from trekhopd (%d)\n",
-		    reply.type);
-	    terminate(1);
-	  }
-	ip = (int *) reply.mesg;
-	gw_serv_port = ntohl(*ip++);
-	gw_port = ntohl(*ip++);
-	serv_port = ntohl(*ip++);
-	printf("--- trekhopd reply received\n");
+  if (reply.type != SP_MESSAGE)
+    {
+      fprintf(stderr, "Got bogus reply from trekhopd (%d)\n",
+        reply.type);
+      terminate(1);
+    }
+  ip = (int *) reply.mesg;
+  gw_serv_port = ntohl(*ip++);
+  gw_port = ntohl(*ip++);
+  serv_port = ntohl(*ip++);
+  printf("--- trekhopd reply received\n");
 
-	/* printf("ports = %d/%d, %d\n", gw_serv_port, gw_port, serv_port); */
+  /* printf("ports = %d/%d, %d\n", gw_serv_port, gw_port, serv_port); */
       }
   }
 #endif /* TREKHOPD */
 
-  pickSocket(port);				 /* new socket != port */
+  pickSocket(port);        /* new socket != port */
 }
 
 isServerDead(void)
@@ -962,7 +962,7 @@ socketPause(void)
 
   FD_ZERO(&readfds);
   FD_SET(sock, &readfds);
-  if (udpSock >= 0)				 /* new */
+  if (udpSock >= 0)        /* new */
     FD_SET(udpSock, &readfds);
 
   SELECT(max_fd, &readfds, 0, 0, &timeout);
@@ -987,14 +987,14 @@ readFromServer(fd_set * readfds)
       FD_ZERO(readfds);
       FD_SET(sock, readfds);
       if (udpSock >= 0)
-	FD_SET(udpSock, readfds);
+  FD_SET(udpSock, readfds);
       timeout.tv_sec = 0;
       timeout.tv_usec = 0;
       if ((rs = SELECT(max_fd, readfds, 0, 0, &timeout)) == 0)
-	{
-	  dotimers();
-	  return 0;
-	}
+  {
+    dotimers();
+    return 0;
+  }
     }
   if (udpSock >= 0 && FD_ISSET(udpSock, readfds))
     {
@@ -1002,25 +1002,25 @@ readFromServer(fd_set * readfds)
       UDPDIAG(("Activity on UDP socket\n"));
       chan = udpSock;
       if (commStatus == STAT_VERIFY_UDP)
-	{
-	  warning("UDP connection established");
-	  sequence = 0;				 /* reset sequence #s */
-	  resetForce();
+  {
+    warning("UDP connection established");
+    sequence = 0;        /* reset sequence #s */
+    resetForce();
 
-	  printUdpInfo();
-	  UDPDIAG(("UDP connection established.\n"));
+    printUdpInfo();
+    UDPDIAG(("UDP connection established.\n"));
 
-	  commMode = COMM_UDP;
-	  commStatus = STAT_CONNECTED;
-	  commSwitchTimeout = 0;
-	  if (udpClientRecv != MODE_SIMPLE)
-	    sendUdpReq(COMM_MODE + udpClientRecv);
-	  if (udpWin)
-	    {
-	      udprefresh(UDP_CURRENT);
-	      udprefresh(UDP_STATUS);
-	    }
-	}
+    commMode = COMM_UDP;
+    commStatus = STAT_CONNECTED;
+    commSwitchTimeout = 0;
+    if (udpClientRecv != MODE_SIMPLE)
+      sendUdpReq(COMM_MODE + udpClientRecv);
+    if (udpWin)
+      {
+        udprefresh(UDP_CURRENT);
+        udprefresh(UDP_STATUS);
+      }
+  }
       retval += doRead(udpSock);
     }
 
@@ -1029,16 +1029,16 @@ readFromServer(fd_set * readfds)
     {
       chan = sock;
       if (commMode == COMM_TCP)
-	drop_flag = 0;				 /* just in case */
+  drop_flag = 0;         /* just in case */
       /* Bug fix for unnecessary redraws with UDP on - reported by TP */
       //      if (commMode == COMM_UDP)
-      //	doRead (sock);
+      //  doRead (sock);
       //      else
-	retval += doRead (sock);
+  retval += doRead (sock);
     }
 
   dotimers();
-  return (retval != 0);				 /* convert to 1/0 */
+  return (retval != 0);        /* convert to 1/0 */
 }
 
 dotimers(void)
@@ -1047,23 +1047,23 @@ dotimers(void)
   if (commSwitchTimeout > 0)
     {
       if (!(--commSwitchTimeout))
-	{
-	  /* timed out; could be initial request to non-UDP server (which * * 
-	   * won't be answered), or the verify packet got lost en route to *
-	   * * the server.  Could also be a request for TCP which timed out *
-	   * * (weird), in which case we just reset anyway. */
-	  commModeReq = commMode = COMM_TCP;
-	  commStatus = STAT_CONNECTED;
-	  if (udpSock >= 0)
-	    closeUdpConn();
-	  if (udpWin)
-	    {
-	      udprefresh(UDP_CURRENT);
-	      udprefresh(UDP_STATUS);
-	    }
-	  warning("Timed out waiting for UDP response from server");
-	  UDPDIAG(("Timed out waiting for UDP response from server\n"));
-	}
+  {
+    /* timed out; could be initial request to non-UDP server (which * *
+     * won't be answered), or the verify packet got lost en route to *
+     * * the server.  Could also be a request for TCP which timed out *
+     * * (weird), in which case we just reset anyway. */
+    commModeReq = commMode = COMM_TCP;
+    commStatus = STAT_CONNECTED;
+    if (udpSock >= 0)
+      closeUdpConn();
+    if (udpWin)
+      {
+        udprefresh(UDP_CURRENT);
+        udprefresh(UDP_STATUS);
+      }
+    warning("Timed out waiting for UDP response from server");
+    UDPDIAG(("Timed out waiting for UDP response from server\n"));
+  }
     }
   /* if we're in a UDP "force" mode, check to see if we need to do something */
   if (udpClientSend > 1 && commMode == COMM_UDP)
@@ -1078,62 +1078,62 @@ int
   switch (*bufptr)
     {
     case SP_S_MESSAGE:
-      size = ((unsigned char) bufptr[4]);	 /* IMPORTANT  Changed */
+      size = ((unsigned char) bufptr[4]);  /* IMPORTANT  Changed */
       break;
     case SP_S_WARNING:
       if ((unsigned char) bufptr[1] == STEXTE_STRING ||
-	  (unsigned char) bufptr[1] == SHORT_WARNING)
-	{
-	  size = ((unsigned char) bufptr[3]);
-	}
+    (unsigned char) bufptr[1] == SHORT_WARNING)
+  {
+    size = ((unsigned char) bufptr[3]);
+  }
       else
-	size = 4;				 /* Normal Packet */
+  size = 4;        /* Normal Packet */
       break;
     case SP_S_PLAYER:
       if ((unsigned char) bufptr[1] & (unsigned char) 128)
-	{					 /* Small +extended Header */
-	  size = ((unsigned char) (bufptr[1] & 0x3f) * 4) + 4;
-	}
+  {          /* Small +extended Header */
+    size = ((unsigned char) (bufptr[1] & 0x3f) * 4) + 4;
+  }
       else if ((unsigned char) bufptr[1] & 64)
-	{					 /* Small Header */
-	  if (shortversion >= SHORTVERSION)	 /* S_P2 */
-	    size = ((unsigned char) (bufptr[1] & 0x3f) * 4) + 4 + (bufptr[2] * 4);
-	  else
-	    size = ((unsigned char) (bufptr[1] & 0x3f) * 4) + 4;
-	}
+  {          /* Small Header */
+    if (shortversion >= SHORTVERSION)  /* S_P2 */
+      size = ((unsigned char) (bufptr[1] & 0x3f) * 4) + 4 + (bufptr[2] * 4);
+    else
+      size = ((unsigned char) (bufptr[1] & 0x3f) * 4) + 4;
+  }
       else
-	{					 /* Big Header */
-	  size = ((unsigned char) bufptr[1] * 4 + 12);
-	}
+  {          /* Big Header */
+    size = ((unsigned char) bufptr[1] * 4 + 12);
+  }
       break;
     case SP_S_TORP:
       size = vtsize[numofbits[(unsigned char) bufptr[1]]];
       break;
     case SP_S_TORP_INFO:
       size = (vtisize[numofbits[(unsigned char) bufptr[1]]]
-	      + numofbits[(unsigned char) bufptr[3]]);
+        + numofbits[(unsigned char) bufptr[3]]);
       break;
     case SP_S_PLANET:
       size = ((unsigned char) bufptr[1] * VPLANET_SIZE) + 2;
       break;
-    case SP_S_PHASER:				 /* S_P2 */
+    case SP_S_PHASER:        /* S_P2 */
       switch ((unsigned char) bufptr[1] & 0x0f)
-	{
-	case PHFREE:
-	case PHHIT:
-	case PHMISS:
-	  size = 4;
-	  break;
-	case PHHIT2:
-	  size = 8;
-	  break;
-	default:
-	  size = sizeof(struct phaser_s_spacket);
+  {
+  case PHFREE:
+  case PHHIT:
+  case PHMISS:
+    size = 4;
+    break;
+  case PHHIT2:
+    size = 8;
+    break;
+  default:
+    size = sizeof(struct phaser_s_spacket);
 
-	  break;
-	}
+    break;
+  }
       break;
-    case SP_S_KILLS:				 /* S_P2 */
+    case SP_S_KILLS:         /* S_P2 */
       size = ((unsigned char) bufptr[1] * 2) + 2;
       break;
     default:
@@ -1176,55 +1176,55 @@ doRead(int asock)
 
   if (debug)
     printf("read %d bytes from %s socket\n",
-	   count, asock == udpSock ? "UDP" : "TCP");
+     count, asock == udpSock ? "UDP" : "TCP");
 
   if (count <= 0)
     {
       if (asock == udpSock)
-	{
+  {
 
 #ifndef WIN32
-	  if (errno == ECONNREFUSED)
+    if (errno == ECONNREFUSED)
 #else
-	  if (WSAGetLastError() == WSAECONNREFUSED)
+    if (WSAGetLastError() == WSAECONNREFUSED)
 #endif
 
-	    {
-	      struct sockaddr_in addr;
+      {
+        struct sockaddr_in addr;
 
-	      UDPDIAG(("asock=%d, sock=%d, udpSock=%d, errno=%d\n",
-		       asock, sock, udpSock, errno));
-	      UDPDIAG(("count=%d\n", count));
-	      UDPDIAG(("Hiccup(%d)!  Reconnecting\n", errno));
-	      addr.sin_addr.s_addr = serveraddr;
-	      addr.sin_port = htons(udpServerPort);
-	      addr.sin_family = AF_INET;
-	      if (connect(udpSock, (struct sockaddr *) &addr, sizeof(addr)) < 0)
-		{
-		  perror("connect");
-		  UDPDIAG(("Unable to reconnect\n"));
-		  /* and fall through to disconnect */
-		}
-	      else
-		{
-		  UDPDIAG(("Reconnect successful\n"));
-		  return (0);
-		}
-	    }
-	  UDPDIAG(("*** UDP disconnected (res=%d, err=%d)\n",
-		   count, errno));
-	  warning("UDP link severed");
-	  printUdpInfo();
-	  closeUdpConn();
-	  commMode = commModeReq = COMM_TCP;
-	  commStatus = STAT_CONNECTED;
-	  if (udpWin)
-	    {
-	      udprefresh(UDP_STATUS);
-	      udprefresh(UDP_CURRENT);
-	    }
-	  return (0);
-	}
+        UDPDIAG(("asock=%d, sock=%d, udpSock=%d, errno=%d\n",
+           asock, sock, udpSock, errno));
+        UDPDIAG(("count=%d\n", count));
+        UDPDIAG(("Hiccup(%d)!  Reconnecting\n", errno));
+        addr.sin_addr.s_addr = serveraddr;
+        addr.sin_port = htons(udpServerPort);
+        addr.sin_family = AF_INET;
+        if (connect(udpSock, (struct sockaddr *) &addr, sizeof(addr)) < 0)
+    {
+      perror("connect");
+      UDPDIAG(("Unable to reconnect\n"));
+      /* and fall through to disconnect */
+    }
+        else
+    {
+      UDPDIAG(("Reconnect successful\n"));
+      return (0);
+    }
+      }
+    UDPDIAG(("*** UDP disconnected (res=%d, err=%d)\n",
+       count, errno));
+    warning("UDP link severed");
+    printUdpInfo();
+    closeUdpConn();
+    commMode = commModeReq = COMM_TCP;
+    commStatus = STAT_CONNECTED;
+    if (udpWin)
+      {
+        udprefresh(UDP_STATUS);
+        udprefresh(UDP_CURRENT);
+      }
+    return (0);
+  }
       printf("1) Got read() of %d. Server dead\n", count);
       perror("1) read()");
       serverDead = 1;
@@ -1236,167 +1236,167 @@ doRead(int asock)
       /* this goto label for a bug w/ short packets */
     computesize:
       if (*bufptr < 1 || *bufptr > NUM_PACKETS || handlers[*bufptr].size == 0)
-	{
-	  int     i;
+  {
+    int     i;
 
-	  fprintf(stderr, "Unknown packet type: %d\n", *bufptr);
+    fprintf(stderr, "Unknown packet type: %d\n", *bufptr);
 
 #ifndef CORRUPTED_PACKETS
-	  printf("count: %d, bufptr at %d,  Content:\n", count,
-		 bufptr - buf);
-	  for (i = 0; i < count; i++)
-	    {
-	      printf("0x%x, ", (unsigned int) buf[i]);
-	    }
+    printf("count: %d, bufptr at %d,  Content:\n", count,
+     bufptr - buf);
+    for (i = 0; i < count; i++)
+      {
+        printf("0x%x, ", (unsigned int) buf[i]);
+      }
 #endif
 
-	  return (0);
-	}
+    return (0);
+  }
       size = handlers[*bufptr].size;
 
 #ifdef SHORT_PACKETS
       if (size == -1)
-	{					 /* variable packet */
-	  size = getvpsize(bufptr);
-	  if (size <= 0)
-	    {
-	      fprintf(stderr, "Bad short-packet size value (%d)\n", size);
-	      return 0;
-	    }
+  {          /* variable packet */
+    size = getvpsize(bufptr);
+    if (size <= 0)
+      {
+        fprintf(stderr, "Bad short-packet size value (%d)\n", size);
+        return 0;
+      }
 
-	  if (debug)
-	    printf("read variable packet size %d, type %d\n",
-		   size, *bufptr);
-	}
+    if (debug)
+      printf("read variable packet size %d, type %d\n",
+       size, *bufptr);
+  }
 #endif /* SHORT_PACKETS */
 
       if (size == 0)
-	fprintf(stderr, "Variable packet has 0 length! type=%d Trying to read more!\n", *bufptr);
+  fprintf(stderr, "Variable packet has 0 length! type=%d Trying to read more!\n", *bufptr);
       /* read broke in the middle of a packet, wait until we get the rest */
       while (size > count + (buf - bufptr) || size == 0)
-	{
-	  /* We wait for up to ten seconds for rest of packet. If we don't *
-	   * * get it, we assume the server died. */
-	tryagain1:
-	  timeout.tv_sec = 20;
-	  timeout.tv_usec = 0;
-	  FD_ZERO(&readfds);
-	  FD_SET(asock, &readfds);
-	  /* readfds=1<<asock; */
-	  if ((temp = SELECT(max_fd, &readfds, 0, 0, &timeout)) == 0)
-	    {
-	      printf("Packet fragment.  Server must be dead\n");
-	      serverDead = 1;
-	      return (0);
-	    }
+  {
+    /* We wait for up to ten seconds for rest of packet. If we don't *
+     * * get it, we assume the server died. */
+  tryagain1:
+    timeout.tv_sec = 20;
+    timeout.tv_usec = 0;
+    FD_ZERO(&readfds);
+    FD_SET(asock, &readfds);
+    /* readfds=1<<asock; */
+    if ((temp = SELECT(max_fd, &readfds, 0, 0, &timeout)) == 0)
+      {
+        printf("Packet fragment.  Server must be dead\n");
+        serverDead = 1;
+        return (0);
+      }
 
-	  /* 88=largest short packet, messages */
-	  if (size == 0)
-	    {
-	      temp = read(asock, buf + count, 88);
-	    }
-	  else
-	    temp = read(asock, buf + count, size - (count + (buf - bufptr)));
-	  count += temp;
-	  if (temp <= 0)
-	    {
-	      printf("2) Got read() of %d.  Server is dead\n", temp);
-	      serverDead = 1;
-	      return (0);
-	    }
-	  /* go back to the size computation, hopefully with the rest of the */
-	  /* aborted packet in the buffer. */
-	  if (size == 0)
-	    goto computesize;
-	}
+    /* 88=largest short packet, messages */
+    if (size == 0)
+      {
+        temp = read(asock, buf + count, 88);
+      }
+    else
+      temp = read(asock, buf + count, size - (count + (buf - bufptr)));
+    count += temp;
+    if (temp <= 0)
+      {
+        printf("2) Got read() of %d.  Server is dead\n", temp);
+        serverDead = 1;
+        return (0);
+      }
+    /* go back to the size computation, hopefully with the rest of the */
+    /* aborted packet in the buffer. */
+    if (size == 0)
+      goto computesize;
+  }
       if (handlers[*bufptr].handler != NULL)
-	{
-	  if (asock != udpSock ||
-	      (!drop_flag || *bufptr == SP_SEQUENCE || *bufptr == SP_SC_SEQUENCE))
-	    {
-	      if (debug)
-		printf("read packet %d\n", *bufptr);
+  {
+    if (asock != udpSock ||
+        (!drop_flag || *bufptr == SP_SEQUENCE || *bufptr == SP_SC_SEQUENCE))
+      {
+        if (debug)
+    printf("read packet %d\n", *bufptr);
 
 #ifdef RECORDGAME
-	      if (recordFile != NULL && ckRecordPacket(*bufptr))
-		{
-		  if (fwrite(bufptr, size, 1, recordFile) != 1)
-		    {
-		      perror("write: (recordFile)");
-		      fclose(recordFile);
-		      recordFile = NULL;
-		    }
-		}
+        if (recordFile != NULL && ckRecordPacket(*bufptr))
+    {
+      if (fwrite(bufptr, size, 1, recordFile) != 1)
+        {
+          perror("write: (recordFile)");
+          fclose(recordFile);
+          recordFile = NULL;
+        }
+    }
 #endif
 
 #ifdef PACKET_LOG
-	      if (log_packets)
-		{
-		  Log_Packet((char) (*bufptr), size);
-		  print_packet(bufptr,size);
-		}
+        if (log_packets)
+    {
+      Log_Packet((char) (*bufptr), size);
+      print_packet(bufptr,size);
+    }
 #endif
 
-	      if (asock == udpSock)
-		packets_received++;
+        if (asock == udpSock)
+    packets_received++;
 
-	      (*(handlers[*bufptr].handler)) (bufptr
+        (*(handlers[*bufptr].handler)) (bufptr
 
 #ifdef CORRUPTED_PACKETS
-					      ,asock
+                ,asock
 #endif
 
-		  );
-	    }
-	  else
-	    {
-	      if (debug)
-		{
-		  if (drop_flag)
-		    printf("%d bytes dropped.\n", size);
-		}
-	      UDPDIAG(("Ignored type %d\n", *bufptr));
-	    }
-	}
+      );
+      }
+    else
+      {
+        if (debug)
+    {
+      if (drop_flag)
+        printf("%d bytes dropped.\n", size);
+    }
+        UDPDIAG(("Ignored type %d\n", *bufptr));
+      }
+  }
       else
-	{
-	  printf("Handler for packet %d not installed...\n", *bufptr);
-	}
+  {
+    printf("Handler for packet %d not installed...\n", *bufptr);
+  }
 
       bufptr += size;
 
 #ifdef nodef
       if (bufptr > buf + BUFSIZ)
-	{
-	  MCOPY(buf + BUFSIZ, buf, BUFSIZ);
-	  if (count == BUFSIZ * 2)
-	    {
-	    tryagain2:
-	      FD_ZERO(&readfds);
-	      FD_SET(asock, &readfds);
-	      /* readfds = 1<<asock; */
-	      if ((temp = SELECT(max_fd, &readfds, 0, 0, &timeout)) > 0)
-		{
-		  temp = read(asock, buf + BUFSIZ, BUFSIZ);
-		  count = BUFSIZ + temp;
-		  if (temp <= 0)
-		    {
-		      printf("3) Got read() of %d.  Server is dead\n", temp);
-		      serverDead = 1;
-		      return (0);
-		    }
-		}
-	      else
-		{
-		  count = BUFSIZ;
-		}
-	    }
-	  else
-	    {
-	      count -= BUFSIZ;
-	    }
-	  bufptr -= BUFSIZ;
-	}
+  {
+    MCOPY(buf + BUFSIZ, buf, BUFSIZ);
+    if (count == BUFSIZ * 2)
+      {
+      tryagain2:
+        FD_ZERO(&readfds);
+        FD_SET(asock, &readfds);
+        /* readfds = 1<<asock; */
+        if ((temp = SELECT(max_fd, &readfds, 0, 0, &timeout)) > 0)
+    {
+      temp = read(asock, buf + BUFSIZ, BUFSIZ);
+      count = BUFSIZ + temp;
+      if (temp <= 0)
+        {
+          printf("3) Got read() of %d.  Server is dead\n", temp);
+          serverDead = 1;
+          return (0);
+        }
+    }
+        else
+    {
+      count = BUFSIZ;
+    }
+      }
+    else
+      {
+        count -= BUFSIZ;
+      }
+    bufptr -= BUFSIZ;
+  }
 #endif
     }
   return (1);
@@ -1427,7 +1427,7 @@ void    handleTorp(struct torp_spacket *packet)
   if (rotate)
     {
       rotate_coord(&thetorp->t_x, &thetorp->t_y, rotate_deg,
-		   GWIDTH / 2, GWIDTH / 2);
+       GWIDTH / 2, GWIDTH / 2);
       rotate_dir(&thetorp->t_dir, rotate_deg);
     }
 #endif
@@ -1462,14 +1462,14 @@ void    handleTorpInfo(struct torp_info_spacket *packet)
 
 #ifdef nodef
       if (players[thetorp->t_owner].p_status == PEXPLODE)
-	fprintf(stderr, "TORP STARTED WHEN PLAYER EXPLODED\n");
+  fprintf(stderr, "TORP STARTED WHEN PLAYER EXPLODED\n");
 #endif
 
       /* BORG TEST */
 
 #ifdef BD
       if (bd)
-	bd_new_torp(ntohs(packet->tnum), thetorp);
+  bd_new_torp(ntohs(packet->tnum), thetorp);
 #endif
     }
   if (packet->status == TFREE && thetorp->t_status)
@@ -1483,9 +1483,9 @@ void    handleTorpInfo(struct torp_info_spacket *packet)
       /* FAT: prevent explosion reset */
       thetorp->t_status = packet->status;
       if (thetorp->t_status == TEXPLODE)
-	{
-	  thetorp->t_fuse = NUMDETFRAMES;
-	}
+  {
+    thetorp->t_fuse = NUMDETFRAMES;
+  }
     }
 }
 
@@ -1528,7 +1528,7 @@ void    handleSelf(struct you_spacket *packet)
     {
       me = (ghoststart ? &players[ghost_pno] : pl);
       if (log_packets) {
-	fprintf(stderr, "handleSelf: my player number is %d\n", packet->pnum);
+  fprintf(stderr, "handleSelf: my player number is %d\n", packet->pnum);
       }
       myship = &(me->p_ship);
       mystats = &(me->p_stats);
@@ -1568,10 +1568,10 @@ void    handleSelf(struct you_spacket *packet)
 
 #ifdef INCLUDE_VISTRACT
   if (packet->tractor & 0x40)
-    pl->p_tractor = (short) packet->tractor & (~0x40);	/* ATM - visible 
-							 * tractors */
+    pl->p_tractor = (short) packet->tractor & (~0x40);  /* ATM - visible
+               * tractors */
 
-#ifdef nodef					 /* tmp */
+#ifdef nodef           /* tmp */
   else
     pl->p_tractor = -1;
 #endif /* nodef */
@@ -1603,9 +1603,9 @@ void    handlePlayer(struct player_spacket *packet)
   if (F_cloak_maxwarp && pl != me)
     {
       if (pl->p_speed == 0xf)
-	pl->p_flags |= PFCLOAK;
+  pl->p_flags |= PFCLOAK;
       else if (pl->p_flags & PFCLOAK)
-	pl->p_flags &= ~PFCLOAK;
+  pl->p_flags &= ~PFCLOAK;
     }
   x = ntohl(packet->x);
   y = ntohl(packet->y);
@@ -1617,9 +1617,9 @@ void    handlePlayer(struct player_spacket *packet)
       x = pl->p_x;
       y = pl->p_y;
       if (pl->p_dir > DEADPACKETS)
-	pl->p_explode = EX_FRAMES;
+  pl->p_explode = EX_FRAMES;
       else
-	pl->p_explode = 0;
+  pl->p_explode = 0;
       redrawPlayer[packet->pnum] = 1;
       PlistNoteUpdate(packet->pnum);
     }
@@ -1632,7 +1632,7 @@ void    handlePlayer(struct player_spacket *packet)
 
   if (me == pl)
     {
-      extern int my_x, my_y;			 /* From short.c */
+      extern int my_x, my_y;       /* From short.c */
 
       my_x = x;
       my_y = y;
@@ -1652,7 +1652,7 @@ void    handlePlayer(struct player_spacket *packet)
 void    handleWarning(struct warning_spacket *packet)
 {
   packet->mesg[sizeof(packet->mesg) - 1] = '\0'; /* guarantee null * *
-						  * termination */
+              * termination */
   warning(packet->mesg);
 }
 
@@ -1669,58 +1669,58 @@ sendShortPacket(char type, char state)
   if (commMode == COMM_UDP && udpClientSend >= 2)
     {
       switch (type)
-	{
-	case CP_SPEED:
-	  fSpeed = state | 0x100;
-	  break;
-	case CP_DIRECTION:
-	  fDirection = state | 0x100;
-	  break;
-	case CP_SHIELD:
-	  fShield = state | 0xa00;
-	  break;
-	case CP_ORBIT:
-	  fOrbit = state | 0xa00;
-	  break;
-	case CP_REPAIR:
-	  fRepair = state | 0xa00;
-	  break;
-	case CP_CLOAK:
-	  fCloak = state | 0xa00;
-	  break;
-	case CP_BOMB:
-	  fBomb = state | 0xa00;
-	  break;
-	case CP_DOCKPERM:
-	  fDockperm = state | 0xa00;
-	  break;
-	case CP_PLAYLOCK:
-	  fPlayLock = state | 0xa00;
-	  break;
-	case CP_PLANLOCK:
-	  fPlanLock = state | 0xa00;
-	  break;
-	case CP_BEAM:
-	  if (state == 1)
-	    fBeamup = 1 | 0x500;
-	  else
-	    fBeamdown = 2 | 0x500;
-	  break;
-	}
+  {
+  case CP_SPEED:
+    fSpeed = state | 0x100;
+    break;
+  case CP_DIRECTION:
+    fDirection = state | 0x100;
+    break;
+  case CP_SHIELD:
+    fShield = state | 0xa00;
+    break;
+  case CP_ORBIT:
+    fOrbit = state | 0xa00;
+    break;
+  case CP_REPAIR:
+    fRepair = state | 0xa00;
+    break;
+  case CP_CLOAK:
+    fCloak = state | 0xa00;
+    break;
+  case CP_BOMB:
+    fBomb = state | 0xa00;
+    break;
+  case CP_DOCKPERM:
+    fDockperm = state | 0xa00;
+    break;
+  case CP_PLAYLOCK:
+    fPlayLock = state | 0xa00;
+    break;
+  case CP_PLANLOCK:
+    fPlanLock = state | 0xa00;
+    break;
+  case CP_BEAM:
+    if (state == 1)
+      fBeamup = 1 | 0x500;
+    else
+      fBeamdown = 2 | 0x500;
+    break;
+  }
 
       /* force weapons too? */
       if (udpClientSend >= 3)
-	{
-	  switch (type)
-	    {
-	    case CP_PHASER:
-	      fPhaser = state | 0x100;
-	      break;
-	    case CP_PLASMA:
-	      fPlasma = state | 0x100;
-	      break;
-	    }
-	}
+  {
+    switch (type)
+      {
+      case CP_PHASER:
+        fPhaser = state | 0x100;
+        break;
+      case CP_PLASMA:
+        fPlasma = state | 0x100;
+        break;
+      }
+  }
     }
 }
 
@@ -1755,81 +1755,81 @@ sendServerPacket(struct player_spacket *packet)
     {
       /* special case for verify packet */
       if (packet->type == CP_UDP_REQ)
-	{
-	  if (((struct udp_req_cpacket *) packet)->request == COMM_VERIFY)
-	    goto send_udp;
-	}
+  {
+    if (((struct udp_req_cpacket *) packet)->request == COMM_VERIFY)
+      goto send_udp;
+  }
       /* business as usual (or player has turned off UDP transmission) */
       if (gwrite(sock, (char *) packet, size) != size)
-	{
-	  printf("gwrite failed.  Server must be dead\n");
-	  serverDead = 1;
-	}
+  {
+    printf("gwrite failed.  Server must be dead\n");
+    serverDead = 1;
+  }
     }
   else
     {
       /* UDP stuff */
       switch (packet->type)
-	{
-	case CP_SPEED:
-	case CP_DIRECTION:
-	case CP_PHASER:
-	case CP_PLASMA:
-	case CP_TORP:
-	case CP_QUIT:
-	case CP_PRACTR:
-	case CP_SHIELD:
-	case CP_REPAIR:
-	case CP_ORBIT:
-	case CP_PLANLOCK:
-	case CP_PLAYLOCK:
-	case CP_BOMB:
-	case CP_BEAM:
-	case CP_CLOAK:
-	case CP_DET_TORPS:
-	case CP_DET_MYTORP:
-	case CP_REFIT:
-	case CP_TRACTOR:
-	case CP_REPRESS:
-	case CP_COUP:
-	case CP_DOCKPERM:
+  {
+  case CP_SPEED:
+  case CP_DIRECTION:
+  case CP_PHASER:
+  case CP_PLASMA:
+  case CP_TORP:
+  case CP_QUIT:
+  case CP_PRACTR:
+  case CP_SHIELD:
+  case CP_REPAIR:
+  case CP_ORBIT:
+  case CP_PLANLOCK:
+  case CP_PLAYLOCK:
+  case CP_BOMB:
+  case CP_BEAM:
+  case CP_CLOAK:
+  case CP_DET_TORPS:
+  case CP_DET_MYTORP:
+  case CP_REFIT:
+  case CP_TRACTOR:
+  case CP_REPRESS:
+  case CP_COUP:
+  case CP_DOCKPERM:
 
 #ifdef INCLUDE_SCAN
-	case CP_SCAN:
+  case CP_SCAN:
 #endif
 
-	case CP_PING_RESPONSE:
-	  /* non-critical stuff, use UDP */
-	send_udp:
-	  packets_sent++;
+  case CP_PING_RESPONSE:
+    /* non-critical stuff, use UDP */
+  send_udp:
+    packets_sent++;
 
-	  V_UDPDIAG(("Sent %d on UDP port\n", packet->type));
-	  if (gwrite(udpSock, packet, size) != size)
-	    {
-	      UDPDIAG(("gwrite on UDP failed.  Closing UDP connection\n"));
-	      warning("UDP link severed");
-	      /* serverDead=1; */
-	      commModeReq = commMode = COMM_TCP;
-	      commStatus = STAT_CONNECTED;
-	      commSwitchTimeout = 0;
-	      if (udpWin)
-		{
-		  udprefresh(UDP_STATUS);
-		  udprefresh(UDP_CURRENT);
-		}
-	      if (udpSock >= 0)
-		closeUdpConn();
-	    }
-	  break;
+    V_UDPDIAG(("Sent %d on UDP port\n", packet->type));
+    if (gwrite(udpSock, packet, size) != size)
+      {
+        UDPDIAG(("gwrite on UDP failed.  Closing UDP connection\n"));
+        warning("UDP link severed");
+        /* serverDead=1; */
+        commModeReq = commMode = COMM_TCP;
+        commStatus = STAT_CONNECTED;
+        commSwitchTimeout = 0;
+        if (udpWin)
+    {
+      udprefresh(UDP_STATUS);
+      udprefresh(UDP_CURRENT);
+    }
+        if (udpSock >= 0)
+    closeUdpConn();
+      }
+    break;
 
-	default:
-	  /* critical stuff, use TCP */
-	  if (gwrite(sock, (char *) packet, size) != size)
-	    {
-	      printf("gwrite failed.  Server must be dead\n");
-	      serverDead = 1;
-	    }
-	}
+  default:
+    /* critical stuff, use TCP */
+    if (gwrite(sock, (char *) packet, size) != size)
+      {
+        printf("gwrite failed.  Server must be dead\n");
+        serverDead = 1;
+      }
+  }
     }
 }
 
@@ -1870,14 +1870,14 @@ void    handlePlanet(struct planet_spacket *packet)
 
   if (plan->pl_armies != ntohl(packet->armies))
     {
-      /* don't redraw when armies change unless it crosses the '4' army 
-       * limit. Keeps people from watching for planet 'flicker' when 
+      /* don't redraw when armies change unless it crosses the '4' army
+       * limit. Keeps people from watching for planet 'flicker' when
        * players are beaming */
       int     planetarmies = ntohl(packet->armies);
 
       if ((plan->pl_armies < 5 && planetarmies > 4) ||
-	  (plan->pl_armies > 4 && planetarmies < 5))
-	redraw = 1;
+    (plan->pl_armies > 4 && planetarmies < 5))
+  redraw = 1;
     }
   plan->pl_armies = ntohl(packet->armies);
 
@@ -1919,7 +1919,7 @@ void    handlePhaser(struct phaser_spacket *packet)
   phas->ph_x = ntohl(packet->x);
   phas->ph_y = ntohl(packet->y);
   phas->ph_target = ntohl(packet->target);
-  phas->ph_fuse = 0;				 /* NEW */
+  phas->ph_fuse = 0;         /* NEW */
   phas->ph_updateFuse = PHASER_UPDATE_FUSE;
 
 #ifdef ROTATERACE
@@ -1940,10 +1940,10 @@ void    handleMessage(struct mesg_spacket *packet)
   packet->mesg[sizeof(packet->mesg) - 1] = '\0';
 #endif
 
-  /* printf("flags: 0x%x\n", packet->m_flags); 
-   * printf("from: %d\n", packet->m_from); 
-   * printf("recpt: %d\n", packet->m_recpt); 
-   * printf("mesg: %s\n", packet->mesg); 
+  /* printf("flags: 0x%x\n", packet->m_flags);
+   * printf("from: %d\n", packet->m_from);
+   * printf("recpt: %d\n", packet->m_recpt);
+   * printf("mesg: %s\n", packet->mesg);
    */
 
   dmessage(packet->mesg, packet->m_flags, packet->m_from, packet->m_recpt);
@@ -1990,7 +1990,7 @@ void    handleLogin(struct login_spacket *packet)
   loginAccept = packet->accept;
   if (packet->accept)
     {
-      /* no longer needed .. we have it in xtrekrc bcopy(packet->keymap, 
+      /* no longer needed .. we have it in xtrekrc bcopy(packet->keymap,
        * mystats->st_keymap, 96); */
       mystats->st_flags = ntohl(packet->flags);
 
@@ -2076,9 +2076,9 @@ void    handlePlasmaInfo(struct plasma_info_spacket *packet)
       /* FAT: prevent explosion timer from being reset */
       thetorp->pt_status = packet->status;
       if (thetorp->pt_status == PTEXPLODE)
-	{
-	  thetorp->pt_fuse = NUMDETFRAMES;
-	}
+  {
+    thetorp->pt_fuse = NUMDETFRAMES;
+  }
     }
 }
 
@@ -2167,10 +2167,10 @@ void    handleKills(struct kills_spacket *packet)
 
 #ifdef ARMY_SLIDER
       if (me == &players[packet->pnum])
-	{
-	  calibrate_stats();
-	  redrawStats();
-	}
+  {
+    calibrate_stats();
+    redrawStats();
+  }
 #endif /* ARMY_SLIDER */
     }
 }
@@ -2204,10 +2204,10 @@ void    handlePStatus(struct pstatus_spacket *packet)
     {
       packet->status = PEXPLODE;
 
-      if (j->p_status == PEXPLODE)		 /* Prevent redundant updates 
-						  * 
-						  */
-	return;
+      if (j->p_status == PEXPLODE)     /* Prevent redundant updates
+              *
+              */
+  return;
     }
 
   /* guarantees we won't miss the kill message since this is TCP */
@@ -2240,10 +2240,10 @@ sendMessage(char *mes, int group, int indiv)
       int     size;
 
       size = strlen(mes);
-      size += 5;				 /* 1 for '\0', 4 * *
-						  * packetheader */
+      size += 5;         /* 1 for '\0', 4 * *
+              * packetheader */
       if ((size % 4) != 0)
-	size += (4 - (size % 4));
+  size += (4 - (size % 4));
       mesPacket.pad1 = (char) size;
       sizes[CP_S_MESSAGE] = size;
       mesPacket.type = CP_S_MESSAGE;
@@ -2271,12 +2271,12 @@ sendOptionsPacket(void)
   bzero(&optPacket, sizeof(optPacket));
   optPacket.type = CP_OPTIONS;
   optPacket.flags =
-      htonl(ST_MAPMODE +			 /* always on */
-	    ST_NAMEMODE * namemode +
-	    ST_SHOWSHIELDS +			 /* always on */
-	    ST_KEEPPEACE * keeppeace +
-	    ST_SHOWLOCAL * showlocal +
-	    ST_SHOWGLOBAL * showgalactic);
+      htonl(ST_MAPMODE +       /* always on */
+      ST_NAMEMODE * namemode +
+      ST_SHOWSHIELDS +       /* always on */
+      ST_KEEPPEACE * keeppeace +
+      ST_SHOWLOCAL * showlocal +
+      ST_SHOWGLOBAL * showgalactic);
   MCOPY(mystats->st_keymap, optPacket.keymap, 96);
   sendServerPacket((struct player_spacket *) &optPacket);
 }
@@ -2343,16 +2343,16 @@ gwrite(int fd, char *buf, register int bytes)
     {
       n = write(fd, buf, bytes);
       if (n < 0)
-	{
-	  if (fd == udpSock)
-	    {
-	      fprintf(stderr, "Tried to write %d, 0x%x, %d\n",
-		      fd, buf, bytes);
-	      perror("write");
-	      printUdpInfo();
-	    }
-	  return (-1);
-	}
+  {
+    if (fd == udpSock)
+      {
+        fprintf(stderr, "Tried to write %d, 0x%x, %d\n",
+          fd, buf, bytes);
+        perror("write");
+        printUdpInfo();
+      }
+    return (-1);
+  }
       bytes -= n;
       buf += n;
     }
@@ -2425,20 +2425,20 @@ void    handlePlyrLogin(struct plyr_login_spacket *packet, int sock)
     {
       /* This is me.  Set some stats */
       if (lastRank == -1)
-	{
-	  if (loggedIn)
-	    {
-	      lastRank = packet->rank;
-	    }
-	}
+  {
+    if (loggedIn)
+      {
+        lastRank = packet->rank;
+      }
+  }
       else
-	{
-	  if (lastRank != packet->rank)
-	    {
-	      lastRank = packet->rank;
-	      promoted = 1;
-	    }
-	}
+  {
+    if (lastRank != packet->rank)
+      {
+        lastRank = packet->rank;
+        promoted = 1;
+      }
+  }
     }
 
 
@@ -2482,8 +2482,8 @@ void    handleStats(struct stats_spacket *packet)
   pl->p_stats.st_sbmaxkills = ntohl(packet->sbmaxkills) / 100.0;
 
 
-  /* For some reason, we get updates for freed players.  When this happens, * 
-   * 
+  /* For some reason, we get updates for freed players.  When this happens, *
+   *
    * * don't bother the update the player list. */
   if (pl->p_status != PFREE)
     PlistNoteUpdate(packet->pnum);
@@ -2510,7 +2510,7 @@ void    handlePlyrInfo(struct plyr_info_spacket *packet)
   pl = &players[packet->pnum];
 
   PlistNoteUpdate(packet->pnum);
-  if ((pl->p_team != packet->team) ||		 /* Check 0 system default */
+  if ((pl->p_team != packet->team) ||    /* Check 0 system default */
       ((pl->p_team == 0) && (pl->p_mapchars[0] != teamlet[0])))
     {
       pl->p_team = packet->team;
@@ -2518,8 +2518,8 @@ void    handlePlyrInfo(struct plyr_info_spacket *packet)
       PlistNoteArrive(packet->pnum);
 
       if (pl == me)
-	redrawall = 1;				 /* Update the map if I * *
-						  * change teams */
+  redrawall = 1;         /* Update the map if I * *
+              * change teams */
     }
 
   getship(&pl->p_ship, packet->shiptype);
@@ -2530,7 +2530,7 @@ void    handlePlyrInfo(struct plyr_info_spacket *packet)
     {
       redrawTstats();
       calibrate_stats();
-      redrawStats();				 /* TSH */
+      redrawStats();         /* TSH */
     }
   redrawPlayer[packet->pnum] = 1;
 }
@@ -2607,8 +2607,8 @@ void    handleReserved(struct reserved_spacket *packet, int sock)
 #else
 
   if (RSA_Client)
-    {						 /* can use -o option for old
-						  * * * blessing */
+    {            /* can use -o option for old
+              * * * blessing */
       /* client sends back a 'reserved' packet just saying RSA_VERSION info */
       /* theoretically, the server then sends off a rsa_key_spacket * for the
        * * * client to then respond to */
@@ -2680,10 +2680,10 @@ void    handleRSAKey(struct rsa_key_spacket *packet)
     {
       len = sizeof(saddr);
       if (getpeername(sock, (struct sockaddr *) &saddr, &len) < 0)
-	{
-	  perror("getpeername(sock)");
-	  terminate(1);
-	}
+  {
+    perror("getpeername(sock)");
+    terminate(1);
+  }
     }
   else
     {
@@ -2769,11 +2769,11 @@ sendUdpReq(int req)
 
 #ifdef SHORT_PACKETS
       if (recv_short)
-	{					 /* not necessary */
-	  /* Let the client do the work, and not the network :-) */
+  {          /* not necessary */
+    /* Let the client do the work, and not the network :-) */
 
-	  resetWeaponInfo();
-	}
+    resetWeaponInfo();
+  }
 #endif
 
       sendServerPacket((struct player_spacket *) &packet);
@@ -2789,21 +2789,21 @@ sendUdpReq(int req)
     {
       /* open UDP port */
       if (openUdpConn() >= 0)
-	{
-	  UDPDIAG(("Bound to local port %d on fd %d\n", udpLocalPort, udpSock));
-	}
+  {
+    UDPDIAG(("Bound to local port %d on fd %d\n", udpLocalPort, udpSock));
+  }
       else
-	{
-	  UDPDIAG(("Bind to local port %d failed\n", udpLocalPort));
-	  commModeReq = COMM_TCP;
-	  commStatus = STAT_CONNECTED;
-	  commSwitchTimeout = 0;
-	  if (udpWin)
-	    udprefresh(UDP_STATUS);
-	  warning("Unable to establish UDP connection");
+  {
+    UDPDIAG(("Bind to local port %d failed\n", udpLocalPort));
+    commModeReq = COMM_TCP;
+    commStatus = STAT_CONNECTED;
+    commSwitchTimeout = 0;
+    if (udpWin)
+      udprefresh(UDP_STATUS);
+    warning("Unable to establish UDP connection");
 
-	  return;
-	}
+    return;
+  }
     }
   /* send the request */
   packet.type = CP_UDP_REQ;
@@ -2813,18 +2813,18 @@ sendUdpReq(int req)
 #ifdef GATEWAY
   if (!strcmp(serverName, gw_mach))
     {
-      packet.port = htons(gw_serv_port);	 /* gw port that server * *
-						  * should call */
+      packet.port = htons(gw_serv_port);   /* gw port that server * *
+              * should call */
       UDPDIAG(("+ Telling server to contact us on %d\n", gw_serv_port));
     }
 #endif
 
 #ifdef UDP_PORTSWAP
   if (portSwap)
-    packet.connmode = CONNMODE_PORT;		 /* have him send his port */
+    packet.connmode = CONNMODE_PORT;     /* have him send his port */
   else
 #endif
-    packet.connmode = CONNMODE_PACKET;		 /* we get addr from packet */
+    packet.connmode = CONNMODE_PACKET;     /* we get addr from packet */
 
   sendServerPacket((struct player_spacket *) &packet);
 
@@ -2834,11 +2834,11 @@ sendUdpReq(int req)
     commStatus = STAT_SWITCH_TCP;
   else
     commStatus = STAT_SWITCH_UDP;
-  commSwitchTimeout = 25;			 /* wait 25 updates (about *
-						  * * five seconds) */
+  commSwitchTimeout = 25;      /* wait 25 updates (about *
+              * * five seconds) */
 
   UDPDIAG(("Sent request for %s mode\n", (req == COMM_TCP) ?
-	   "TCP" : "UDP"));
+     "TCP" : "UDP"));
 
 #ifdef UDP_PORTSWAP
   if (!portSwap)
@@ -2873,103 +2873,103 @@ void    handleUdpReply(struct udp_reply_spacket *packet)
     {
     case SWITCH_TCP_OK:
       if (commMode == COMM_TCP)
-	{
-	  UDPDIAG(("Got SWITCH_TCP_OK while in TCP mode; ignoring\n"));
-	}
+  {
+    UDPDIAG(("Got SWITCH_TCP_OK while in TCP mode; ignoring\n"));
+  }
       else
-	{
-	  commMode = COMM_TCP;
-	  commStatus = STAT_CONNECTED;
-	  warning("Switched to TCP-only connection");
-	  closeUdpConn();
-	  UDPDIAG(("UDP port closed\n"));
-	  if (udpWin)
-	    {
-	      udprefresh(UDP_STATUS);
-	      udprefresh(UDP_CURRENT);
-	    }
-	}
+  {
+    commMode = COMM_TCP;
+    commStatus = STAT_CONNECTED;
+    warning("Switched to TCP-only connection");
+    closeUdpConn();
+    UDPDIAG(("UDP port closed\n"));
+    if (udpWin)
+      {
+        udprefresh(UDP_STATUS);
+        udprefresh(UDP_CURRENT);
+      }
+  }
       break;
     case SWITCH_UDP_OK:
       if (commMode == COMM_UDP)
-	{
-	  UDPDIAG(("Got SWITCH_UDP_OK while in UDP mode; ignoring\n"));
-	}
+  {
+    UDPDIAG(("Got SWITCH_UDP_OK while in UDP mode; ignoring\n"));
+  }
       else
-	{
-	  /* the server is forcing UDP down our throat? */
-	  if (commModeReq != COMM_UDP)
-	    {
-	      UDPDIAG(("Got unsolicited SWITCH_UDP_OK; ignoring\n"));
-	    }
-	  else
-	    {
+  {
+    /* the server is forcing UDP down our throat? */
+    if (commModeReq != COMM_UDP)
+      {
+        UDPDIAG(("Got unsolicited SWITCH_UDP_OK; ignoring\n"));
+      }
+    else
+      {
 
 #ifdef UDP_PORTSWAP
-	      if (portSwap)
-		{
-		  udpServerPort = ntohl(packet->port);
-		  if (connUdpConn() < 0)
-		    {
-		      UDPDIAG(("Unable to connect, resetting\n"));
-		      warning("Connection attempt failed");
-		      commModeReq = COMM_TCP;
-		      commStatus = STAT_CONNECTED;
-		      if (udpSock >= 0)
-			closeUdpConn();
-		      if (udpWin)
-			{
-			  udprefresh(UDP_STATUS);
-			  udprefresh(UDP_CURRENT);
-			}
-		      response.request = COMM_TCP;
-		      response.port = 0;
-		      goto send;
-		    }
-		}
+        if (portSwap)
+    {
+      udpServerPort = ntohl(packet->port);
+      if (connUdpConn() < 0)
+        {
+          UDPDIAG(("Unable to connect, resetting\n"));
+          warning("Connection attempt failed");
+          commModeReq = COMM_TCP;
+          commStatus = STAT_CONNECTED;
+          if (udpSock >= 0)
+      closeUdpConn();
+          if (udpWin)
+      {
+        udprefresh(UDP_STATUS);
+        udprefresh(UDP_CURRENT);
+      }
+          response.request = COMM_TCP;
+          response.port = 0;
+          goto send;
+        }
+    }
 #else
-	      /* this came down UDP, so we MUST be connected */
-	      /* (do the verify thing anyway just for kicks) */
+        /* this came down UDP, so we MUST be connected */
+        /* (do the verify thing anyway just for kicks) */
 #endif
 
-	      UDPDIAG(("Connected to server's UDP port\n"));
-	      commStatus = STAT_VERIFY_UDP;
-	      if (udpWin)
-		udprefresh(UDP_STATUS);
-	      response.request = COMM_VERIFY;	 /* send verify request on *
-						  * * UDP */
-	      response.port = 0;
-	      commSwitchTimeout = 25;		 /* wait 25 updates */
-	    send:
-	      sendServerPacket((struct player_spacket *) &response);
-	    }
-	}
+        UDPDIAG(("Connected to server's UDP port\n"));
+        commStatus = STAT_VERIFY_UDP;
+        if (udpWin)
+    udprefresh(UDP_STATUS);
+        response.request = COMM_VERIFY;  /* send verify request on *
+              * * UDP */
+        response.port = 0;
+        commSwitchTimeout = 25;    /* wait 25 updates */
+      send:
+        sendServerPacket((struct player_spacket *) &response);
+      }
+  }
       break;
     case SWITCH_DENIED:
       if (ntohs(packet->port))
-	{
-	  UDPDIAG(("Switch to UDP failed (different version)\n"));
-	  warning("UDP protocol request failed (bad version)");
-	}
+  {
+    UDPDIAG(("Switch to UDP failed (different version)\n"));
+    warning("UDP protocol request failed (bad version)");
+  }
       else
-	{
-	  UDPDIAG(("Switch to UDP denied\n"));
-	  warning("UDP protocol request denied");
-	}
+  {
+    UDPDIAG(("Switch to UDP denied\n"));
+    warning("UDP protocol request denied");
+  }
       commModeReq = commMode;
       commStatus = STAT_CONNECTED;
       commSwitchTimeout = 0;
       if (udpWin)
-	udprefresh(UDP_STATUS);
+  udprefresh(UDP_STATUS);
       if (udpSock >= 0)
-	closeUdpConn();
+  closeUdpConn();
       break;
     case SWITCH_VERIFY:
       UDPDIAG(("Received UDP verification\n"));
       break;
     default:
       fprintf(stderr, "netrek: Got funny reply (%d) in UDP_REPLY packet\n",
-	      packet->reply);
+        packet->reply);
       break;
     }
 }
@@ -2984,8 +2984,8 @@ openUdpConn(void)
   if (udpSock >= 0)
     {
       fprintf(stderr, "netrek: tried to open udpSock twice\n");
-      return (0);				 /* pretend we succeeded * *
-						  * (this could be bad) */
+      return (0);        /* pretend we succeeded * *
+              * (this could be bad) */
     }
   if ((udpSock = socket(AF_INET, SOCK_DGRAM, 0)) < 0)
     {
@@ -3016,31 +3016,31 @@ openUdpConn(void)
   for (attempts = 0; attempts < MAX_PORT_RETRY; attempts++)
     {
       while (udpLocalPort < 2048)
-	{
-	  udpLocalPort = (udpLocalPort + 10687) & 32767;
-	}
+  {
+    udpLocalPort = (udpLocalPort + 10687) & 32767;
+  }
 
 #ifdef GATEWAY
       /* we need the gateway to know where to find us */
       if (!strcmp(serverName, gw_mach))
-	{
-	  UDPDIAG(("+ gateway test: binding to %d\n", gw_local_port));
-	  udpLocalPort = gw_local_port;
-	}
+  {
+    UDPDIAG(("+ gateway test: binding to %d\n", gw_local_port));
+    udpLocalPort = gw_local_port;
+  }
 #endif
 
       addr.sin_port = htons(udpLocalPort);
       if (bind(udpSock, (struct sockaddr *) &addr, sizeof(addr)) >= 0)
-	break;
+  break;
 
-      /* bind() failed, so find another port.  If we're tunneling through a * 
-       * 
+      /* bind() failed, so find another port.  If we're tunneling through a *
+       *
        * * router-based firewall, we just increment; otherwise we try to mix
        * it * * up a little.  The check for ports < 2048 is done above. */
       if (baseLocalPort)
-	udpLocalPort++;
+  udpLocalPort++;
       else
-	udpLocalPort = (udpLocalPort + 10687) & 32767;
+  udpLocalPort = (udpLocalPort + 10687) & 32767;
     }
   if (attempts == MAX_PORT_RETRY)
     {
@@ -3056,17 +3056,17 @@ openUdpConn(void)
   if (!serveraddr)
     {
       if ((addr.sin_addr.s_addr = inet_addr(serverName)) == -1)
-	{
-	  if ((hp = gethostbyname(serverName)) == NULL)
-	    {
-	      printf("Who is %s?\n", serverName);
-	      terminate(0);
-	    }
-	  else
-	    {
-	      addr.sin_addr.s_addr = *(LONG *) hp->h_addr;
-	    }
-	}
+  {
+    if ((hp = gethostbyname(serverName)) == NULL)
+      {
+        printf("Who is %s?\n", serverName);
+        terminate(0);
+      }
+    else
+      {
+        addr.sin_addr.s_addr = *(LONG *) hp->h_addr;
+      }
+  }
       serveraddr = addr.sin_addr.s_addr;
       UDPDIAG(("Found serveraddr == 0x%x\n", serveraddr));
     }
@@ -3088,7 +3088,7 @@ connUdpConn()
     {
       fprintf(stderr, "Error %d: ");
       perror("netrek: unable to connect UDP socket");
-      printUdpInfo();				 /* debug */
+      printUdpInfo();        /* debug */
       return (-1);
     }
 
@@ -3103,7 +3103,7 @@ connUdpConn()
       return -1;
     }
   printf("udpLocalPort %d, getsockname port %d\n",
-	 udpLocalPort, addr.sin_port);
+   udpLocalPort, addr.sin_port);
 #endif
 
   return (0);
@@ -3119,8 +3119,8 @@ recvUdpConn(void)
   int     fromlen, res;
   int     i;
 
-  MZERO(&from, sizeof(from));			 /* don't get garbage if * *
-						  * really broken */
+  MZERO(&from, sizeof(from));      /* don't get garbage if * *
+              * really broken */
 
   ns_init(3);
 
@@ -3132,22 +3132,22 @@ recvUdpConn(void)
 tryagain:
   FD_ZERO(&readfds);
   FD_SET(udpSock, &readfds);
-  to.tv_sec = 6;				 /* wait 3 seconds, then * *
-						  * abort */
+  to.tv_sec = 6;         /* wait 3 seconds, then * *
+              * abort */
   to.tv_usec = 0;
   if ((res = SELECT(max_fd, &readfds, 0, 0, &to)) <= 0)
     {
       if (!res)
-	{
-	  UDPDIAG(("timed out waiting for response\n"));
-	  warning("UDP connection request timed out");
-	  return (-1);
-	}
+  {
+    UDPDIAG(("timed out waiting for response\n"));
+    warning("UDP connection request timed out");
+    return (-1);
+  }
       else
-	{
-	  perror("select() before recvfrom()");
-	  return (-1);
-	}
+  {
+    perror("select() before recvfrom()");
+    return (-1);
+  }
     }
   if (recvfrom(udpSock, buf, BUFSIZE, 0, (struct sockaddr *) &from, &fromlen) < 0)
     {
@@ -3160,7 +3160,7 @@ tryagain:
       /* safe? */
       serveraddr = from.sin_addr.s_addr;
       UDPDIAG(("Warning: from 0x%x, but server is 0x%x\n",
-	       from.sin_addr.s_addr, serveraddr));
+         from.sin_addr.s_addr, serveraddr));
     }
   if (from.sin_family != AF_INET)
     {
@@ -3218,7 +3218,7 @@ printUdpInfo(void)
     }
 
   PUDPDIAG(("LOCAL: addr=0x%x, family=%d, port=%d\n", addr.sin_addr.s_addr,
-	    addr.sin_family, ntohs(addr.sin_port)));
+      addr.sin_family, ntohs(addr.sin_port)));
 
   if (getpeername(udpSock, (struct sockaddr *) &addr, &len) < 0)
     {
@@ -3226,7 +3226,7 @@ printUdpInfo(void)
       return;
     }
   PUDPDIAG(("PEER : addr=0x%x, family=%d, port=%d\n", addr.sin_addr.s_addr,
-	    addr.sin_family, ntohs(addr.sin_port)));
+      addr.sin_family, ntohs(addr.sin_port)));
 }
 #undef PUDPDIAG
 
@@ -3237,8 +3237,8 @@ void    handleSequence(struct sequence_spacket *packet)
 
   drop_flag = 0;
   if (chan != udpSock)
-    return;					 /* don't pay attention to *
-						  * * TCP sequence #s */
+    return;          /* don't pay attention to *
+              * * TCP sequence #s */
   udpTotal++;
   recent_count++;
 
@@ -3262,55 +3262,55 @@ void    handleSequence(struct sequence_spacket *packet)
       newseq |= (sequence & 0xffff0000);
 
       if (!udpSequenceChk)
-	{					 /* put this here so that * * 
-						  * turning seq check */
-	  sequence = newseq;			 /* on and off doesn't make * 
-						  * 
-						  * * us think we lost */
-	  return;				 /* a whole bunch of packets. 
-						  * 
-						  */
-	}
+  {          /* put this here so that * *
+              * turning seq check */
+    sequence = newseq;       /* on and off doesn't make *
+              *
+              * * us think we lost */
+    return;        /* a whole bunch of packets.
+              *
+              */
+  }
       if (newseq > sequence)
-	{
-	  /* accept */
-	  if (newseq != sequence + 1)
-	    {
-	      udpDropped += (newseq - sequence) - 1;
-	      udpTotal += (newseq - sequence) - 1;	/* want TOTAL packets 
-							 * 
-							 */
-	      recent_dropped += (newseq - sequence) - 1;
-	      recent_count += (newseq - sequence) - 1;
-	      if (udpWin)
-		udprefresh(UDP_DROPPED);
-	      UDPDIAG(("sequence=%d, newseq=%d, we lost some\n",
-		       sequence, newseq));
-	    }
-	  sequence = newseq;
-	  /* S_P2 */
-	  if (shortversion == SHORTVERSION && recv_short)
-	    {
-	      me->p_flags = (me->p_flags & 0xffff00ff) | (unsigned int) packet->flag16 << 8;
-	    }
-	}
+  {
+    /* accept */
+    if (newseq != sequence + 1)
+      {
+        udpDropped += (newseq - sequence) - 1;
+        udpTotal += (newseq - sequence) - 1;  /* want TOTAL packets
+               *
+               */
+        recent_dropped += (newseq - sequence) - 1;
+        recent_count += (newseq - sequence) - 1;
+        if (udpWin)
+    udprefresh(UDP_DROPPED);
+        UDPDIAG(("sequence=%d, newseq=%d, we lost some\n",
+           sequence, newseq));
+      }
+    sequence = newseq;
+    /* S_P2 */
+    if (shortversion == SHORTVERSION && recv_short)
+      {
+        me->p_flags = (me->p_flags & 0xffff00ff) | (unsigned int) packet->flag16 << 8;
+      }
+  }
       else
-	{
-	  /* reject */
-	  if (packet->type == SP_SC_SEQUENCE)
-	    {
-	      V_UDPDIAG(("(ignoring repeat %d)\n", newseq));
-	    }
-	  else
-	    {
-	      UDPDIAG(("sequence=%d, newseq=%d, ignoring transmission\n",
-		       sequence, newseq));
-	    }
-	  /* the remaining packets will be dropped and we shouldn't count the
-	   * * * SP_SEQUENCE packet either */
-	  packets_received--;
-	  drop_flag = 1;
-	}
+  {
+    /* reject */
+    if (packet->type == SP_SC_SEQUENCE)
+      {
+        V_UDPDIAG(("(ignoring repeat %d)\n", newseq));
+      }
+    else
+      {
+        UDPDIAG(("sequence=%d, newseq=%d, ignoring transmission\n",
+           sequence, newseq));
+      }
+    /* the remaining packets will be dropped and we shouldn't count the
+     * * * SP_SEQUENCE packet either */
+    packets_received--;
+    drop_flag = 1;
+  }
     }
   /* printf("newseq %d, sequence %d\n", newseq, sequence); */
   if (recent_count > UDP_RECENT_INTR)
@@ -3320,7 +3320,7 @@ void    handleSequence(struct sequence_spacket *packet)
       udpRecentDropped = recent_dropped;
       recent_count = recent_dropped = 0;
       if (udpWin)
-	udprefresh(UDP_DROPPED);
+  udprefresh(UDP_DROPPED);
     }
 }
 
@@ -3338,7 +3338,7 @@ static int sumout = 0;
 
 /* HW clumsy but who cares ... :-) */
 static int vari_sizes[NUM_PACKETS];
-static int cp_msg_size;				 /* For CP_S_MESSAGE */
+static int cp_msg_size;        /* For CP_S_MESSAGE */
 
 void Log_Packet(char type, int act_size)
 /* HW */
@@ -3357,10 +3357,10 @@ void Log_Packet(char type, int act_size)
     }
   packet_log[type]++;
   /* data_this_sec += handlers[type].size; */
-  data_this_sec += act_size;			 /* HW */
-  ALL_BYTES += act_size;			 /* To get all bytes */
+  data_this_sec += act_size;       /* HW */
+  ALL_BYTES += act_size;       /* To get all bytes */
   if (handlers[type].size == -1)
-    {						 /* vari packet */
+    {            /* vari packet */
       vari_sizes[type] += act_size;
     }
   this_sec = time(NULL);
@@ -3368,27 +3368,27 @@ void Log_Packet(char type, int act_size)
     {
       lasttime = this_sec;
       if (log_packets > 1)
-	{
-	  fprintf(stdout, "%d %d %d\n", this_sec - Start_Time, data_this_sec, outdata_this_sec);
-	}
+  {
+    fprintf(stdout, "%d %d %d\n", this_sec - Start_Time, data_this_sec, outdata_this_sec);
+  }
       if (Start_Time == 0)
-	{
-	  Start_Time = this_sec;
-	}
-      /* ignore baudage on the first few seconds of reception -- * that's * * 
+  {
+    Start_Time = this_sec;
+  }
+      /* ignore baudage on the first few seconds of reception -- * that's * *
        * when we get crushed by the motd being sent */
       if (lasttime > Start_Time + 10)
-	{
-	  if (data_this_sec > Max_CPS)
-	    Max_CPS = data_this_sec;
-	  if (outdata_this_sec > Max_CPSout)
-	    Max_CPSout = outdata_this_sec;
-	  sumpl += data_this_sec;
-	  s2 += (data_this_sec * data_this_sec);
-	  sout2 += outdata_this_sec * outdata_this_sec;
-	  sumout += outdata_this_sec;
-	  numpl++;
-	}
+  {
+    if (data_this_sec > Max_CPS)
+      Max_CPS = data_this_sec;
+    if (outdata_this_sec > Max_CPSout)
+      Max_CPSout = outdata_this_sec;
+    sumpl += data_this_sec;
+    s2 += (data_this_sec * data_this_sec);
+    sout2 += outdata_this_sec * outdata_this_sec;
+    sumout += outdata_this_sec;
+    numpl++;
+  }
       data_this_sec = 0;
       outdata_this_sec = 0;
     }
@@ -3404,7 +3404,7 @@ void Log_OPacket(int type, int size)
 
 #ifdef SHORT_PACKETS
   if (type == CP_S_MESSAGE)
-    cp_msg_size += size;			 /* HW */
+    cp_msg_size += size;       /* HW */
 #endif
 }
 
@@ -3422,10 +3422,10 @@ Dump_Packet_Log_Info(void)
   printf("Packet Logging Summary:\n");
   printf("Start time: %s ", ctime(&Start_Time));
   printf(" End time: %s Elapsed play time: %3.2f min\n",
-	 ctime(&Now), (float) ((Now - Start_Time) / 60));
+   ctime(&Now), (float) ((Now - Start_Time) / 60));
   printf("Maximum CPS in during normal play: %d bytes per sec\n", Max_CPS);
   printf("Standard deviation in: %d\n",
-	 (int) sqrt((numpl * s2 - sumpl * sumpl) / (numpl * (numpl - 1))));
+   (int) sqrt((numpl * s2 - sumpl * sumpl) / (numpl * (numpl - 1))));
   printf("Maximum CPS out during normal play: %d bytes per sec\n", Max_CPSout);
   printf("Standard deviation out: %d\n",
      (int) sqrt((numpl * sout2 - sumout * sumout) / (numpl * (numpl - 1))));
@@ -3433,14 +3433,14 @@ Dump_Packet_Log_Info(void)
 #ifdef SHORT_PACKETS
   /* total_bytes = ALL_BYTES; *//* Hope this works  HW */
   for (i = 0; i <= NUM_PACKETS; i++)
-    {						 /* I think it must be <= */
+    {            /* I think it must be <= */
       if (handlers[i].size != -1)
-	total_bytes += handlers[i].size * packet_log[i];
+  total_bytes += handlers[i].size * packet_log[i];
       else
-	total_bytes += vari_sizes[i];
-    }						 /* The result should be == * 
-						  * 
-						  * * ALL_BYTES HW */
+  total_bytes += vari_sizes[i];
+    }            /* The result should be == *
+              *
+              * * ALL_BYTES HW */
 #else
   for (i = 0; i <= NUM_PACKETS; i++)
     {
@@ -3453,16 +3453,16 @@ Dump_Packet_Log_Info(void)
 
 #ifdef SHORT_PACKETS
       if (handlers[i].size != -1)
-	outtotal_bytes += outpacket_log[i] * sizes[i];
+  outtotal_bytes += outpacket_log[i] * sizes[i];
       else
-	outtotal_bytes += cp_msg_size;		 /* HW */
+  outtotal_bytes += cp_msg_size;     /* HW */
 #else
       outtotal_bytes += outpacket_log[i] * sizes[i];
 #endif
     }
 
   printf("Total bytes received %d, average CPS: %4.1f\n",
-	 total_bytes, (float) (total_bytes / (Now - Start_Time)));
+   total_bytes, (float) (total_bytes / (Now - Start_Time)));
   printf("Server Packets Summary:\n");
   printf("Num #Rcvd    Size   TotlBytes   %%Total\n");
   for (i = 0; i <= NUM_PACKETS; i++)
@@ -3470,22 +3470,22 @@ Dump_Packet_Log_Info(void)
 
 #ifdef SHORT_PACKETS
       if (handlers[i].size != -1)
-	calc_temp = handlers[i].size * packet_log[i];
+  calc_temp = handlers[i].size * packet_log[i];
       else
-	calc_temp = vari_sizes[i];
+  calc_temp = vari_sizes[i];
 
       printf("%3d %5d    %4d   %9d   %3.2f\n",
-	     i, packet_log[i], handlers[i].size, calc_temp,
-	     (float) (calc_temp * 100 / total_bytes));
+       i, packet_log[i], handlers[i].size, calc_temp,
+       (float) (calc_temp * 100 / total_bytes));
 #else
       calc_temp = handlers[i].size * packet_log[i];
       printf("%3d %5d    %4d   %9d   %3.2f\n",
-	     i, packet_log[i], handlers[i].size, calc_temp,
-	     (float) (calc_temp * 100 / total_bytes));
+       i, packet_log[i], handlers[i].size, calc_temp,
+       (float) (calc_temp * 100 / total_bytes));
 #endif
     }
   printf("Total bytes sent %d, average CPS: %4.1f\n",
-	 outtotal_bytes, (float) (outtotal_bytes / (Now - Start_Time)));
+   outtotal_bytes, (float) (outtotal_bytes / (Now - Start_Time)));
   printf("Client Packets Summary:\n");
   printf("Num #Sent    Size   TotlBytes   %%Total\n");
   for (i = 0; i <= NUM_SIZES; i++)
@@ -3493,18 +3493,18 @@ Dump_Packet_Log_Info(void)
 
 #ifdef SHORT_PACKETS
       if (sizes[i] == -1)
-	calc_temp = cp_msg_size;
+  calc_temp = cp_msg_size;
       else
-	calc_temp = sizes[i] * outpacket_log[i];
+  calc_temp = sizes[i] * outpacket_log[i];
       printf("%3d %5d    %4d   %9d   %3.2f\n",
-	     i, outpacket_log[i], sizes[i], calc_temp,
-	     (float) (calc_temp * 100 / outtotal_bytes));
+       i, outpacket_log[i], sizes[i], calc_temp,
+       (float) (calc_temp * 100 / outtotal_bytes));
     }
 #else
       calc_temp = sizes[i] * outpacket_log[i];
       printf("%3d %5d    %4d   %9d   %3.2f\n",
-	     i, outpacket_log[i], sizes[i], calc_temp,
-	     (float) (calc_temp * 100 / outtotal_bytes));
+       i, outpacket_log[i], sizes[i], calc_temp,
+       (float) (calc_temp * 100 / outtotal_bytes));
     }
 #endif
 }
@@ -3523,224 +3523,224 @@ void print_packet(char *packet, int size)
      {
        case SP_MESSAGE:
          fprintf(stderr, "\nS->C SP_MESSAGE\t");
-	 if (log_packets > 1)
-	   fprintf(stderr, "  m_flags=0x%0X, m_recpt=%d, m_from=%d, mesg=\"%s\",", 
-		   ((struct mesg_spacket *) packet)->m_flags, 
-		   ((struct mesg_spacket *) packet)->m_recpt, 
-		   ((struct mesg_spacket *) packet)->m_from, 
-		   ((struct mesg_spacket *) packet)->mesg );
-	 break;
-       case SP_PLAYER_INFO  :                   /* general player info not */ 
-						/* * elsewhere */
-	 fprintf(stderr, "\nS->C SP_PLAYER_INFO\t");
-	 if (log_packets > 1)
-	   fprintf(stderr, "  pnum=%d, shiptype=%d, team=%d,",
-		   ((struct plyr_info_spacket *) packet)->pnum,
-		   ((struct plyr_info_spacket *) packet)->shiptype,
-		   ((struct plyr_info_spacket *) packet)->team );
+   if (log_packets > 1)
+     fprintf(stderr, "  m_flags=0x%0X, m_recpt=%d, m_from=%d, mesg=\"%s\",",
+       ((struct mesg_spacket *) packet)->m_flags,
+       ((struct mesg_spacket *) packet)->m_recpt,
+       ((struct mesg_spacket *) packet)->m_from,
+       ((struct mesg_spacket *) packet)->mesg );
+   break;
+       case SP_PLAYER_INFO  :                   /* general player info not */
+            /* * elsewhere */
+   fprintf(stderr, "\nS->C SP_PLAYER_INFO\t");
+   if (log_packets > 1)
+     fprintf(stderr, "  pnum=%d, shiptype=%d, team=%d,",
+       ((struct plyr_info_spacket *) packet)->pnum,
+       ((struct plyr_info_spacket *) packet)->shiptype,
+       ((struct plyr_info_spacket *) packet)->team );
          break;
        case SP_KILLS        :                   /* # kills a player has */
-	 fprintf(stderr, "\nS->C SP_KILLS\t");
-	 if (log_packets > 1)
-	   fprintf(stderr, "  pnum=%d, kills=%u,",
-		   ((struct kills_spacket *) packet)->pnum,
-		   ntohl(((struct kills_spacket *) packet)->kills) );
-	 break;
+   fprintf(stderr, "\nS->C SP_KILLS\t");
+   if (log_packets > 1)
+     fprintf(stderr, "  pnum=%d, kills=%u,",
+       ((struct kills_spacket *) packet)->pnum,
+       ntohl(((struct kills_spacket *) packet)->kills) );
+   break;
        case SP_PLAYER       :                   /* x,y for player */
-	 fprintf(stderr, "\nS->C SP_PLAYER\t");
-	 if (log_packets > 1)
-	   fprintf(stderr, "  pnum=%d, dir=%u, speed=%d,x=%ld, y=%d,",
-		   ((struct player_spacket *) packet)->pnum,
-		   ((struct player_spacket *) packet)->dir,
-		   ((struct player_spacket *) packet)->speed,
-		   ntohl(((struct player_spacket *) packet)->x),
-		   ntohl(((struct player_spacket *) packet)->y) );
+   fprintf(stderr, "\nS->C SP_PLAYER\t");
+   if (log_packets > 1)
+     fprintf(stderr, "  pnum=%d, dir=%u, speed=%d,x=%ld, y=%d,",
+       ((struct player_spacket *) packet)->pnum,
+       ((struct player_spacket *) packet)->dir,
+       ((struct player_spacket *) packet)->speed,
+       ntohl(((struct player_spacket *) packet)->x),
+       ntohl(((struct player_spacket *) packet)->y) );
 
-	 break;
+   break;
        case SP_TORP_INFO    :                   /* torp status */
-	 fprintf(stderr, "\nS->C SP_TORP_INF0\t");
-	 if (log_packets > 1)
-	   fprintf(stderr, "  war=%d, status=%d, tnum=%u,",
-		   ((struct torp_info_spacket *) packet)->war,
-		   ((struct torp_info_spacket *) packet)->status,
-		   ntohs(((struct torp_info_spacket *) packet)->tnum) );
-	 break;
+   fprintf(stderr, "\nS->C SP_TORP_INF0\t");
+   if (log_packets > 1)
+     fprintf(stderr, "  war=%d, status=%d, tnum=%u,",
+       ((struct torp_info_spacket *) packet)->war,
+       ((struct torp_info_spacket *) packet)->status,
+       ntohs(((struct torp_info_spacket *) packet)->tnum) );
+   break;
        case SP_TORP         :                   /* torp location */
-	 fprintf(stderr, "\nS->C SP_TORP\t");
-	 if (log_packets > 1)
-	   fprintf(stderr, "  dir=%d, tnum=%u, x=%u, y=%u,",
-		   ((struct torp_spacket *) packet)->dir,
-		   ntohs(((struct torp_spacket *) packet)->tnum),
-		   ntohl(((struct torp_spacket *) packet)->x),
-		   ntohl(((struct torp_spacket *) packet)->y) );
-	 break;
+   fprintf(stderr, "\nS->C SP_TORP\t");
+   if (log_packets > 1)
+     fprintf(stderr, "  dir=%d, tnum=%u, x=%u, y=%u,",
+       ((struct torp_spacket *) packet)->dir,
+       ntohs(((struct torp_spacket *) packet)->tnum),
+       ntohl(((struct torp_spacket *) packet)->x),
+       ntohl(((struct torp_spacket *) packet)->y) );
+   break;
        case SP_PHASER       :                   /* phaser status and * *
-						 * direction */
-	 fprintf(stderr, "\nS->C SP_PHASER\t");
-	 if (log_packets > 1)
-	   fprintf(stderr, "  pnum=%d, status=%d, dir=%u, x=%ld, y=%ld, target=%ld,",
-		   ((struct phaser_spacket *) packet)->pnum,
-		   ((struct phaser_spacket *) packet)->status,
-		   ((struct phaser_spacket *) packet)->dir,
-		   ntohl(((struct phaser_spacket *) packet)->x),
-		   ntohl(((struct phaser_spacket *) packet)->y),
-		   ntohl(((struct phaser_spacket *) packet)->target) );
-	 break;
+             * direction */
+   fprintf(stderr, "\nS->C SP_PHASER\t");
+   if (log_packets > 1)
+     fprintf(stderr, "  pnum=%d, status=%d, dir=%u, x=%ld, y=%ld, target=%ld,",
+       ((struct phaser_spacket *) packet)->pnum,
+       ((struct phaser_spacket *) packet)->status,
+       ((struct phaser_spacket *) packet)->dir,
+       ntohl(((struct phaser_spacket *) packet)->x),
+       ntohl(((struct phaser_spacket *) packet)->y),
+       ntohl(((struct phaser_spacket *) packet)->target) );
+   break;
        case SP_PLASMA_INFO  :                  /* player login information */
-	 fprintf(stderr, "\nS->C SP_PLASMA_INFO\t");
-	 if (log_packets > 1)
-	   fprintf(stderr, "  war=%d, status=%d  pnum=%u,",
-		   ((struct plasma_info_spacket *) packet)->war,
-		   ((struct plasma_info_spacket *) packet)->status,
-		   ntohs(((struct plasma_info_spacket *) packet)->pnum) );
-	 break;
+   fprintf(stderr, "\nS->C SP_PLASMA_INFO\t");
+   if (log_packets > 1)
+     fprintf(stderr, "  war=%d, status=%d  pnum=%u,",
+       ((struct plasma_info_spacket *) packet)->war,
+       ((struct plasma_info_spacket *) packet)->status,
+       ntohs(((struct plasma_info_spacket *) packet)->pnum) );
+   break;
        case SP_PLASMA       :                  /* like SP_TORP */
-	 fprintf(stderr, "\nS->C SP_PLASMA\t");
-	 if (log_packets > 1)
-	   fprintf(stderr, "  pnum=%u, x=%ld, y=%ld,",
-		   ntohs(((struct plasma_spacket *) packet)->pnum),
-		   ntohl(((struct plasma_spacket *) packet)->x),
-		   ntohl(((struct plasma_spacket *) packet)->y) );
-	 break;
+   fprintf(stderr, "\nS->C SP_PLASMA\t");
+   if (log_packets > 1)
+     fprintf(stderr, "  pnum=%u, x=%ld, y=%ld,",
+       ntohs(((struct plasma_spacket *) packet)->pnum),
+       ntohl(((struct plasma_spacket *) packet)->x),
+       ntohl(((struct plasma_spacket *) packet)->y) );
+   break;
        case SP_WARNING      :                  /* like SP_MESG */
-	 fprintf(stderr,"\nS->C SP_WARNING\t");
-	 if (log_packets > 1)
-	   fprintf(stderr, "  mesg=\"%s\",",
-		   ((struct warning_spacket *) packet)->mesg);
-	 break;
+   fprintf(stderr,"\nS->C SP_WARNING\t");
+   if (log_packets > 1)
+     fprintf(stderr, "  mesg=\"%s\",",
+       ((struct warning_spacket *) packet)->mesg);
+   break;
        case SP_MOTD         :                  /* line from .motd screen */
-	 fprintf(stderr,"\nS->C SP_MOTD\t");
-	 if (log_packets > 1)
-	   fprintf(stderr, "  line=\"%s\",",
-		   ((struct motd_spacket *) packet)->line);
-	 break;
+   fprintf(stderr,"\nS->C SP_MOTD\t");
+   if (log_packets > 1)
+     fprintf(stderr, "  line=\"%s\",",
+       ((struct motd_spacket *) packet)->line);
+   break;
        case SP_YOU          :                  /* info on you? */
-	 fprintf(stderr, "\nS->C SP_YOU\t");
-	 if (log_packets > 1)
-	   fprintf(stderr, "  pnum=%d, hostile=%d, swar=%d, armies=%d, flags=0x%0X, damage=%ld, shield=%ld, fuel=%ld, etemp=%u, wtemp=%u, whydead=%u, whodead=%u,",
-		   ((struct you_spacket *) packet)->pnum,
-		   ((struct you_spacket *) packet)->hostile,
-		   ((struct you_spacket *) packet)->swar,
-		   ((struct you_spacket *) packet)->armies,
-		   ntohs(((struct you_spacket *) packet)->flags),
-		   ntohl(((struct you_spacket *) packet)->damage),
-		   ntohl(((struct you_spacket *) packet)->shield),
-		   ntohl(((struct you_spacket *) packet)->fuel),
-		   ntohs(((struct you_spacket *) packet)->etemp),
-		   ntohs(((struct you_spacket *) packet)->wtemp),
-		   ntohs(((struct you_spacket *) packet)->whydead),
-		   ntohs(((struct you_spacket *) packet)->whodead) );
-	 break;
+   fprintf(stderr, "\nS->C SP_YOU\t");
+   if (log_packets > 1)
+     fprintf(stderr, "  pnum=%d, hostile=%d, swar=%d, armies=%d, flags=0x%0X, damage=%ld, shield=%ld, fuel=%ld, etemp=%u, wtemp=%u, whydead=%u, whodead=%u,",
+       ((struct you_spacket *) packet)->pnum,
+       ((struct you_spacket *) packet)->hostile,
+       ((struct you_spacket *) packet)->swar,
+       ((struct you_spacket *) packet)->armies,
+       ntohs(((struct you_spacket *) packet)->flags),
+       ntohl(((struct you_spacket *) packet)->damage),
+       ntohl(((struct you_spacket *) packet)->shield),
+       ntohl(((struct you_spacket *) packet)->fuel),
+       ntohs(((struct you_spacket *) packet)->etemp),
+       ntohs(((struct you_spacket *) packet)->wtemp),
+       ntohs(((struct you_spacket *) packet)->whydead),
+       ntohs(((struct you_spacket *) packet)->whodead) );
+   break;
        case SP_QUEUE        :                  /* estimated loc in queue? */
-	 fprintf(stderr, "\nS->C SP_QUEUE\t");
-	 if (log_packets > 1)
-	   fprintf(stderr, "  pos=%u,",
-		   ntohs(((struct queue_spacket *) packet)->pos) );
-	 break;
+   fprintf(stderr, "\nS->C SP_QUEUE\t");
+   if (log_packets > 1)
+     fprintf(stderr, "  pos=%u,",
+       ntohs(((struct queue_spacket *) packet)->pos) );
+   break;
        case SP_STATUS       :                  /* galaxy status numbers */
-	 fprintf(stderr, "\nS->C SP_STATUS\t");
-	 if (log_packets > 1)
-	   fprintf(stderr, "  tourn=%d, armsbomb=%u, planets=%u, kills=%u, losses=%u, time=%u, timeprod=%lu,",
-		   ((struct status_spacket *) packet)->tourn,
-		   ntohl(((struct status_spacket *) packet)->armsbomb),
-		   ntohl(((struct status_spacket *) packet)->planets),
-		   ntohl(((struct status_spacket *) packet)->kills),
-		   ntohl(((struct status_spacket *) packet)->losses),
-		   ntohl(((struct status_spacket *) packet)->time),
-		   ntohl(((struct status_spacket *) packet)->timeprod) );
-	 break;
+   fprintf(stderr, "\nS->C SP_STATUS\t");
+   if (log_packets > 1)
+     fprintf(stderr, "  tourn=%d, armsbomb=%u, planets=%u, kills=%u, losses=%u, time=%u, timeprod=%lu,",
+       ((struct status_spacket *) packet)->tourn,
+       ntohl(((struct status_spacket *) packet)->armsbomb),
+       ntohl(((struct status_spacket *) packet)->planets),
+       ntohl(((struct status_spacket *) packet)->kills),
+       ntohl(((struct status_spacket *) packet)->losses),
+       ntohl(((struct status_spacket *) packet)->time),
+       ntohl(((struct status_spacket *) packet)->timeprod) );
+   break;
        case SP_PLANET       :                  /* planet armies & * *
-						* facilities */
-	 fprintf(stderr, "\nS->C SP_PLANET\t");
-	 if (log_packets > 1)
-	   fprintf(stderr, "  pnum=%d, owner=%d, info=%d, flags=0x%0X, armies=%ld,",
-		   ((struct planet_spacket *) packet)->pnum,
-		   ((struct planet_spacket *) packet)->owner,
-		   ((struct planet_spacket *) packet)->info,
-		   ntohs(((struct planet_spacket *) packet)->flags),
-		   ntohl(((struct planet_spacket *) packet)->armies) );
-	 break;
+            * facilities */
+   fprintf(stderr, "\nS->C SP_PLANET\t");
+   if (log_packets > 1)
+     fprintf(stderr, "  pnum=%d, owner=%d, info=%d, flags=0x%0X, armies=%ld,",
+       ((struct planet_spacket *) packet)->pnum,
+       ((struct planet_spacket *) packet)->owner,
+       ((struct planet_spacket *) packet)->info,
+       ntohs(((struct planet_spacket *) packet)->flags),
+       ntohl(((struct planet_spacket *) packet)->armies) );
+   break;
        case SP_PICKOK       :                  /* your team & ship was * *
-						* accepted */
-	 fprintf(stderr, "\nS->C SP_PICKOK\t");
-	 if (log_packets > 1)
-	   fprintf(stderr, "  state=%d,",
-		   ((struct pickok_spacket *) packet)-> state );
-	 break;
+            * accepted */
+   fprintf(stderr, "\nS->C SP_PICKOK\t");
+   if (log_packets > 1)
+     fprintf(stderr, "  state=%d,",
+       ((struct pickok_spacket *) packet)-> state );
+   break;
        case SP_LOGIN        :                  /* login response */
-	 fprintf(stderr, "\nS->C SP_LOGIN\t");
-	 if (log_packets > 1)
-	   fprintf(stderr, "  accept=%d, flags=0x%0X, keymap=\"%s\",",
-		   ((struct login_spacket *) packet)->accept,
-		   ntohl(((struct login_spacket *) packet)->flags),
-		   ((struct login_spacket *) packet)->keymap );
-	 break;
+   fprintf(stderr, "\nS->C SP_LOGIN\t");
+   if (log_packets > 1)
+     fprintf(stderr, "  accept=%d, flags=0x%0X, keymap=\"%s\",",
+       ((struct login_spacket *) packet)->accept,
+       ntohl(((struct login_spacket *) packet)->flags),
+       ((struct login_spacket *) packet)->keymap );
+   break;
        case SP_FLAGS        :                  /* give flags for a player */
-	 fprintf(stderr, "\nS->C SP_FLAGS\t");
-	 if (log_packets > 1)
-	   fprintf(stderr, "  pnum=%d, flags=0x%0X,",
-		   ((struct flags_spacket *) packet)->pnum,
-		   ntohl(((struct flags_spacket *) packet)->flags) );
-	 break;
+   fprintf(stderr, "\nS->C SP_FLAGS\t");
+   if (log_packets > 1)
+     fprintf(stderr, "  pnum=%d, flags=0x%0X,",
+       ((struct flags_spacket *) packet)->pnum,
+       ntohl(((struct flags_spacket *) packet)->flags) );
+   break;
        case SP_MASK         :                  /* tournament mode mask */
-	 fprintf(stderr, "\nS->C SP_MASK\t");
-	 if (log_packets > 1)
-	   fprintf(stderr, "  mask=%d,",
-		   ((struct mask_spacket *) packet)->mask );
-	 break;
+   fprintf(stderr, "\nS->C SP_MASK\t");
+   if (log_packets > 1)
+     fprintf(stderr, "  mask=%d,",
+       ((struct mask_spacket *) packet)->mask );
+   break;
        case SP_PSTATUS      :                  /* give status for a player */
-	 fprintf(stderr, "\nS->C SP_PSTATUS\t");
-	 if (log_packets > 1)
-	   fprintf(stderr, "  pnum=%d, status=%d,",
-		   ((struct pstatus_spacket *) packet)->pnum,
-		   ((struct pstatus_spacket *) packet)->status );
-	 break;
+   fprintf(stderr, "\nS->C SP_PSTATUS\t");
+   if (log_packets > 1)
+     fprintf(stderr, "  pnum=%d, status=%d,",
+       ((struct pstatus_spacket *) packet)->pnum,
+       ((struct pstatus_spacket *) packet)->status );
+   break;
        case SP_BADVERSION   :                  /* invalid version number */
-	 fprintf(stderr, "\nS->C SP_BADVERSION\t");
-	 if (log_packets > 1)
-	   fprintf(stderr, "  why=%d,",
-		   ((struct badversion_spacket *) packet)->why );
-	 break;
+   fprintf(stderr, "\nS->C SP_BADVERSION\t");
+   if (log_packets > 1)
+     fprintf(stderr, "  why=%d,",
+       ((struct badversion_spacket *) packet)->why );
+   break;
        case SP_HOSTILE      :                  /* hostility settings for a
-						* * * player */
-	 fprintf(stderr, "\nS->C SP_HOSTILE\t");
-	 if (log_packets > 1)
-	   fprintf(stderr, "  pnum=%d, war=%d, hostile=%d,",
-		   ((struct hostile_spacket *) packet)->pnum,
-		   ((struct hostile_spacket *) packet)->war,
-		   ((struct hostile_spacket *) packet)->hostile );
-	 break;
+            * * * player */
+   fprintf(stderr, "\nS->C SP_HOSTILE\t");
+   if (log_packets > 1)
+     fprintf(stderr, "  pnum=%d, war=%d, hostile=%d,",
+       ((struct hostile_spacket *) packet)->pnum,
+       ((struct hostile_spacket *) packet)->war,
+       ((struct hostile_spacket *) packet)->hostile );
+   break;
        case SP_STATS        :                  /* a player's statistics */
-	 fprintf(stderr, "\nS->C SP_STATS\t");
-	 if (log_packets > 1)
-	   fprintf(stderr, "  pnum=%d, tkills=%ld, tlosses=%ld, kills=%ld, losses=%ld, tticks=%ld, tplanets=%ld, tarmies=%ld, sbkills=%ld, sblosses=%ld, armies=%ld, planets=%ld, maxkills=%ld, sbmaxkills=%ld,",
-		   ((struct stats_spacket *) packet)->pnum,
-		   ntohl(((struct stats_spacket *) packet)->tkills),
-		   ntohl(((struct stats_spacket *) packet)->tlosses),
-		   ntohl(((struct stats_spacket *) packet)->kills),
-		   ntohl(((struct stats_spacket *) packet)->losses),
-		   ntohl(((struct stats_spacket *) packet)->tticks),
-		   ntohl(((struct stats_spacket *) packet)->tplanets),
-		   ntohl(((struct stats_spacket *) packet)->tarmies),
-		   ntohl(((struct stats_spacket *) packet)->sbkills),
-		   ntohl(((struct stats_spacket *) packet)->sblosses),
-		   ntohl(((struct stats_spacket *) packet)->armies),
-		   ntohl(((struct stats_spacket *) packet)->planets),
-		   ntohl(((struct stats_spacket *) packet)->maxkills),
-		   ntohl(((struct stats_spacket *) packet)->sbmaxkills) );
-	 break;
+   fprintf(stderr, "\nS->C SP_STATS\t");
+   if (log_packets > 1)
+     fprintf(stderr, "  pnum=%d, tkills=%ld, tlosses=%ld, kills=%ld, losses=%ld, tticks=%ld, tplanets=%ld, tarmies=%ld, sbkills=%ld, sblosses=%ld, armies=%ld, planets=%ld, maxkills=%ld, sbmaxkills=%ld,",
+       ((struct stats_spacket *) packet)->pnum,
+       ntohl(((struct stats_spacket *) packet)->tkills),
+       ntohl(((struct stats_spacket *) packet)->tlosses),
+       ntohl(((struct stats_spacket *) packet)->kills),
+       ntohl(((struct stats_spacket *) packet)->losses),
+       ntohl(((struct stats_spacket *) packet)->tticks),
+       ntohl(((struct stats_spacket *) packet)->tplanets),
+       ntohl(((struct stats_spacket *) packet)->tarmies),
+       ntohl(((struct stats_spacket *) packet)->sbkills),
+       ntohl(((struct stats_spacket *) packet)->sblosses),
+       ntohl(((struct stats_spacket *) packet)->armies),
+       ntohl(((struct stats_spacket *) packet)->planets),
+       ntohl(((struct stats_spacket *) packet)->maxkills),
+       ntohl(((struct stats_spacket *) packet)->sbmaxkills) );
+   break;
        case SP_PL_LOGIN     :                  /* new player logs in */
-	 fprintf(stderr, "\nS->C SP_PL_LOGIN\t");
-	 if (log_packets > 1)
-	   fprintf(stderr, "  pnum=%d, rank=%d, name=\"%s\", monitor=\"%s\", login=\"%s\",",
-		   ((struct plyr_login_spacket *) packet)->pnum,
-		   ((struct plyr_login_spacket *) packet)->rank,
-		   ((struct plyr_login_spacket *) packet)->name,
-		   ((struct plyr_login_spacket *) packet)->monitor,
-		   ((struct plyr_login_spacket *) packet)->login );
-	 break;
+   fprintf(stderr, "\nS->C SP_PL_LOGIN\t");
+   if (log_packets > 1)
+     fprintf(stderr, "  pnum=%d, rank=%d, name=\"%s\", monitor=\"%s\", login=\"%s\",",
+       ((struct plyr_login_spacket *) packet)->pnum,
+       ((struct plyr_login_spacket *) packet)->rank,
+       ((struct plyr_login_spacket *) packet)->name,
+       ((struct plyr_login_spacket *) packet)->monitor,
+       ((struct plyr_login_spacket *) packet)->login );
+   break;
        case SP_RESERVED     :                  /* for future use */
-	 fprintf(stderr, "\nS->C SP_RESERVED\t");
+   fprintf(stderr, "\nS->C SP_RESERVED\t");
          if (log_packets > 1)
            {
              fprintf(stderr, "  data=");
@@ -3748,293 +3748,293 @@ void print_packet(char *packet, int size)
                fprintf(stderr, "0x%0X ", (unsigned char)((struct reserved_spacket *) packet)->data[i]);
              fprintf(stderr, ",");
            }
-	 break;
+   break;
        case SP_PLANET_LOC   :                  /* planet name, x, y */
-	 fprintf(stderr, "\nS->C SP_PLANET_LOC\t");
-	 if (log_packets > 1)
-	   fprintf(stderr, "  pnum=%d, x=%ld, y=%ld, name=\"%s\",",
-		   ((struct planet_loc_spacket *) packet)->pnum,
-		   ntohl(((struct planet_loc_spacket *) packet)->x),
-		   ntohl(((struct planet_loc_spacket *) packet)->y),
-		   ((struct planet_loc_spacket *) packet)->name );
-	 break;
+   fprintf(stderr, "\nS->C SP_PLANET_LOC\t");
+   if (log_packets > 1)
+     fprintf(stderr, "  pnum=%d, x=%ld, y=%ld, name=\"%s\",",
+       ((struct planet_loc_spacket *) packet)->pnum,
+       ntohl(((struct planet_loc_spacket *) packet)->x),
+       ntohl(((struct planet_loc_spacket *) packet)->y),
+       ((struct planet_loc_spacket *) packet)->name );
+   break;
 #ifdef INCLUDE_SCAN
        /* NOTE: not implemented */
        case SP_SCAN         :                  /* ATM: results of player *
-						* * scan */
-	 fprintf(stderr, "\nS->C SP_SCAN\t");
-	 if(log_packets > 1)
-	   fprintf(stderr, "not implemented,");
-	 break;
+            * * scan */
+   fprintf(stderr, "\nS->C SP_SCAN\t");
+   if(log_packets > 1)
+     fprintf(stderr, "not implemented,");
+   break;
 #endif
        case SP_UDP_REPLY    :                  /* notify client of UDP * *
-						* status */
-	 fprintf(stderr, "\nS->C SP_UDP_REPLY\t");
-	 if (log_packets > 1)
-	   fprintf(stderr, "  reply=%d, port=%d,",
-		   ((struct udp_reply_spacket *) packet)->reply,
-		   ntohl(((struct udp_reply_spacket *) packet)->port) );
-	 break;
+            * status */
+   fprintf(stderr, "\nS->C SP_UDP_REPLY\t");
+   if (log_packets > 1)
+     fprintf(stderr, "  reply=%d, port=%d,",
+       ((struct udp_reply_spacket *) packet)->reply,
+       ntohl(((struct udp_reply_spacket *) packet)->port) );
+   break;
        case SP_SEQUENCE     :                  /* sequence # packet */
-	 fprintf(stderr, "\nS->C SP_SEQUENCE\t");
-	 if (log_packets > 1)
-	   fprintf(stderr, "  flag16=0x%0X, sequence=%u,",
-		   ((struct sequence_spacket *) packet)->flag16,
-		   ntohs(((struct sequence_spacket *) packet)->sequence) );
-	 break;
+   fprintf(stderr, "\nS->C SP_SEQUENCE\t");
+   if (log_packets > 1)
+     fprintf(stderr, "  flag16=0x%0X, sequence=%u,",
+       ((struct sequence_spacket *) packet)->flag16,
+       ntohs(((struct sequence_spacket *) packet)->sequence) );
+   break;
        case SP_SC_SEQUENCE  :                  /* this trans is * *
-						* semi-critical info */
-	 fprintf(stderr, "\nS->C SP_SC_SEQUENCE\t");
-	 if (log_packets > 1)
-	   fprintf(stderr, "  sequence=%u,",
-		   ntohs(((struct sc_sequence_spacket *) packet)->sequence) );
-	 break;
-       
+            * semi-critical info */
+   fprintf(stderr, "\nS->C SP_SC_SEQUENCE\t");
+   if (log_packets > 1)
+     fprintf(stderr, "  sequence=%u,",
+       ntohs(((struct sc_sequence_spacket *) packet)->sequence) );
+   break;
+
 #ifdef RSA
        case SP_RSA_KEY      :                  /* handles binary * *
-						* verification */
-	 fprintf(stderr, "\nS->C SP_RSA_KEY\t");
-	 if(log_packets > 1)
-	   {
-	     fprintf(stderr, "  data=");
-	     for(i = 0; i < KEY_SIZE; i++)
-	       fprintf(stderr, "0x%0X ",((struct rsa_key_spacket *) packet)->data[i]);
-	     fprintf(stderr, ",");
-	   }
-	 break;
+            * verification */
+   fprintf(stderr, "\nS->C SP_RSA_KEY\t");
+   if(log_packets > 1)
+     {
+       fprintf(stderr, "  data=");
+       for(i = 0; i < KEY_SIZE; i++)
+         fprintf(stderr, "0x%0X ",((struct rsa_key_spacket *) packet)->data[i]);
+       fprintf(stderr, ",");
+     }
+   break;
 #endif
-       
-       case SP_SHIP_CAP     :                   /* Handles server ship mods */
-	 fprintf(stderr, "\nS->C SP_SHIP_CAP\t");
-	 if (log_packets > 1)
-	   fprintf(stderr, "  operation=%d, s_type=%u, s_torpspeed=%u, s_phaserrange=%u, s_maxspeed=%d, s_maxfuel=%d, s_maxshield=%d, s_maxdamage=%d, s_maxwpntemp=%d, s_maxegntemp=%d, s_width=%u, s_height=%d, s_maxarmies=%d, s_letter=%d, s_name=\"%s\", s_desig1=%c, s_desig2=%c, s_bitmap=%u,",
-		   ((struct ship_cap_spacket *) packet)->operation,
-		   ntohs(((struct ship_cap_spacket *) packet)->s_type),
-		   ntohs(((struct ship_cap_spacket *) packet)->s_torpspeed),
-		   ntohs(((struct ship_cap_spacket *) packet)->s_phaserrange),
-		   ((struct ship_cap_spacket *) packet)->s_maxspeed,
-		   ((struct ship_cap_spacket *) packet)->s_maxfuel,
-		   ((struct ship_cap_spacket *) packet)->s_maxshield,
-		   ((struct ship_cap_spacket *) packet)->s_maxdamage,
-		   ((struct ship_cap_spacket *) packet)->s_maxwpntemp,
-		   ((struct ship_cap_spacket *) packet)->s_maxegntemp,
-		   ntohs(((struct ship_cap_spacket *) packet)->s_width),
-		   ntohs(((struct ship_cap_spacket *) packet)->s_height),
-		   ntohs(((struct ship_cap_spacket *) packet)->s_maxarmies),
-		   ((struct ship_cap_spacket *) packet)->s_letter,
-		   ((struct ship_cap_spacket *) packet)->s_name,
-		   ((struct ship_cap_spacket *) packet)->s_desig1,
-		   ((struct ship_cap_spacket *) packet)->s_desig2,
-		   ntohs(((struct ship_cap_spacket *) packet)->s_bitmap) );
 
-	 break;
+       case SP_SHIP_CAP     :                   /* Handles server ship mods */
+   fprintf(stderr, "\nS->C SP_SHIP_CAP\t");
+   if (log_packets > 1)
+     fprintf(stderr, "  operation=%d, s_type=%u, s_torpspeed=%u, s_phaserrange=%u, s_maxspeed=%d, s_maxfuel=%d, s_maxshield=%d, s_maxdamage=%d, s_maxwpntemp=%d, s_maxegntemp=%d, s_width=%u, s_height=%d, s_maxarmies=%d, s_letter=%d, s_name=\"%s\", s_desig1=%c, s_desig2=%c, s_bitmap=%u,",
+       ((struct ship_cap_spacket *) packet)->operation,
+       ntohs(((struct ship_cap_spacket *) packet)->s_type),
+       ntohs(((struct ship_cap_spacket *) packet)->s_torpspeed),
+       ntohs(((struct ship_cap_spacket *) packet)->s_phaserrange),
+       ((struct ship_cap_spacket *) packet)->s_maxspeed,
+       ((struct ship_cap_spacket *) packet)->s_maxfuel,
+       ((struct ship_cap_spacket *) packet)->s_maxshield,
+       ((struct ship_cap_spacket *) packet)->s_maxdamage,
+       ((struct ship_cap_spacket *) packet)->s_maxwpntemp,
+       ((struct ship_cap_spacket *) packet)->s_maxegntemp,
+       ntohs(((struct ship_cap_spacket *) packet)->s_width),
+       ntohs(((struct ship_cap_spacket *) packet)->s_height),
+       ntohs(((struct ship_cap_spacket *) packet)->s_maxarmies),
+       ((struct ship_cap_spacket *) packet)->s_letter,
+       ((struct ship_cap_spacket *) packet)->s_name,
+       ((struct ship_cap_spacket *) packet)->s_desig1,
+       ((struct ship_cap_spacket *) packet)->s_desig2,
+       ntohs(((struct ship_cap_spacket *) packet)->s_bitmap) );
+
+   break;
 #ifdef SHORT_PACKETS
        case SP_S_REPLY      :                  /* reply to send-short * *
-						* request */
-	 fprintf(stderr, "\nS->C SP_S_REPLY\t");
-	 if (log_packets > 1)
-	   fprintf(stderr,"  repl=%d, windside=%u, gwidth=%ld,",
-		   ((struct shortreply_spacket *) packet)->repl,
-		   ntohs(((struct shortreply_spacket *) packet)->winside),
-		   ntohl(((struct shortreply_spacket *) packet)->gwidth) );
-	 break;
+            * request */
+   fprintf(stderr, "\nS->C SP_S_REPLY\t");
+   if (log_packets > 1)
+     fprintf(stderr,"  repl=%d, windside=%u, gwidth=%ld,",
+       ((struct shortreply_spacket *) packet)->repl,
+       ntohs(((struct shortreply_spacket *) packet)->winside),
+       ntohl(((struct shortreply_spacket *) packet)->gwidth) );
+   break;
        case SP_S_MESSAGE    :                  /* var. Message Packet */
-	 fprintf(stderr, "\nS->C SP_S_MESSAGE\t");
-	 if (log_packets > 1)
-           
-	   fprintf(stderr, "  m_flags=0x%0X, m_recpt=%u, m_from=%u, length=%u, mesg=\"%s\",",
-	    	   ((struct mesg_s_spacket *) packet)->m_flags,
-		   ((struct mesg_s_spacket *) packet)->m_recpt,
-		   ((struct mesg_s_spacket *) packet)->m_from,
-		   ((struct mesg_s_spacket *) packet)->length,
-		   &( ((struct mesg_s_spacket *) packet)->mesg ) );
-	 break;
+   fprintf(stderr, "\nS->C SP_S_MESSAGE\t");
+   if (log_packets > 1)
+
+     fprintf(stderr, "  m_flags=0x%0X, m_recpt=%u, m_from=%u, length=%u, mesg=\"%s\",",
+           ((struct mesg_s_spacket *) packet)->m_flags,
+       ((struct mesg_s_spacket *) packet)->m_recpt,
+       ((struct mesg_s_spacket *) packet)->m_from,
+       ((struct mesg_s_spacket *) packet)->length,
+       &( ((struct mesg_s_spacket *) packet)->mesg ) );
+   break;
        case SP_S_WARNING    :                  /* Warnings with 4  Bytes */
-	 fprintf(stderr, "\nS->C SP_S_WARNING\t");
-	 if (log_packets > 1)
-	   fprintf(stderr, "  whichmessage=%u, argument=%d, argument2=%d,",
-		   ((struct warning_s_spacket *) packet)->whichmessage,
-		   ((struct warning_s_spacket *) packet)->argument,
-		   ((struct warning_s_spacket *) packet)->argument2 );
-	 break;
+   fprintf(stderr, "\nS->C SP_S_WARNING\t");
+   if (log_packets > 1)
+     fprintf(stderr, "  whichmessage=%u, argument=%d, argument2=%d,",
+       ((struct warning_s_spacket *) packet)->whichmessage,
+       ((struct warning_s_spacket *) packet)->argument,
+       ((struct warning_s_spacket *) packet)->argument2 );
+   break;
        case SP_S_YOU        :                  /* hostile,armies,whydead,etc
-						* * * .. */
-	 fprintf(stderr, "\nS->C SP_S_YOU\t");
-	 if (log_packets > 1)
-	   fprintf(stderr, "  pnum=%d, hostile=%d, swar=%d, armies=%d, whydead=%d, whodead=%d, flags=0x%0X,",
-		   ((struct youshort_spacket *) packet)->pnum,
-		   ((struct youshort_spacket *) packet)->hostile,
-		   ((struct youshort_spacket *) packet)->swar,
-		   ((struct youshort_spacket *) packet)->armies,
-		   ((struct youshort_spacket *) packet)->whydead,
-		   ((struct youshort_spacket *) packet)->whodead,
-		   ntohl(((struct youshort_spacket *) packet)->flags) );
-	 break;
+            * * * .. */
+   fprintf(stderr, "\nS->C SP_S_YOU\t");
+   if (log_packets > 1)
+     fprintf(stderr, "  pnum=%d, hostile=%d, swar=%d, armies=%d, whydead=%d, whodead=%d, flags=0x%0X,",
+       ((struct youshort_spacket *) packet)->pnum,
+       ((struct youshort_spacket *) packet)->hostile,
+       ((struct youshort_spacket *) packet)->swar,
+       ((struct youshort_spacket *) packet)->armies,
+       ((struct youshort_spacket *) packet)->whydead,
+       ((struct youshort_spacket *) packet)->whodead,
+       ntohl(((struct youshort_spacket *) packet)->flags) );
+   break;
        case SP_S_YOU_SS     :                  /* your ship status */
-	 fprintf(stderr, "\nS->C SP_S_YOU_SS\t");
-	 if (log_packets > 1)
-	   fprintf(stderr, "  ddamage=%u, shield=%u, fuel=%u, etemp=%u, wtemp=%u,",
-		   ntohs(((struct youss_spacket *) packet)->damage),
-		   ntohs(((struct youss_spacket *) packet)->shield),
-		   ntohs(((struct youss_spacket *) packet)->fuel),
-		   ntohs(((struct youss_spacket *) packet)->etemp),
-		   ntohs(((struct youss_spacket *) packet)->wtemp) );
-	 break;
+   fprintf(stderr, "\nS->C SP_S_YOU_SS\t");
+   if (log_packets > 1)
+     fprintf(stderr, "  ddamage=%u, shield=%u, fuel=%u, etemp=%u, wtemp=%u,",
+       ntohs(((struct youss_spacket *) packet)->damage),
+       ntohs(((struct youss_spacket *) packet)->shield),
+       ntohs(((struct youss_spacket *) packet)->fuel),
+       ntohs(((struct youss_spacket *) packet)->etemp),
+       ntohs(((struct youss_spacket *) packet)->wtemp) );
+   break;
        case SP_S_PLAYER     :                  /* variable length player *
-						* * packet */
-	 fprintf(stderr, "\nS->C SP_S_PLAYER\t");
-	 if (log_packets > 1)
-	   fprintf(stderr, "  packets=%d, dir=%u, speed=%d, x=%ld, y=%ld,",
-		   ((struct player_s_spacket *) packet)->packets,
-		   ntohl(((struct player_s_spacket *) packet)->dir),
-		   ((struct player_s_spacket *) packet)->speed,
-		   ntohl(((struct player_s_spacket *) packet)->x),
-		   ntohl(((struct player_s_spacket *) packet)->y) );
-	 break;
+            * * packet */
+   fprintf(stderr, "\nS->C SP_S_PLAYER\t");
+   if (log_packets > 1)
+     fprintf(stderr, "  packets=%d, dir=%u, speed=%d, x=%ld, y=%ld,",
+       ((struct player_s_spacket *) packet)->packets,
+       ntohl(((struct player_s_spacket *) packet)->dir),
+       ((struct player_s_spacket *) packet)->speed,
+       ntohl(((struct player_s_spacket *) packet)->x),
+       ntohl(((struct player_s_spacket *) packet)->y) );
+   break;
 #endif
-       
+
 #ifdef PING
        case SP_PING         :                  /* ping packet */
-	 fprintf(stderr, "\nS->C SP_PING\t");
-	 if (log_packets > 1)
-	   fprintf(stderr, "  number=%u, lag=%u, tloss_sc=%u, tloss_cs=%u, iloss_sc=%u, iloss_cs=%u,",
-		   ((struct ping_spacket *) packet)->number,
-		   ((struct ping_spacket *) packet)->lag,
-		   ((struct ping_spacket *) packet)->tloss_sc,
-		   ((struct ping_spacket *) packet)->tloss_cs,
-		   ((struct ping_spacket *) packet)->iloss_sc,
-		   ((struct ping_spacket *) packet)->iloss_cs );
-	 break;
+   fprintf(stderr, "\nS->C SP_PING\t");
+   if (log_packets > 1)
+     fprintf(stderr, "  number=%u, lag=%u, tloss_sc=%u, tloss_cs=%u, iloss_sc=%u, iloss_cs=%u,",
+       ((struct ping_spacket *) packet)->number,
+       ((struct ping_spacket *) packet)->lag,
+       ((struct ping_spacket *) packet)->tloss_sc,
+       ((struct ping_spacket *) packet)->tloss_cs,
+       ((struct ping_spacket *) packet)->iloss_sc,
+       ((struct ping_spacket *) packet)->iloss_cs );
+   break;
 #endif
 #ifdef FEATURE_PACKETS
        case SP_FEATURE      :
-	 fprintf(stderr, "\nS->C SP_FEATURE\t");
-	 if (log_packets > 1)
-	   fprintf(stderr, "  feature_type=%c, arg1=%d, arg2=%d, value=%d, name=\"%s\",",
-		   ((struct feature_cpacket *) packet)->feature_type,
-		   ((struct feature_cpacket *) packet)->arg1,
-		   ((struct feature_cpacket *) packet)->arg2,
-		   ntohl(((struct feature_cpacket *) packet)->value),
-		   ((struct feature_cpacket *) packet)->name );
-	 break;
-#endif       
+   fprintf(stderr, "\nS->C SP_FEATURE\t");
+   if (log_packets > 1)
+     fprintf(stderr, "  feature_type=%c, arg1=%d, arg2=%d, value=%d, name=\"%s\",",
+       ((struct feature_cpacket *) packet)->feature_type,
+       ((struct feature_cpacket *) packet)->arg1,
+       ((struct feature_cpacket *) packet)->arg2,
+       ntohl(((struct feature_cpacket *) packet)->value),
+       ((struct feature_cpacket *) packet)->name );
+   break;
+#endif
 #ifdef SHORT_PACKETS
        case SP_S_TORP       :                  /* variable length torp * *
-						* packet */
-	 fprintf(stderr, "\nS->C SP_S_TORP\t");
-	 if (log_packets > 1)
-	   print_sp_s_torp(packet, 1);
-	 break;
+            * packet */
+   fprintf(stderr, "\nS->C SP_S_TORP\t");
+   if (log_packets > 1)
+     print_sp_s_torp(packet, 1);
+   break;
        case SP_S_TORP_INFO  :                  /* SP_S_TORP with TorpInfo */
-	 fprintf(stderr, "\nS->C SP_S_TORP_INFO\t");
-	 if (log_packets > 1)         /* struct built by hand in handleVTorp */
-	   print_sp_s_torp(packet, 3);
-	 break;
+   fprintf(stderr, "\nS->C SP_S_TORP_INFO\t");
+   if (log_packets > 1)         /* struct built by hand in handleVTorp */
+     print_sp_s_torp(packet, 3);
+   break;
        case SP_S_8_TORP     :                  /* optimized SP_S_TORP */
-	 fprintf(stderr, "\nS->C SP_S_8_TORP\t");
-	 if (log_packets > 1)
-	   print_sp_s_torp(packet, 2);
-	 break;
+   fprintf(stderr, "\nS->C SP_S_8_TORP\t");
+   if (log_packets > 1)
+     print_sp_s_torp(packet, 2);
+   break;
        case SP_S_PLANET     :                  /* see SP_PLANET */
-	 fprintf(stderr, "\nS->C SP_S_PLANET\t"); 
-	 if (log_packets > 1)
-	   {
-	     plpacket = (struct planet_s_spacket *) &packet[2];
-	     nplanets = packet[1];
+   fprintf(stderr, "\nS->C SP_S_PLANET\t");
+   if (log_packets > 1)
+     {
+       plpacket = (struct planet_s_spacket *) &packet[2];
+       nplanets = packet[1];
              fprintf(stderr, "nplanets = %d, ", nplanets);
              for(i = 0; i < nplanets; i++, plpacket++ )
-	       fprintf(stderr, 
-		       "pnum = %d, pl_owner = %d, info = %d, flags = %d, armies = %d ", 
-		       plpacket->pnum, 
-		       plpacket->owner, 
-		       plpacket->info, 
-		       plpacket->armies,
-		       ntohs(plpacket->flags) );
-	   }
-	 fprintf(stderr,"\n");
-	 break;
-       
+         fprintf(stderr,
+           "pnum = %d, pl_owner = %d, info = %d, flags = %d, armies = %d ",
+           plpacket->pnum,
+           plpacket->owner,
+           plpacket->info,
+           plpacket->armies,
+           ntohs(plpacket->flags) );
+     }
+   fprintf(stderr,"\n");
+   break;
+
        /* S_P2 */
        case SP_S_SEQUENCE   :                  /* SP_SEQUENCE for * *
-						* compressed packets */
-	 fprintf(stderr, "\nS->C SP_S_SEQUENCE\t");
-	 if (log_packets > 1)
-	   fprintf(stderr, "  No struct defined,");
-	 break;
+            * compressed packets */
+   fprintf(stderr, "\nS->C SP_S_SEQUENCE\t");
+   if (log_packets > 1)
+     fprintf(stderr, "  No struct defined,");
+   break;
        case SP_S_PHASER     :                  /* see struct */
-	 fprintf(stderr, "\nS->C SP_S_PHASER\t");
-	 if (log_packets > 1)
-	   fprintf(stderr, "  status=%d, pnum=%d, target=%d, dir=%d, x=%d, y=%d",
-		   ((((struct phaser_s_spacket *) packet)->status) & 0x0f),
-		   ((((struct phaser_s_spacket *) packet)->pnum) & 0x3f),
-		   ((struct phaser_s_spacket *) packet)->target,
-		   ((struct phaser_s_spacket *) packet)->dir,
-		   (SCALE * (ntohs(((struct phaser_s_spacket*) packet)->x))),
-		   (SCALE * (ntohs(((struct phaser_s_spacket*) packet)->y))) );
-	 break;
+   fprintf(stderr, "\nS->C SP_S_PHASER\t");
+   if (log_packets > 1)
+     fprintf(stderr, "  status=%d, pnum=%d, target=%d, dir=%d, x=%d, y=%d",
+       ((((struct phaser_s_spacket *) packet)->status) & 0x0f),
+       ((((struct phaser_s_spacket *) packet)->pnum) & 0x3f),
+       ((struct phaser_s_spacket *) packet)->target,
+       ((struct phaser_s_spacket *) packet)->dir,
+       (SCALE * (ntohs(((struct phaser_s_spacket*) packet)->x))),
+       (SCALE * (ntohs(((struct phaser_s_spacket*) packet)->y))) );
+   break;
        case SP_S_KILLS      :                  /* # of kills player have */
-	 fprintf(stderr, "\nS->C SP_S_KILLS\t");
-	 if (log_packets > 1)
-	   {
-	     fprintf(stderr, "  pnum=%d, ",
-		      (unsigned char) packet[1]);
+   fprintf(stderr, "\nS->C SP_S_KILLS\t");
+   if (log_packets > 1)
+     {
+       fprintf(stderr, "  pnum=%d, ",
+          (unsigned char) packet[1]);
              data = &packet[2];
-             for (i = 0; i < (unsigned) packet[1]; i++) 
-	       {
-		 kills = (unsigned short) *data++;
+             for (i = 0; i < (unsigned) packet[1]; i++)
+         {
+     kills = (unsigned short) *data++;
                  kills |= (unsigned short) ((*data & 0x03) << 8);
                  pnum = (unsigned char) *data++ >> 2;
                  fprintf(stderr, "pnum = %d, kills = %d ",pnum, kills);
-	       }
-	   }
-	 fprintf(stderr,"\n");
-	 break;
+         }
+     }
+   fprintf(stderr,"\n");
+   break;
        case SP_S_STATS      :                  /* see SP_STATS */
-	 fprintf(stderr, "\nS->C SP_S_STATS\t");
-	 if (log_packets > 1)
-	   fprintf(stderr, "  pnum=%d, tplanets=%d, tkills=%d, tlosses=%d, kills=%d, losses=%d, tticks=%d, tarmies=%d, sbkills=%d, sblosses=%d, armies=%d, planets=%d, maxkills=%d, sbmaxkills=%d,",
-		   ((struct stats_spacket *) packet)->pnum,
-		   ntohs(((struct stats_spacket *) packet)->tplanets),
-		   ntohs(((struct stats_spacket *) packet)->tkills),
-		   ntohs(((struct stats_spacket *) packet)->tlosses),
-		   ntohs(((struct stats_spacket *) packet)->kills),
-		   ntohs(((struct stats_spacket *) packet)->losses),
-		   ntohl(((struct stats_spacket *) packet)->tticks),
-		   ntohl(((struct stats_spacket *) packet)->tarmies),
-		   ntohs(((struct stats_spacket *) packet)->sbkills),
-		   ntohs(((struct stats_spacket *) packet)->sblosses),
-		   ntohs(((struct stats_spacket *) packet)->armies),
-		   ntohs(((struct stats_spacket *) packet)->planets),
-		   ntohl(((struct stats_spacket *) packet)->maxkills),
-		   ntohl(((struct stats_spacket *) packet)->sbmaxkills) );
-	 break;
+   fprintf(stderr, "\nS->C SP_S_STATS\t");
+   if (log_packets > 1)
+     fprintf(stderr, "  pnum=%d, tplanets=%d, tkills=%d, tlosses=%d, kills=%d, losses=%d, tticks=%d, tarmies=%d, sbkills=%d, sblosses=%d, armies=%d, planets=%d, maxkills=%d, sbmaxkills=%d,",
+       ((struct stats_spacket *) packet)->pnum,
+       ntohs(((struct stats_spacket *) packet)->tplanets),
+       ntohs(((struct stats_spacket *) packet)->tkills),
+       ntohs(((struct stats_spacket *) packet)->tlosses),
+       ntohs(((struct stats_spacket *) packet)->kills),
+       ntohs(((struct stats_spacket *) packet)->losses),
+       ntohl(((struct stats_spacket *) packet)->tticks),
+       ntohl(((struct stats_spacket *) packet)->tarmies),
+       ntohs(((struct stats_spacket *) packet)->sbkills),
+       ntohs(((struct stats_spacket *) packet)->sblosses),
+       ntohs(((struct stats_spacket *) packet)->armies),
+       ntohs(((struct stats_spacket *) packet)->planets),
+       ntohl(((struct stats_spacket *) packet)->maxkills),
+       ntohl(((struct stats_spacket *) packet)->sbmaxkills) );
+   break;
 #endif
-     default: 
+     default:
        fprintf(stderr, "\nS->C UNKNOWN\t");
        if(log_packets > 1)
-	 fprintf(stderr, "  type=%d,",packet[0]);
+   fprintf(stderr, "  type=%d,",packet[0]);
      }
-   
+
 #ifdef nodef /* #ifdef SHORT_PACKETS */
    switch( *((char *) packet) )
      {
        /* variable length packets */
        case VPLAYER_SIZE    :
-	 fprintf(stderr, "\nS->C VPLAYER_SIZE\t");
-	 if (log_packets > 1)
-	   fprintf(stderr, "  No struct defined, same enum value as SP_PLAYER,");
-	 break;
+   fprintf(stderr, "\nS->C VPLAYER_SIZE\t");
+   if (log_packets > 1)
+     fprintf(stderr, "  No struct defined, same enum value as SP_PLAYER,");
+   break;
        case SHORTVERSION    :                   /* other number blocks, like
-						 * * * UDP Version */
-	 fprintf(stderr, "\nS->C SHORTVERSION\t");
-	 if (log_packets > 1)
-	   fprintf(stderr, "  No struct defined, same enum value as SP_MOTD,");
-	 break;
+             * * * UDP Version */
+   fprintf(stderr, "\nS->C SHORTVERSION\t");
+   if (log_packets > 1)
+     fprintf(stderr, "  No struct defined, same enum value as SP_MOTD,");
+   break;
        case OLDSHORTVERSION :                   /* S_P2 */
-	 fprintf(stderr, "\nS->C OLDSHORTVERSION\t");
-	 if (log_packets > 1)
-	   fprintf(stderr, "  No struct defined, same enum value as SP_WARNING,");
-	 break;
+   fprintf(stderr, "\nS->C OLDSHORTVERSION\t");
+   if (log_packets > 1)
+     fprintf(stderr, "  No struct defined, same enum value as SP_WARNING,");
+   break;
      }
 #endif
 
@@ -4051,331 +4051,331 @@ void print_opacket(char *packet, int size)
     case CP_MESSAGE      :                    /* send a message */
       fprintf(stderr, "\nC->S CP_MESSAGE\t");
       if (log_packets > 1)
-	fprintf(stderr, "  group=%d, indiv=%d, mesg=\"%s\",",
-		((struct mesg_cpacket *) packet)->group,
-		((struct mesg_cpacket *) packet)->indiv,
-		((struct mesg_cpacket *) packet)->mesg );
+  fprintf(stderr, "  group=%d, indiv=%d, mesg=\"%s\",",
+    ((struct mesg_cpacket *) packet)->group,
+    ((struct mesg_cpacket *) packet)->indiv,
+    ((struct mesg_cpacket *) packet)->mesg );
       break;
     case CP_SPEED        :                    /* set speed */
       fprintf(stderr, "\nC->S CP_SPEED\t");
       if (log_packets > 1)
-	fprintf(stderr, "  speed=%d,",
-		((struct speed_cpacket *) packet)->speed );
+  fprintf(stderr, "  speed=%d,",
+    ((struct speed_cpacket *) packet)->speed );
       break;
     case CP_DIRECTION    :                    /* change direction */
       fprintf(stderr, "\nC->S CP_DIRECTION\t");
       if (log_packets > 1)
-	fprintf(stderr, "  dir=%u,",
-		((struct dir_cpacket *) packet)->dir );
+  fprintf(stderr, "  dir=%u,",
+    ((struct dir_cpacket *) packet)->dir );
       break;
     case CP_PHASER       :                    /* phaser in a direction */
       fprintf(stderr, "\nC->S CP_PHASER\t");
       if (log_packets > 1)
-	fprintf(stderr, "  dir=%u,",
-		((struct phaser_cpacket *) packet)-> dir );
+  fprintf(stderr, "  dir=%u,",
+    ((struct phaser_cpacket *) packet)-> dir );
       break;
     case CP_PLASMA       :                    /* plasma (in a direction) */
       fprintf(stderr, "\nC->S CP_PLAMSA\t");
       if (log_packets > 1)
-	fprintf(stderr, "  dir=%u,",
-		((struct plasma_cpacket *) packet)->dir );
+  fprintf(stderr, "  dir=%u,",
+    ((struct plasma_cpacket *) packet)->dir );
       break;
     case CP_TORP         :                    /* fire torp in a direction */
       fprintf(stderr, "\nC->S CP_TORP\t");
       if (log_packets > 1)
-	fprintf(stderr, "  dir=%u,",
-		((struct torp_cpacket *) packet)->dir );
+  fprintf(stderr, "  dir=%u,",
+    ((struct torp_cpacket *) packet)->dir );
       break;
     case CP_QUIT         :                    /* self destruct */
       fprintf(stderr, "\nC->S CP_QUIT\t");
       if (log_packets > 1)
-	fprintf(stderr, "  no args,");
+  fprintf(stderr, "  no args,");
       break;
     case CP_LOGIN        :                    /* log in (name, password) */
       fprintf(stderr, "\nC->S CP_LOGIN\t");
       if (log_packets > 1)
-	fprintf(stderr, "  query=%d, name=\"%s\", password=\"%s\", login=\"%s\",",
-		((struct login_cpacket *) packet)->query,
-		((struct login_cpacket *) packet)->name,
-		((struct login_cpacket *) packet)->password,
-		((struct login_cpacket *) packet)->login );
+  fprintf(stderr, "  query=%d, name=\"%s\", password=\"%s\", login=\"%s\",",
+    ((struct login_cpacket *) packet)->query,
+    ((struct login_cpacket *) packet)->name,
+    ((struct login_cpacket *) packet)->password,
+    ((struct login_cpacket *) packet)->login );
       break;
     case CP_OUTFIT       :                    /* outfit to new ship */
       fprintf(stderr, "\nC->S CP_OUTFIT\t");
       if (log_packets > 1)
-	fprintf(stderr, "  team=%d, ship=%d,",
-		((struct outfit_cpacket *) packet)->team,
-		((struct outfit_cpacket *) packet)->ship );
+  fprintf(stderr, "  team=%d, ship=%d,",
+    ((struct outfit_cpacket *) packet)->team,
+    ((struct outfit_cpacket *) packet)->ship );
       break;
     case CP_WAR          :                    /* change war status */
       fprintf(stderr, "\nC->S CP_WAR\t");
       if (log_packets > 1)
-	fprintf(stderr, "  newmask=0x%0X,",
-		((struct war_cpacket *) packet)->newmask );
+  fprintf(stderr, "  newmask=0x%0X,",
+    ((struct war_cpacket *) packet)->newmask );
       break;
     case CP_PRACTR       :                    /* create practice robot? */
       fprintf(stderr, "\nC->S CP_PRACTR\t");
       if (log_packets > 1)
-	fprintf(stderr, "  no args,");
+  fprintf(stderr, "  no args,");
       break;
     case CP_SHIELD       :                    /* raise/lower sheilds */
       fprintf(stderr, "\nC->S CP_SHIELD\t");
       if (log_packets > 1)
-	fprintf(stderr, "  state=%d,",
-		((struct shield_cpacket *) packet)->state );
+  fprintf(stderr, "  state=%d,",
+    ((struct shield_cpacket *) packet)->state );
       break;
     case CP_REPAIR       :                    /* enter repair mode */
       fprintf(stderr, "\nC->S CP_REPAIR\t");
       if (log_packets > 1)
-	fprintf(stderr, "  state=%d,",
-		((struct repair_cpacket *) packet)-> state );
+  fprintf(stderr, "  state=%d,",
+    ((struct repair_cpacket *) packet)-> state );
       break;
     case CP_ORBIT        :                    /* orbit planet/starbase */
       fprintf(stderr, "\nC->S CP_ORBIT\t");
       if (log_packets > 1)
-	fprintf(stderr, "  state=%d,",
-		((struct orbit_cpacket *) packet)->state );
+  fprintf(stderr, "  state=%d,",
+    ((struct orbit_cpacket *) packet)->state );
       break;
     case CP_PLANLOCK     :                    /* lock on planet */
       fprintf(stderr, "\nC->S CP_PLANLOCK\t");
       if (log_packets > 1)
-	fprintf(stderr, "  pnum = %d,",
-		((struct planlock_cpacket *) packet)->pnum );
+  fprintf(stderr, "  pnum = %d,",
+    ((struct planlock_cpacket *) packet)->pnum );
       break;
     case CP_PLAYLOCK     :                    /* lock on player */
       fprintf(stderr, "\nC->S CP_PLAYLOCK\t");
       if (log_packets > 1)
-	fprintf(stderr, "  pnum=%d,",
-		((struct playlock_cpacket *) packet)->pnum );
+  fprintf(stderr, "  pnum=%d,",
+    ((struct playlock_cpacket *) packet)->pnum );
       break;
     case CP_BOMB         :                    /* bomb a planet */
       fprintf(stderr, "\nC->S CP_BOMB\t");
       if (log_packets > 1)
-	fprintf(stderr, "  state=%d,",
-		((struct bomb_cpacket *) packet)->state );
+  fprintf(stderr, "  state=%d,",
+    ((struct bomb_cpacket *) packet)->state );
       break;
     case CP_BEAM         :                    /* beam armies up/down */
       fprintf(stderr, "\nC->S CP_BEAM\t");
       if (log_packets > 1)
-	fprintf(stderr, "  state=%d,",
-		((struct beam_cpacket *) packet)->state );
+  fprintf(stderr, "  state=%d,",
+    ((struct beam_cpacket *) packet)->state );
       break;
     case CP_CLOAK        :                    /* cloak on/off */
       fprintf(stderr, "\nC->S CP_CLOAK\t");
       if (log_packets > 1)
-	fprintf(stderr, "  state=%d,",
-		((struct cloak_cpacket *) packet)->state );
+  fprintf(stderr, "  state=%d,",
+    ((struct cloak_cpacket *) packet)->state );
       break;
     case CP_DET_TORPS    :                    /* detonate enemy torps */
       fprintf(stderr, "\nC->S CP_DET_TORPS\t");
       if (log_packets > 1)
-	fprintf(stderr, "  no args,");
+  fprintf(stderr, "  no args,");
       break;
     case CP_DET_MYTORP   :                    /* detonate one of my torps */
       fprintf(stderr, "\nC->S CP_DET_MYTORP\t");
       if (log_packets > 1)
-	fprintf(stderr, "  tnum=%u,",
-		ntohs(((struct det_mytorp_cpacket *) packet)->tnum) );
+  fprintf(stderr, "  tnum=%u,",
+    ntohs(((struct det_mytorp_cpacket *) packet)->tnum) );
       break;
     case CP_COPILOT      :                    /* toggle copilot mode */
       fprintf(stderr, "\nC->S CP_COPILOT\t");
       if (log_packets > 1)
-	fprintf(stderr, "  state=%d,",
+  fprintf(stderr, "  state=%d,",
                 ((struct copilot_cpacket *) packet)->state );
       break;
-    case CP_REFIT        :                    /* refit to different ship * 
-					       * 
-					       * * type */
+    case CP_REFIT        :                    /* refit to different ship *
+                 *
+                 * * type */
       fprintf(stderr, "\nC->S CP_REFIT\t");
       if (log_packets > 1)
-	fprintf(stderr, "  ship=%d,",
-		((struct refit_cpacket *) packet)->ship );
+  fprintf(stderr, "  ship=%d,",
+    ((struct refit_cpacket *) packet)->ship );
       break;
     case CP_TRACTOR      :                    /* tractor on/off */
       fprintf(stderr, "\nC->S CP_TRACTOR\t");
       if (log_packets > 1)
-	fprintf(stderr, "  state=%d, pnum=%d,",
-		((struct tractor_cpacket *) packet)->state,
-		((struct tractor_cpacket *) packet)->pnum );
+  fprintf(stderr, "  state=%d, pnum=%d,",
+    ((struct tractor_cpacket *) packet)->state,
+    ((struct tractor_cpacket *) packet)->pnum );
       break;
     case CP_REPRESS      :                    /* pressor on/off */
       fprintf(stderr, "\nC->S CP_REPRESS\t");
       if (log_packets > 1)
-	fprintf(stderr, "  state=%d, pnum=%d,",
-		((struct repress_cpacket *) packet)->state,
-		((struct repress_cpacket *) packet)->pnum );
+  fprintf(stderr, "  state=%d, pnum=%d,",
+    ((struct repress_cpacket *) packet)->state,
+    ((struct repress_cpacket *) packet)->pnum );
       break;
     case CP_COUP         :                    /* coup home planet */
       fprintf(stderr, "\nC->S CP_COUP\t");
       if (log_packets > 1)
-	fprintf(stderr, "  no args,");
+  fprintf(stderr, "  no args,");
       break;
     case CP_SOCKET       :                    /* new socket for * *
-				               * reconnection */
+                       * reconnection */
       fprintf(stderr, "\nC->S CP_SOCKET\t");
       if (log_packets > 1)
-	fprintf(stderr, "  version=%d, udp_version=%d\n, socket=%u,",
-		((struct socket_cpacket *) packet)->version, 
-		((struct socket_cpacket *) packet)->udp_version,
-		ntohl(((struct socket_cpacket *) packet)->socket)  );
+  fprintf(stderr, "  version=%d, udp_version=%d\n, socket=%u,",
+    ((struct socket_cpacket *) packet)->version,
+    ((struct socket_cpacket *) packet)->udp_version,
+    ntohl(((struct socket_cpacket *) packet)->socket)  );
       break;
-    case CP_OPTIONS      :                    /* send my options to be * * 
-					       * saved */
+    case CP_OPTIONS      :                    /* send my options to be * *
+                 * saved */
       fprintf(stderr, "\nC->S CP_OPTIONS\t");
       if (log_packets > 1)
-	fprintf(stderr, "  flags=0x%0X, keymap=\"%s\",",
-		ntohl(((struct options_cpacket *) packet)->flags),
-		((struct options_cpacket *) packet)->keymap );
+  fprintf(stderr, "  flags=0x%0X, keymap=\"%s\",",
+    ntohl(((struct options_cpacket *) packet)->flags),
+    ((struct options_cpacket *) packet)->keymap );
       break;
     case CP_BYE          :                    /* I'm done! */
       fprintf(stderr, "\nC->S CP_BYE\t");
       if (log_packets > 1)
-	fprintf(stderr, "  no args,");
+  fprintf(stderr, "  no args,");
       break;
     case CP_DOCKPERM     :                    /* set docking permissions */
       fprintf(stderr, "\nC->S CP_DOCKPERM\t");
       if (log_packets > 1)
-	fprintf(stderr, "  state=%d,",
-		((struct dockperm_cpacket *) packet)->state );
+  fprintf(stderr, "  state=%d,",
+    ((struct dockperm_cpacket *) packet)->state );
       break;
-    case CP_UPDATES      :                    /* set number of usecs per * 
-				               * 
-					       * * update */
+    case CP_UPDATES      :                    /* set number of usecs per *
+                       *
+                 * * update */
       fprintf(stderr, "\nC->S CP_UPDATES\t");
       if (log_packets > 1)
-	fprintf(stderr, "  usecs=%u,",
-		ntohl(((struct updates_cpacket *) packet)->usecs) );
+  fprintf(stderr, "  usecs=%u,",
+    ntohl(((struct updates_cpacket *) packet)->usecs) );
       break;
     case CP_RESETSTATS   :                    /* reset my stats packet */
       fprintf(stderr, "\nC->S CP_RESETSTATS\t");
       if (log_packets > 1)
-	fprintf(stderr, "  verify=%c,",
-		((struct resetstats_cpacket *) packet)->verify );
+  fprintf(stderr, "  verify=%c,",
+    ((struct resetstats_cpacket *) packet)->verify );
       break;
     case CP_RESERVED     :                    /* for future use */
       fprintf(stderr, "\nC->S CP_RESERVED\t");
       if (log_packets > 1)
-	{
-	  fprintf(stderr, "  data=" );
-	  for( i = 0; i < 16; i++) 
+  {
+    fprintf(stderr, "  data=" );
+    for( i = 0; i < 16; i++)
             fprintf(stderr, "0x%0X ",  (unsigned char)((struct reserved_cpacket *) packet)->data[i]);
-	  fprintf(stderr, ", resp=" );
-	  for( i = 0; i < 16; i++) 
+    fprintf(stderr, ", resp=" );
+    for( i = 0; i < 16; i++)
             fprintf(stderr, "0x%0X ",  (unsigned char)((struct reserved_cpacket *) packet)->resp[i]);
-	  fprintf(stderr, ",");
-	}
+    fprintf(stderr, ",");
+  }
       break;
-      
+
 #ifdef INCLUDE_SCAN
       /* NOTE: not implemented. */
-    case CP_SCAN         :                    /* ATM: request for player * 
-					       * 
-					       * * scan */
+    case CP_SCAN         :                    /* ATM: request for player *
+                 *
+                 * * scan */
       fprintf(stderr, "\nC->S CP_SCAN\t");
       if (log_packets > 1)
-	fprintf(stderr, "  not implemented," );
+  fprintf(stderr, "  not implemented," );
       break;
 #endif
 
     case CP_UDP_REQ      :                    /* request UDP on/off */
       fprintf(stderr, "\nC->S CP_UDP_REQ\t");
       if (log_packets > 1)
-	fprintf(stderr, "  request=%d, connmode=%d, port=%d,",
-		((struct udp_req_cpacket *) packet)->request,
-		((struct udp_req_cpacket *) packet)->connmode,
-		ntohl(((struct udp_req_cpacket *) packet)->port) );
+  fprintf(stderr, "  request=%d, connmode=%d, port=%d,",
+    ((struct udp_req_cpacket *) packet)->request,
+    ((struct udp_req_cpacket *) packet)->connmode,
+    ntohl(((struct udp_req_cpacket *) packet)->port) );
       break;
     case CP_SEQUENCE     :                    /* sequence # packet */
       fprintf(stderr, "\nC->S CP_SEQUENCE\t");
       if (log_packets > 1)
-	fprintf(stderr, "  sequence=%u,",
-		ntohs(((struct sequence_cpacket *) packet)->sequence) );
+  fprintf(stderr, "  sequence=%u,",
+    ntohs(((struct sequence_cpacket *) packet)->sequence) );
       break;
 
 #ifdef RSA
     case CP_RSA_KEY      :                    /* handles binary * *
-					       * verification */
+                 * verification */
       fprintf(stderr, "\nC->S CP_RSA_KEY\t");
       if (log_packets > 1)
-	{
-	fprintf(stderr, "  global=");
-	for(i = 0; i < KEY_SIZE; i++)
-	  fprintf(stderr, "0x%0X ",((struct rsa_key_cpacket *)packet)->global[i]);
-	fprintf(stderr,",");
-	fprintf(stderr, "  public=");
-	for(i = 0; i < KEY_SIZE; i++)
-	  fprintf(stderr, "0x%0X ",((struct rsa_key_cpacket *)packet)->public[i]);
-	fprintf(stderr,",");
-	fprintf(stderr, "  resp=");
-	for(i = 0; i < KEY_SIZE; i++)
-	  fprintf(stderr, "0x%0X ",((struct rsa_key_cpacket *)packet)->resp[i]);
-	fprintf(stderr,",");
-	}
+  {
+  fprintf(stderr, "  global=");
+  for(i = 0; i < KEY_SIZE; i++)
+    fprintf(stderr, "0x%0X ",((struct rsa_key_cpacket *)packet)->global[i]);
+  fprintf(stderr,",");
+  fprintf(stderr, "  public=");
+  for(i = 0; i < KEY_SIZE; i++)
+    fprintf(stderr, "0x%0X ",((struct rsa_key_cpacket *)packet)->public[i]);
+  fprintf(stderr,",");
+  fprintf(stderr, "  resp=");
+  for(i = 0; i < KEY_SIZE; i++)
+    fprintf(stderr, "0x%0X ",((struct rsa_key_cpacket *)packet)->resp[i]);
+  fprintf(stderr,",");
+  }
       break;
 #endif
     case CP_PING_RESPONSE :                   /* client response */
       fprintf(stderr, "\nC->S CP_PING_RESPONSE\t");
       if (log_packets > 1)
-	fprintf(stderr, "  number=%u, pingme=%d, cp_sent=%lu, cp_recv=%lu",
-		((struct ping_cpacket *) packet)->number,
-		((struct ping_cpacket *) packet)->pingme,
-		ntohl(((struct ping_cpacket *) packet)->cp_sent),
-		ntohl(((struct ping_cpacket *) packet)->cp_recv) );
+  fprintf(stderr, "  number=%u, pingme=%d, cp_sent=%lu, cp_recv=%lu",
+    ((struct ping_cpacket *) packet)->number,
+    ((struct ping_cpacket *) packet)->pingme,
+    ntohl(((struct ping_cpacket *) packet)->cp_sent),
+    ntohl(((struct ping_cpacket *) packet)->cp_recv) );
       break;
-      
+
 #ifdef SHORT_PACKETS
-    case CP_S_REQ        :          
+    case CP_S_REQ        :
       fprintf(stderr, "\nC->S CP_S_REQ\t");
       if (log_packets > 1)
-	fprintf(stderr, "  req=%d, version=%d,",
-		((struct shortreq_cpacket *) packet)->req,
-		((struct shortreq_cpacket *) packet)->version );
+  fprintf(stderr, "  req=%d, version=%d,",
+    ((struct shortreq_cpacket *) packet)->req,
+    ((struct shortreq_cpacket *) packet)->version );
       break;
-    case CP_S_THRS       :         
+    case CP_S_THRS       :
       fprintf(stderr, "\nC->S CP_S_THRS\t");
       if (log_packets > 1)
-	fprintf(stderr, "  thresh=%u,",
-		ntohs(((struct threshold_cpacket *) packet)->thresh) );
+  fprintf(stderr, "  thresh=%u,",
+    ntohs(((struct threshold_cpacket *) packet)->thresh) );
       break;
     case CP_S_MESSAGE    :                    /* vari. Message Packet */
       fprintf(stderr, "\nC->S CP_S_MESSAGE\t");
       if (log_packets > 1)
-	fprintf(stderr, "  size=%d, group=%d, indiv=%d, mess=\"%s\",",
+  fprintf(stderr, "  size=%d, group=%d, indiv=%d, mess=\"%s\",",
                 ((struct mesg_cpacket *) packet)->pad1,
                 ((struct mesg_cpacket *) packet)->group,
                 ((struct mesg_cpacket *) packet)->indiv,
                 ((struct mesg_cpacket *) packet)->mesg );
       break;
-    case CP_S_RESERVED   :      
+    case CP_S_RESERVED   :
       fprintf(stderr, "\nC->S CP_S_RESERVED\t");
       if (log_packets > 1)
-	fprintf(stderr, "  no struct defined,");
+  fprintf(stderr, "  no struct defined,");
       break;
     case CP_S_DUMMY      :
       fprintf(stderr, "\nC->S CP_S_DUMMY\t");
       if (log_packets > 1)
-	fprintf(stderr, "  no struct defined,");
+  fprintf(stderr, "  no struct defined,");
       break;
 #endif
 
 #ifdef FEATURE_PACKETS
-    case CP_FEATURE      :  
+    case CP_FEATURE      :
       fprintf(stderr, "\nC->S CP_FEATURE\t");
       if (log_packets > 1)
-	fprintf(stderr, "  feature_type=%c, arg1=%d, arg2=%d, value=%d, name=\"%s\",",
-		((struct feature_cpacket *) packet)->feature_type,
-		((struct feature_cpacket *) packet)->arg1,
-		((struct feature_cpacket *) packet)->arg2,
-		ntohl(((struct feature_cpacket *) packet)->value),
-		((struct feature_cpacket *) packet)->name );
+  fprintf(stderr, "  feature_type=%c, arg1=%d, arg2=%d, value=%d, name=\"%s\",",
+    ((struct feature_cpacket *) packet)->feature_type,
+    ((struct feature_cpacket *) packet)->arg1,
+    ((struct feature_cpacket *) packet)->arg2,
+    ntohl(((struct feature_cpacket *) packet)->value),
+    ((struct feature_cpacket *) packet)->name );
       break;
 #endif
     default             :
        fprintf(stderr, "\nC->S UNKNOWN\t");
        if(log_packets > 1)
-	 fprintf(stderr, "  type=%d,",packet[0]);
+   fprintf(stderr, "  type=%d,",packet[0]);
     }
-  
+
 
 }
 
@@ -4392,7 +4392,7 @@ char   *
   if (length > 0)
     {
       while (length--)
-	*s1++ = ' ';
+  *s1++ = ' ';
     }
   return s1;
 }

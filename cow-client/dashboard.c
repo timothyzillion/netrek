@@ -1,9 +1,8 @@
-
 /* dashboard.c - graphic tstatw - 6/2/93
- * 
+ *
  * copyright 1993 Lars Bernhardsson (lab@mtek.chalmers.se) Free to use as long
  * as this notice is left here.
- * 
+ *
  * Color by Nick Trown.
  *
  * $Log: dashboard.c,v $
@@ -135,34 +134,34 @@ void
     {
       buf[0] = (me->p_flags & PFSHIELD ? 'S' : ' ');
       if (me->p_flags & PFGREEN)
-	buf[1] = 'G';
+  buf[1] = 'G';
       else if (me->p_flags & PFYELLOW)
-	buf[1] = 'Y';
+  buf[1] = 'Y';
       else
-	buf[1] = 'R';
+  buf[1] = 'R';
       buf[2] = (me->p_flags & (PFPLLOCK | PFPLOCK) ? 'L' : ' ');
       buf[3] = (me->p_flags & PFREPAIR ? 'R' : ' ');
       buf[4] = (me->p_flags & PFBOMB ? 'B' : ' ');
       buf[5] = (me->p_flags & PFORBIT ? 'O' : ' ');
       if (me->p_ship.s_type == STARBASE)
-	buf[6] = (me->p_flags & PFDOCKOK ? 'D' : ' ');
+  buf[6] = (me->p_flags & PFDOCKOK ? 'D' : ' ');
       else
-	buf[6] = (me->p_flags & PFDOCK ? 'D' : ' ');
+  buf[6] = (me->p_flags & PFDOCK ? 'D' : ' ');
       buf[7] = (me->p_flags & PFCLOAK ? 'C' : ' ');
       buf[8] = (me->p_flags & PFWEP ? 'W' : ' ');
       buf[9] = (me->p_flags & PFENG ? 'E' : ' ');
       if (me->p_flags & PFPRESS)
-	buf[10] = 'P';
+  buf[10] = 'P';
       else if (me->p_flags & PFTRACT)
-	buf[10] = 'T';
+  buf[10] = 'T';
       else
-	buf[10] = ' ';
+  buf[10] = ' ';
       if (me->p_flags & PFBEAMUP)
-	buf[11] = 'u';
+  buf[11] = 'u';
       else if (me->p_flags & PFBEAMDOWN)
-	buf[11] = 'd';
+  buf[11] = 'd';
       else
-	buf[11] = ' ';
+  buf[11] = ' ';
 
       W_WriteText(tstatw, 2, 3, textColor, "Flags", 5, W_RegularFont);
       W_WriteText(tstatw, 2, 17, textColor, buf, 12, W_RegularFont);
@@ -172,9 +171,9 @@ void
   if (fr || status->tourn != old_tourn)
     {
       if (status->tourn)
-	W_WriteText(tstatw, 74, 17, textColor, "T", 1, W_BoldFont);
+  W_WriteText(tstatw, 74, 17, textColor, "T", 1, W_BoldFont);
       else
-	W_WriteText(tstatw, 74, 17, textColor, " ", 1, W_BoldFont);
+  W_WriteText(tstatw, 74, 17, textColor, " ", 1, W_BoldFont);
 
       old_tourn = status->tourn;
     }
@@ -182,30 +181,30 @@ void
   if (fr || plr->p_kills != old_kills)
     {
       if (plr->p_kills > 0.0)
-	{
-	  W_WriteText(tstatw, 346, 17, textColor, "Kills:", 6, W_RegularFont);
-	  ftoa(plr->p_kills, buf, 0, 3, 2);
-	  W_WriteText(tstatw, 386, 17, textColor, buf, strlen(buf), W_RegularFont);
-	}
+  {
+    W_WriteText(tstatw, 346, 17, textColor, "Kills:", 6, W_RegularFont);
+    ftoa(plr->p_kills, buf, 0, 3, 2);
+    W_WriteText(tstatw, 386, 17, textColor, buf, strlen(buf), W_RegularFont);
+  }
       else
-	{
-	  W_ClearArea(tstatw, 346, 17, 96, 10);
-	}
+  {
+    W_ClearArea(tstatw, 346, 17, 96, 10);
+  }
       old_kills = plr->p_kills;
     }
 
   if (fr || plr->p_ntorp != old_torp)
     {
       if (plr->p_ntorp > 0)
-	{
-	  W_WriteText(tstatw, 346, 30, textColor, "Torps:", 6, W_RegularFont);
-	  buf[0] = plr->p_ntorp % 10 + '0';
-	  W_WriteText(tstatw, 386, 30, textColor, buf, 1, W_RegularFont);
-	}
+  {
+    W_WriteText(tstatw, 346, 30, textColor, "Torps:", 6, W_RegularFont);
+    buf[0] = plr->p_ntorp % 10 + '0';
+    W_WriteText(tstatw, 386, 30, textColor, buf, 1, W_RegularFont);
+  }
       else
-	{
-	  W_ClearArea(tstatw, 346, 30, 96, 10);
-	}
+  {
+    W_ClearArea(tstatw, 346, 30, 96, 10);
+  }
       old_torp = plr->p_ntorp;
     }
 }
@@ -245,11 +244,11 @@ void
   if (fr || me->p_speed != old_spd || cur_max != old_cur_spd)
     {
       if (me->p_speed >= me->p_ship.s_maxspeed - 2)
-	color = W_Red;
+  color = W_Red;
       else
-	color = W_Green;
+  color = W_Green;
       db_bar("Sp", 90, 3,
-	     me->p_speed, cur_max, me->p_ship.s_maxspeed, DB_3DIGITS, color);
+       me->p_speed, cur_max, me->p_ship.s_maxspeed, DB_3DIGITS, color);
       old_spd = me->p_speed;
       old_cur_spd = cur_max;
     }
@@ -258,14 +257,14 @@ void
     {
       value = (100 * me->p_shield) / me->p_ship.s_maxshield;
       if (value <= 16)
-	color = W_Red;
+  color = W_Red;
       else if (value <= 66)
-	color = W_Yellow;
+  color = W_Yellow;
       else
-	color = W_Green;
+  color = W_Green;
       db_bar("Sh", 90, 17,
-	     me->p_shield, me->p_ship.s_maxshield, me->p_ship.s_maxshield,
-	     DB_3DIGITS, color);
+       me->p_shield, me->p_ship.s_maxshield, me->p_ship.s_maxshield,
+       DB_3DIGITS, color);
       old_shl = me->p_shield;
     }
 
@@ -273,38 +272,38 @@ void
     {
       value = (100 * (me->p_ship.s_maxdamage - me->p_damage)) / me->p_ship.s_maxdamage;
       if (value <= 16)
-	color = W_Red;
+  color = W_Red;
       else if (value <= 66)
-	color = W_Yellow;
+  color = W_Yellow;
       else
-	color = W_Green;
+  color = W_Green;
       db_bar("Hu", 90, 31,
-	     (me->p_ship.s_maxdamage - me->p_damage),
-	     me->p_ship.s_maxdamage, me->p_ship.s_maxdamage,
-	     DB_3DIGITS, color);
+       (me->p_ship.s_maxdamage - me->p_damage),
+       me->p_ship.s_maxdamage, me->p_ship.s_maxdamage,
+       DB_3DIGITS, color);
       old_dam = me->p_damage;
     }
 
   if (me->p_ship.s_type == ASSAULT)
     cur_max = (((kills * 3) > me->p_ship.s_maxarmies) ?
-	       me->p_ship.s_maxarmies : (int) (kills * 3));
+         me->p_ship.s_maxarmies : (int) (kills * 3));
   else if (me->p_ship.s_type == STARBASE)
     cur_max = me->p_ship.s_maxarmies;
   else
     cur_max = (((kills * 2) > me->p_ship.s_maxarmies) ?
-	       me->p_ship.s_maxarmies : (int) (kills * 2));
+         me->p_ship.s_maxarmies : (int) (kills * 2));
 
   if (fr || me->p_armies != old_arm || cur_max != old_cur_arm)
     {
       value = me->p_armies;
 
       if (value <= 0)
-	color = W_Green;
+  color = W_Green;
       else
-	color = W_Red;
+  color = W_Red;
 
       db_bar("Ar", 218, 3,
-	  me->p_armies, cur_max, me->p_ship.s_maxarmies, DB_3DIGITS, color);
+    me->p_armies, cur_max, me->p_ship.s_maxarmies, DB_3DIGITS, color);
       old_arm = me->p_armies;
       old_cur_arm = cur_max;
     }
@@ -314,14 +313,14 @@ void
       value = (100 * me->p_wtemp) / me->p_ship.s_maxwpntemp;
 
       if (value <= 16)
-	color = W_Green;
+  color = W_Green;
       else if (value <= 66)
-	color = W_Yellow;
+  color = W_Yellow;
       else
-	color = W_Red;
+  color = W_Red;
       db_bar("Wt", 218, 17,
-	     me->p_wtemp / 10, me->p_ship.s_maxwpntemp / 10, me->p_ship.s_maxwpntemp / 10, DB_3DIGITS
-	     ,color);
+       me->p_wtemp / 10, me->p_ship.s_maxwpntemp / 10, me->p_ship.s_maxwpntemp / 10, DB_3DIGITS
+       ,color);
       old_wpn = me->p_wtemp;
     }
 
@@ -329,14 +328,14 @@ void
     {
       value = (100 * me->p_etemp) / me->p_ship.s_maxegntemp;
       if (value <= 16)
-	color = W_Green;
+  color = W_Green;
       else if (value <= 66)
-	color = W_Yellow;
+  color = W_Yellow;
       else
-	color = W_Red;
+  color = W_Red;
       db_bar("Et", 218, 31,
-	     me->p_etemp / 10, me->p_ship.s_maxegntemp / 10, me->p_ship.s_maxegntemp / 10, DB_3DIGITS
-	     ,color);
+       me->p_etemp / 10, me->p_ship.s_maxegntemp / 10, me->p_ship.s_maxegntemp / 10, DB_3DIGITS
+       ,color);
       old_egn = me->p_etemp;
     }
 
@@ -344,13 +343,13 @@ void
     {
       value = ((100 * me->p_fuel) / me->p_ship.s_maxfuel);
       if (value <= 16)
-	color = W_Red;
+  color = W_Red;
       else if (value <= 66)
-	color = W_Yellow;
+  color = W_Yellow;
       else
-	color = W_Green;
+  color = W_Green;
       db_bar("Fu", 346, 3,
-	     me->p_fuel, me->p_ship.s_maxfuel, me->p_ship.s_maxfuel, DB_5DIGITS, color);
+       me->p_fuel, me->p_ship.s_maxfuel, me->p_ship.s_maxfuel, DB_5DIGITS, color);
       old_ful = me->p_fuel;
     }
 }
@@ -389,11 +388,11 @@ void    db_redraw_COW(int fr)
   if (fr || me->p_speed != old_spd || cur_max != old_cur_spd)
     {
       if (me->p_speed >= me->p_ship.s_maxspeed - 2)
-	color = W_Yellow;
+  color = W_Yellow;
       else
-	color = W_White;
+  color = W_White;
       db_bar("Sp", 90, 3,
-	     me->p_speed, cur_max, me->p_ship.s_maxspeed, DB_3DIGITS, color);
+       me->p_speed, cur_max, me->p_ship.s_maxspeed, DB_3DIGITS, color);
       old_spd = me->p_speed;
       old_cur_spd = cur_max;
     }
@@ -402,13 +401,13 @@ void    db_redraw_COW(int fr)
     {
       value = (100 * me->p_shield) / me->p_ship.s_maxshield;
       if (value <= 50)
-	color = W_Red;
+  color = W_Red;
       else if (value < 90)
-	color = W_Yellow;
+  color = W_Yellow;
       else
-	color = W_White;
+  color = W_White;
       db_bar("Sh", 90, 17,
-	     me->p_ship.s_maxshield - me->p_shield, me->p_ship.s_maxshield, me->p_ship.s_maxshield, DB_3DIGITS, color);
+       me->p_ship.s_maxshield - me->p_shield, me->p_ship.s_maxshield, me->p_ship.s_maxshield, DB_3DIGITS, color);
       old_shl = me->p_shield;
     }
 
@@ -416,37 +415,37 @@ void    db_redraw_COW(int fr)
     {
       value = (100 * me->p_damage) / me->p_ship.s_maxdamage;
       if (value <= 10)
-	color = W_White;
+  color = W_White;
       else if (value > 50)
-	color = W_Red;
+  color = W_Red;
       else
-	color = W_Yellow;
+  color = W_Yellow;
       db_bar("Da", 90, 31,
-	     me->p_damage, me->p_ship.s_maxdamage, me->p_ship.s_maxdamage, DB_3DIGITS, color);
+       me->p_damage, me->p_ship.s_maxdamage, me->p_ship.s_maxdamage, DB_3DIGITS, color);
       old_dam = me->p_damage;
     }
 
   if (me->p_ship.s_type == ASSAULT)
     cur_max = (((kills * 3) > me->p_ship.s_maxarmies) ?
-	       me->p_ship.s_maxarmies : (int) (kills * 3));
+         me->p_ship.s_maxarmies : (int) (kills * 3));
   else if (me->p_ship.s_type == STARBASE)
     cur_max = me->p_ship.s_maxarmies;
   else
     cur_max = (((kills * 2) > me->p_ship.s_maxarmies) ?
-	       me->p_ship.s_maxarmies : (int) (kills * 2));
+         me->p_ship.s_maxarmies : (int) (kills * 2));
 
   if (fr || me->p_armies != old_arm || cur_max != old_cur_arm)
     {
       value = me->p_armies;
 
       if (value <= 3)
-	color = W_White;
+  color = W_White;
       else if (value > 5)
-	color = W_Red;
+  color = W_Red;
       else
-	color = W_Yellow;
+  color = W_Yellow;
       db_bar("Ar", 218, 3,
-	  me->p_armies, cur_max, me->p_ship.s_maxarmies, DB_3DIGITS, color);
+    me->p_armies, cur_max, me->p_ship.s_maxarmies, DB_3DIGITS, color);
       old_arm = me->p_armies;
       old_cur_arm = cur_max;
     }
@@ -456,14 +455,14 @@ void    db_redraw_COW(int fr)
       value = (100 * me->p_wtemp) / me->p_ship.s_maxwpntemp;
 
       if (value > 50)
-	color = W_Red;
+  color = W_Red;
       else if (value <= 20)
-	color = W_White;
+  color = W_White;
       else
-	color = W_Yellow;
+  color = W_Yellow;
       db_bar("Wt", 218, 17,
-	     me->p_wtemp / 10, me->p_ship.s_maxwpntemp / 10, me->p_ship.s_maxwpntemp / 10, DB_3DIGITS
-	     ,color);
+       me->p_wtemp / 10, me->p_ship.s_maxwpntemp / 10, me->p_ship.s_maxwpntemp / 10, DB_3DIGITS
+       ,color);
       old_wpn = me->p_wtemp;
     }
 
@@ -472,14 +471,14 @@ void    db_redraw_COW(int fr)
       value = (100 * me->p_etemp) / me->p_ship.s_maxegntemp;
 
       if (value <= 25)
-	color = W_White;
+  color = W_White;
       else if (value < 75)
-	color = W_Yellow;
+  color = W_Yellow;
       else
-	color = W_Red;
+  color = W_Red;
       db_bar("Et", 218, 31,
-	     me->p_etemp / 10, me->p_ship.s_maxegntemp / 10, me->p_ship.s_maxegntemp / 10, DB_3DIGITS
-	     ,color);
+       me->p_etemp / 10, me->p_ship.s_maxegntemp / 10, me->p_ship.s_maxegntemp / 10, DB_3DIGITS
+       ,color);
       old_egn = me->p_etemp;
     }
 
@@ -488,13 +487,13 @@ void    db_redraw_COW(int fr)
       value = ((100 * me->p_fuel) / me->p_ship.s_maxfuel);
 
       if (value <= 50)
-	color = W_Red;
+  color = W_Red;
       else if (value > 90)
-	color = W_White;
+  color = W_White;
       else
-	color = W_Yellow;
+  color = W_Yellow;
       db_bar("Fu", 346, 3,
-	     me->p_fuel, me->p_ship.s_maxfuel, me->p_ship.s_maxfuel, DB_5DIGITS, color);
+       me->p_fuel, me->p_ship.s_maxfuel, me->p_ship.s_maxfuel, DB_5DIGITS, color);
       old_ful = me->p_fuel;
     }
 }

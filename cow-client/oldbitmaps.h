@@ -1,5 +1,4 @@
 
-
 #define clock_width 48
 #define clock_height 48
 static char clock_bits[] =

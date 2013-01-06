@@ -147,10 +147,10 @@ int     ReadFileToSprite(char *filename, struct S_Object *sprite, W_Window * w)
       XpmReturnExtensions | XpmCloseness;
 
   if (XpmReadFileToPixmap(W_Display, win->window, filename, &sprite->image,
-			  &sprite->shape, &attr) != XpmSuccess)
+        &sprite->shape, &attr) != XpmSuccess)
     {
       if (!(pixMissing & NO_PIXMAPS))
-	fprintf(stderr, "Unable to read file %s.\n", filename);
+  fprintf(stderr, "Unable to read file %s.\n", filename);
       sprite->image = NoPixmapError;
       sprite->nviews = 1;
       return (1);
@@ -159,7 +159,7 @@ int     ReadFileToSprite(char *filename, struct S_Object *sprite, W_Window * w)
   for (k = 0; k < attr.nextensions; k++)
     {
       if (strcmpi(attr.extensions[0].name, "num_views") == 0)
-	nviews = atoi(attr.extensions[0].lines[0]);
+  nviews = atoi(attr.extensions[0].lines[0]);
     }
 
   if (nviews == 0)
@@ -168,18 +168,18 @@ int     ReadFileToSprite(char *filename, struct S_Object *sprite, W_Window * w)
 
       guess = (int) ((attr.height) / (attr.width));
       if (guess == (attr.height) / (attr.width))
-	{
-	  nviews = guess;
-	}
+  {
+    nviews = guess;
+  }
       else
-	{
-	  if (!(pixMissing & NO_PIXMAPS))
-	    fprintf(stderr, "NUM_VIEWS not suppied in %s.  Unable to estimate ...\n",
-		    filename);
-	  sprite->image = NoPixmapError;
-	  sprite->nviews = 1;
-	  return (1);
-	}
+  {
+    if (!(pixMissing & NO_PIXMAPS))
+      fprintf(stderr, "NUM_VIEWS not suppied in %s.  Unable to estimate ...\n",
+        filename);
+    sprite->image = NoPixmapError;
+    sprite->nviews = 1;
+    return (1);
+  }
     }
 
   sprite->parent = w;
@@ -207,7 +207,7 @@ int     ReadFileToTile(char *filename, Pixmap * pix)
       != XpmSuccess)
     {
       if (!(pixMissing & NO_PIXMAPS))
-	fprintf(stderr, "Unable to read file %s.\n", filename);
+  fprintf(stderr, "Unable to read file %s.\n", filename);
       *pix = NoPixmapError;
       return (1);
     }
@@ -235,8 +235,8 @@ void    GetPixmaps(Display * d, struct window *win)
   if ((strcmpi(pixmapDir, "None") == 0) || (pixMissing & NO_PIXMAPS))
     {
       pixMissing = NO_IND_PIX | NO_FED_PIX | NO_ROM_PIX |
-	  NO_KLI_PIX | NO_ORI_PIX | NO_WEP_PIX | NO_EXP_PIX |
-	  NO_CLK_PIX | NO_MAP_PIX | NO_BG_PIX | NO_PIXMAPS;
+    NO_KLI_PIX | NO_ORI_PIX | NO_WEP_PIX | NO_EXP_PIX |
+    NO_CLK_PIX | NO_MAP_PIX | NO_BG_PIX | NO_PIXMAPS;
       fprintf(stderr, "Pixmaps turned OFF\n");
     }
   else
@@ -244,12 +244,12 @@ void    GetPixmaps(Display * d, struct window *win)
       struct stat buf;
 
       if ((stat(pixmapDir, &buf)) || (!(S_ISDIR(buf.st_mode))))
-	{
-	  pixMissing = NO_IND_PIX | NO_FED_PIX | NO_ROM_PIX |
-	      NO_KLI_PIX | NO_ORI_PIX | NO_WEP_PIX | NO_EXP_PIX |
-	      NO_CLK_PIX | NO_MAP_PIX | NO_BG_PIX | NO_PIXMAPS;
-	  fprintf(stderr, "Pixmaps dir not found - turned OFF\n");
-	}
+  {
+    pixMissing = NO_IND_PIX | NO_FED_PIX | NO_ROM_PIX |
+        NO_KLI_PIX | NO_ORI_PIX | NO_WEP_PIX | NO_EXP_PIX |
+        NO_CLK_PIX | NO_MAP_PIX | NO_BG_PIX | NO_PIXMAPS;
+    fprintf(stderr, "Pixmaps dir not found - turned OFF\n");
+  }
     }
 
   pixmap_gc = XCreateGC(W_Display, win->window, 0, NULL);
@@ -258,35 +258,35 @@ void    GetPixmaps(Display * d, struct window *win)
     {
       missing = 0;
       for (j = 0; j < NUM_TYPES; j++)
-	{
-	  sprintf(buf, "%s/%s/%s", pixmapDir, teamnames[i], shipfiles[j]);
-	  missing += ReadFileToSprite(buf, &shipImg[i][j], &w);
-	}
+  {
+    sprintf(buf, "%s/%s/%s", pixmapDir, teamnames[i], shipfiles[j]);
+    missing += ReadFileToSprite(buf, &shipImg[i][j], &w);
+  }
       if (missing == NUM_TYPES)
-	{
-	  pixMissing |= reremap[i];
-	  if (!(pixMissing & NO_PIXMAPS))
-	    fprintf(stderr, "TYPE %s ship PIXMAPS NOT AVAILABLE\n", teamnames[i]);
-	}
+  {
+    pixMissing |= reremap[i];
+    if (!(pixMissing & NO_PIXMAPS))
+      fprintf(stderr, "TYPE %s ship PIXMAPS NOT AVAILABLE\n", teamnames[i]);
+  }
     }
 
   missing = 0;
   for (i = 0; i < NUMTEAM + 1; i++)
     {
       for (j = 0; j < 2; j++)
-	{
-	  sprintf(buf, "%s/%s/%s", pixmapDir, teamnames[i], torpfiles[j]);
-	  missing += ReadFileToSprite(buf, &torpImg[i][j], &w);
+  {
+    sprintf(buf, "%s/%s/%s", pixmapDir, teamnames[i], torpfiles[j]);
+    missing += ReadFileToSprite(buf, &torpImg[i][j], &w);
 
-	  sprintf(buf, "%s/%s/%s", pixmapDir, teamnames[i], plasmafiles[j]);
-	  missing += ReadFileToSprite(buf, &plasmaImg[i][j], &w);
-	}
+    sprintf(buf, "%s/%s/%s", pixmapDir, teamnames[i], plasmafiles[j]);
+    missing += ReadFileToSprite(buf, &plasmaImg[i][j], &w);
+  }
     }
   if (missing == (NUMTEAM + 1) * 4)
     {
       pixMissing |= NO_WEP_PIX;
       if (!(pixMissing & NO_PIXMAPS))
-	fprintf(stderr, "TYPE weapon PIXMAPS NOT AVAILABLE\n");
+  fprintf(stderr, "TYPE weapon PIXMAPS NOT AVAILABLE\n");
     }
 
   missing = 0;
@@ -299,7 +299,7 @@ void    GetPixmaps(Display * d, struct window *win)
     {
       pixMissing |= NO_EXP_PIX;
       if (!(pixMissing & NO_PIXMAPS))
-	fprintf(stderr, "TYPE explosion PIXMAPS NOT AVAILABLE\n");
+  fprintf(stderr, "TYPE explosion PIXMAPS NOT AVAILABLE\n");
     }
 
   missing = 0;
@@ -307,22 +307,22 @@ void    GetPixmaps(Display * d, struct window *win)
     {
       sprintf(buf, "%s/Planets/Map/%s", pixmapDir, mplanetfiles[i]);
       if (i == PL_PIX_AGRI && missing == 0)
-	{
-	  /* If the AGRI pixmap is missing, use the ROCK pixmap */
-	  if (ReadFileToSprite(buf, &mplanetImg[i], &mapw) != 0)
-	    {
-	      sprintf(buf, "%s/Planets/%s", pixmapDir, mplanetfiles[i - 1]);
-	      ReadFileToSprite(buf, &mplanetImg[i], &mapw);
-	    }
-	}
+  {
+    /* If the AGRI pixmap is missing, use the ROCK pixmap */
+    if (ReadFileToSprite(buf, &mplanetImg[i], &mapw) != 0)
+      {
+        sprintf(buf, "%s/Planets/%s", pixmapDir, mplanetfiles[i - 1]);
+        ReadFileToSprite(buf, &mplanetImg[i], &mapw);
+      }
+  }
       else
-	missing += ReadFileToSprite(buf, &mplanetImg[i], &mapw);
+  missing += ReadFileToSprite(buf, &mplanetImg[i], &mapw);
     }
   if (missing)
     {
       pixMissing |= NO_MAP_PIX;
       if (!(pixMissing & NO_PIXMAPS))
-	fprintf(stderr, "TYPE map PIXMAPS NOT AVAILABLE\n");
+  fprintf(stderr, "TYPE map PIXMAPS NOT AVAILABLE\n");
     }
 
   sprintf(buf, "%s/Misc/%s", pixmapDir, cloakfile);
@@ -330,7 +330,7 @@ void    GetPixmaps(Display * d, struct window *win)
     {
       pixMissing |= NO_CLK_PIX;
       if (!(pixMissing & NO_PIXMAPS))
-	fprintf(stderr, "TYPE cloak PIXMAPS NOT AVAILABLE\n");
+  fprintf(stderr, "TYPE cloak PIXMAPS NOT AVAILABLE\n");
     }
 
   missing = 0;
@@ -343,7 +343,7 @@ void    GetPixmaps(Display * d, struct window *win)
     {
       pixMissing |= NO_BG_PIX;
       if (!(pixMissing & NO_PIXMAPS))
-	fprintf(stderr, "TYPE background PIXMAPS NOT AVAILABLE\n");
+  fprintf(stderr, "TYPE background PIXMAPS NOT AVAILABLE\n");
     }
 
   pixMissing &= ~NO_HALOS;
@@ -375,19 +375,19 @@ int     W_DrawSprite(void *in, int x, int y, int winside)
     {
       XSetClipMask(W_Display, sprite->gc, cloakImg.shape);
       XSetClipOrigin(W_Display, sprite->gc,
-		     dx, dy - cloakImg.view * (cloakImg.height));
+         dx, dy - cloakImg.view * (cloakImg.height));
     }
   else
     {
       XSetClipMask(W_Display, sprite->gc, sprite->shape);
       XSetClipOrigin(W_Display, sprite->gc,
-		     dx, dy - sprite->view * (sprite->height));
+         dx, dy - sprite->view * (sprite->height));
     }
 
   XCopyArea(W_Display, sprite->image, win->window, sprite->gc,
-	    0, (sprite->view) * (sprite->height),
-	    sprite->width, sprite->height,
-	    dx, dy);
+      0, (sprite->view) * (sprite->height),
+      sprite->width, sprite->height,
+      dx, dy);
 
   return (sprite->width);
 }
@@ -408,7 +408,7 @@ void   *S_Ship(int playerno)
    * * in the xpm    */
 
   sprite->view = ((((this->p_dir) + 128 / (sprite->nviews))
-		   / (256 / (sprite->nviews))) % (sprite->nviews));
+       / (256 / (sprite->nviews))) % (sprite->nviews));
 
   if ((this->p_status != PALIVE) && (this->p_status != PEXPLODE))
     {
@@ -427,15 +427,15 @@ void   *S_Ship(int playerno)
       int     i = this->p_explode;
 
       if (pixFlags & NO_EXP_PIX)
-	return ((void *) NULL);
+  return ((void *) NULL);
 
       if (this->p_ship.s_type == STARBASE)
-	sprite = &explosionImg[1];
+  sprite = &explosionImg[1];
       else
-	sprite = &explosionImg[0];
+  sprite = &explosionImg[0];
 
       if (i >= sprite->nviews)
-	return ((void *) NULL);
+  return ((void *) NULL);
 
       sprite->view = i;
       this->p_explode++;
@@ -443,22 +443,22 @@ void   *S_Ship(int playerno)
   else if ((this->p_flags & PFCLOAK) || (this->p_cloakphase > 0))
     {
       if (this->p_cloakphase == (CLOAK_PHASES - 1))
-	{
-	  if ((this == me) && !(pixFlags & NO_CLK_PIX))
-	    {
-	      sprite = &cloakImg;
-	      sprite->view = cloakImg.nviews - 1;
-	    }
-	  else
-	    {
-	      return ((void *) NULL);
-	    }
-	}
+  {
+    if ((this == me) && !(pixFlags & NO_CLK_PIX))
+      {
+        sprite = &cloakImg;
+        sprite->view = cloakImg.nviews - 1;
+      }
+    else
+      {
+        return ((void *) NULL);
+      }
+  }
       else
-	{
-	  sprite->cloak = this->p_cloakphase;
-	  cloakImg.view = cloakImg.nviews - this->p_cloakphase - 1;
-	}
+  {
+    sprite->cloak = this->p_cloakphase;
+    cloakImg.view = cloakImg.nviews - this->p_cloakphase - 1;
+  }
     }
 
   if ((sprite->image == NoPixmapError) ||
@@ -485,9 +485,9 @@ void   *S_mPlanet(int planetno)
       )
     {
       if ((this->pl_flags & PLAGRI) && (F_agri_pix))
-	sprite = &mplanetImg[PL_PIX_AGRI];
+  sprite = &mplanetImg[PL_PIX_AGRI];
       else
-	sprite = &mplanetImg[PL_PIX_ROCK];
+  sprite = &mplanetImg[PL_PIX_ROCK];
 
     }
   else
@@ -602,18 +602,18 @@ void   *S_Torp(int torpno)
       sprite = &torpImg[remap[players[this->t_owner].p_team]][1];
       this->t_fuse--;
       if (this->t_fuse <= 0)
-	{
-	  this->t_status = PTFREE;
-	  players[this->t_owner].p_ntorp--;
-	}
+  {
+    this->t_status = PTFREE;
+    players[this->t_owner].p_ntorp--;
+  }
       else if (this->t_fuse >= NUMDETFRAMES)
-	{
-	  this->t_fuse = NUMDETFRAMES - 1;
-	}
+  {
+    this->t_fuse = NUMDETFRAMES - 1;
+  }
       else
-	{
-	  sprite->view = this->t_fuse;
-	}
+  {
+    sprite->view = this->t_fuse;
+  }
     }
   else
     {
@@ -637,18 +637,18 @@ void   *S_Plasma(int plasmatorpno)
       sprite = &plasmaImg[remap[players[this->pt_owner].p_team]][1];
       this->pt_fuse--;
       if (this->pt_fuse <= 0)
-	{
-	  this->pt_status = PTFREE;
-	  players[this->pt_owner].p_nplasmatorp--;
-	}
+  {
+    this->pt_status = PTFREE;
+    players[this->pt_owner].p_nplasmatorp--;
+  }
       else if (this->pt_fuse >= NUMDETFRAMES)
-	{
-	  this->pt_fuse = NUMDETFRAMES - 1;
-	}
+  {
+    this->pt_fuse = NUMDETFRAMES - 1;
+  }
       else
-	{
-	  sprite->view = this->pt_fuse;
-	}
+  {
+    sprite->view = this->pt_fuse;
+  }
     }
   else
     {

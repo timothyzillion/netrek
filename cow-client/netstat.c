@@ -1,4 +1,3 @@
-
 /* netstat.c
  *
  * $Log: netstat.c,v $
@@ -35,15 +34,15 @@ static int dead;
 static int start;
 static int counter;
 
-static int sum, n, s2;				 /* total since last reset */
+static int sum, n, s2;         /* total since last reset */
 static int M, var;
 static double sd;
 
-static int suml, nl, s2l;			 /* total since last death */
+static int suml, nl, s2l;      /* total since last death */
 static int Ml, varl;
 static double sdl;
 
-static int nf;					 /* network failures */
+static int nf;           /* network failures */
 
 static char nfthresh_s[8] = NETSTAT_DF_NFT_S;
 static int nfthresh = NETSTAT_DF_NFT;
@@ -64,7 +63,7 @@ ns_record_update(int count)
   static int lastupdateSpeed;
   static int lasttime = -1;
 
-  et = 1000 / updatespeed;			 /* expected time */
+  et = 1000 / updatespeed;       /* expected time */
 
   if (!me)
     return;
@@ -123,7 +122,7 @@ ns_record_update(int count)
 
   if (lasttime >= nfthresh)
     {
-      nf++;					 /* network failure */
+      nf++;          /* network failure */
       nsrefresh(NETSTAT_FAILURES);
       updateLMeter();
 
@@ -168,14 +167,14 @@ ns_do_stat(int v, int c)
       M = sum / n;
       var = (s2 - M * sum) / (n - 1);
       if (debug)
-	printf("ns1: var=%d\n", var);
+  printf("ns1: var=%d\n", var);
       sd = (int) sqrt((double) var);
       nsrefresh(NETSTAT_TOTAL);
 
       Ml = suml / nl;
       varl = (s2l - Ml * suml) / (nl - 1);
       if (debug)
-	printf("ns2: varl=%d\n", varl);
+  printf("ns2: varl=%d\n", varl);
       sdl = (int) sqrt((double) varl);
 
       nsrefresh(NETSTAT_LOCAL);

@@ -1,6 +1,5 @@
-
 /* getname.c
- * 
+ *
  * Kevin P. Smith 09/28/88
  *
  * $Log: getname.c,v $
@@ -61,7 +60,7 @@ noautologin(void)
   *defpasswd = *password1 = *password2 = '\0';
   alf = "Automatic login failed";
   W_WriteText(w, 100, 130, textColor, alf, strlen(alf),
-	      W_BoldFont);
+        W_BoldFont);
 
 }
 
@@ -76,16 +75,16 @@ static int
     {
       W_NextEvent(&event);
       switch ((int) event.type)
-	{
-	case W_EV_EXPOSE:
-	  if (event.Window == w)
-	    do_redraw = 1;
-	  break;
-	case W_EV_KEY:
-	  ch = event.key;
-	  if (!autolog)
-	    loginproced(ch, defname);
-	}
+  {
+  case W_EV_EXPOSE:
+    if (event.Window == w)
+      do_redraw = 1;
+    break;
+  case W_EV_KEY:
+    ch = event.key;
+    if (!autolog)
+      loginproced(ch, defname);
+  }
     }
 
   if (do_redraw)
@@ -145,127 +144,127 @@ getname(char *defname, char *defpasswd)
       handleWEvents(defname);
 
       if (!autolog)
-	{
+  {
 
 #ifndef HAVE_WIN32
-	  W_FullScreen(baseWin);
-	  timeout.tv_sec = 1;
-	  timeout.tv_usec = 0;
+    W_FullScreen(baseWin);
+    timeout.tv_sec = 1;
+    timeout.tv_usec = 0;
 #else
-	  /* Since we don't have a socket to check on Win32 for windowing *
-	   * system events, we set the timeout to zero and effectively poll.
-	   * * Yes, I could do the correct thing and call *
-	   * WaitForMultipleObjects() etc. but I don't feel like it */
-	  timeout.tv_sec = 0;
-	  timeout.tv_usec = 100000;
+    /* Since we don't have a socket to check on Win32 for windowing *
+     * system events, we set the timeout to zero and effectively poll.
+     * * Yes, I could do the correct thing and call *
+     * WaitForMultipleObjects() etc. but I don't feel like it */
+    timeout.tv_sec = 0;
+    timeout.tv_usec = 100000;
 #endif
 
-	  FD_ZERO(&readfds);
-	  FD_SET(sock, &readfds);
-	  if (udpSock >= 0)
-	    FD_SET(udpSock, &readfds);
+    FD_ZERO(&readfds);
+    FD_SET(sock, &readfds);
+    if (udpSock >= 0)
+      FD_SET(udpSock, &readfds);
 
 #ifndef HAVE_WIN32
-	  FD_SET(W_Socket(), &readfds);
+    FD_SET(W_Socket(), &readfds);
 #endif
 
-	  if (SELECT(32, &readfds, 0, 0, &timeout) < 0)
-	    {
-	      perror("select");
-	      continue;
-	    }
+    if (SELECT(32, &readfds, 0, 0, &timeout) < 0)
+      {
+        perror("select");
+        continue;
+      }
 
-	  if (FD_ISSET(sock, &readfds)
-	      || (udpSock >= 0 && FD_ISSET(udpSock, &readfds)))
-	    readFromServer(&readfds);
+    if (FD_ISSET(sock, &readfds)
+        || (udpSock >= 0 && FD_ISSET(udpSock, &readfds)))
+      readFromServer(&readfds);
 
 #ifndef HAVE_WIN32
-	  if (FD_ISSET(W_Socket(), &readfds))
+    if (FD_ISSET(W_Socket(), &readfds))
 #else
-	  if (W_EventsPending())
+    if (W_EventsPending())
 #endif
 
-	    handleWEvents(defname);
-	}
+      handleWEvents(defname);
+  }
       else
-	{
-	  readFromServer(&readfds);
-	}
+  {
+    readFromServer(&readfds);
+  }
 
       if (isServerDead())
-	{
-	  printf("Shit, we were ghostbusted\n");
+  {
+    printf("Shit, we were ghostbusted\n");
 
 #ifdef HAVE_XPM
-	  W_GalacticBgd(GHOST_PIX);
+    W_GalacticBgd(GHOST_PIX);
 #endif
 
 #ifdef AUTOKEY
-	  if (autoKey)
-	    W_AutoRepeatOn();
+    if (autoKey)
+      W_AutoRepeatOn();
 #endif
 
-	  terminate(0);
-	}
+    terminate(0);
+  }
 
       if (time(0) != lasttime)
-	{
-	  lasttime++;
-	  secondsLeft--;
-	  showreadme();
-	  if (!autolog)
-	    {
-	      sprintf(tempstr, "Seconds to go: %d ", secondsLeft);
-	      W_WriteText(w, 100, 400, textColor, tempstr, strlen(tempstr),
-			  W_RegularFont);
-	    }
-	  if (secondsLeft == 0)
-	    {
-	      me->p_status = PFREE;
-	      printf("Timed Out.\n");
+  {
+    lasttime++;
+    secondsLeft--;
+    showreadme();
+    if (!autolog)
+      {
+        sprintf(tempstr, "Seconds to go: %d ", secondsLeft);
+        W_WriteText(w, 100, 400, textColor, tempstr, strlen(tempstr),
+        W_RegularFont);
+      }
+    if (secondsLeft == 0)
+      {
+        me->p_status = PFREE;
+        printf("Timed Out.\n");
 
 #ifdef AUTOKEY
-	      if (autoKey)
-		W_AutoRepeatOn();
+        if (autoKey)
+    W_AutoRepeatOn();
 #endif
 
-	      terminate(0);
-	    }
-	}
+        terminate(0);
+      }
+  }
       if (state == ST_DONE)
-	{
-	  W_ClearWindow(w);
-	  W_ClearWindow(mapw);
-	  return;
-	}
+  {
+    W_ClearWindow(w);
+    W_ClearWindow(mapw);
+    return;
+  }
       if (autolog)
-	{
-	  switch (state)
-	    {
-	    case ST_GETNAME:
-	      tempname[0] = '\0';
-	      ch = 13;
-	      j = 0;
-	      break;
+  {
+    switch (state)
+      {
+      case ST_GETNAME:
+        tempname[0] = '\0';
+        ch = 13;
+        j = 0;
+        break;
 
-	    case ST_GETPASS:
-	    case ST_MAKEPASS1:
-	    case ST_MAKEPASS2:
-	      ch = defpasswd[j++];
-	      if (ch == '\0')
-		{
-		  j = 0;
-		  ch = 13;
-		}
-	      break;
+      case ST_GETPASS:
+      case ST_MAKEPASS1:
+      case ST_MAKEPASS2:
+        ch = defpasswd[j++];
+        if (ch == '\0')
+    {
+      j = 0;
+      ch = 13;
+    }
+        break;
 
-	    default:
-	      break;
-	    }
+      default:
+        break;
+      }
 
-	  loginproced(ch, defname);
+    loginproced(ch, defname);
 
-	}
+  }
 
       laststate = state;
     }
@@ -288,7 +287,7 @@ void
 
 #ifdef AUTOKEY
       if (autoKey)
-	W_AutoRepeatOn();
+  W_AutoRepeatOn();
 #endif
 
       terminate(0);
@@ -299,51 +298,51 @@ void
     {
     case ST_GETNAME:
       if (ch == 13)
-	{
-	  if (*tempname == '\0')
-	    {
-	      STRNCPY(tempname, defname, sizeof(tempname));
-	    }
-	  loaddude();
-	  displayStartup(defname);
-	}
+  {
+    if (*tempname == '\0')
+      {
+        STRNCPY(tempname, defname, sizeof(tempname));
+      }
+    loaddude();
+    displayStartup(defname);
+  }
       else
-	{
-	  adjustString(ch, tempname, defname);
-	}
+  {
+    adjustString(ch, tempname, defname);
+  }
       break;
     case ST_GETPASS:
       if (ch == 13)
-	{
-	  checkpassword();
-	  displayStartup(defname);
-	}
+  {
+    checkpassword();
+    displayStartup(defname);
+  }
       else
-	{
-	  adjustString(ch, password1, defname);
-	}
+  {
+    adjustString(ch, password1, defname);
+  }
       break;
     case ST_MAKEPASS1:
       if (ch == 13)
-	{
-	  state = ST_MAKEPASS2;
-	  displayStartup(defname);
-	}
+  {
+    state = ST_MAKEPASS2;
+    displayStartup(defname);
+  }
       else
-	{
-	  adjustString(ch, password1, defname);
-	}
+  {
+    adjustString(ch, password1, defname);
+  }
       break;
     case ST_MAKEPASS2:
       if (ch == 13)
-	{
-	  makeNewGuy();
-	  displayStartup(defname);
-	}
+  {
+    makeNewGuy();
+    displayStartup(defname);
+  }
       else
-	{
-	  adjustString(ch, password2, defname);
-	}
+  {
+    adjustString(ch, password2, defname);
+  }
       break;
     }
 
@@ -362,38 +361,38 @@ loaddude(void)
       sendLoginReq(tempname, ppwd, login, 0);
       state = ST_DONE;
       me->p_pos = -1;
-      me->p_stats.st_tticks = 1;		 /* prevent overflow */
+      me->p_stats.st_tticks = 1;     /* prevent overflow */
       STRNCPY(me->p_name, tempname, sizeof(tempname));
       while (loginAccept == -1)
-	{
-	  socketPause();
-	  readFromServer(NULL);
-	  if (isServerDead())
-	    {
-	      printf("Server is hosed.\n");
+  {
+    socketPause();
+    readFromServer(NULL);
+    if (isServerDead())
+      {
+        printf("Server is hosed.\n");
 
 #ifdef AUTOKEY
-	      if (autoKey)
-		W_AutoRepeatOn();
+        if (autoKey)
+    W_AutoRepeatOn();
 #endif
 
-	      terminate(0);
-	    }
-	}
+        terminate(0);
+      }
+  }
       if (loginAccept == 0)
-	{
-	  char *s = "Server refuses guest login, use another name.";
-	  W_WriteText(w, 100, 70, textColor, s, strlen(s), W_BoldFont);
-	  (void) W_EventsPending();
-	  sleep(3);
-	  W_ClearWindow(w);
-	  state = ST_GETNAME;
-	  *tempname = 0;
+  {
+    char *s = "Server refuses guest login, use another name.";
+    W_WriteText(w, 100, 70, textColor, s, strlen(s), W_BoldFont);
+    (void) W_EventsPending();
+    sleep(3);
+    W_ClearWindow(w);
+    state = ST_GETNAME;
+    *tempname = 0;
 #ifdef AUTOKEY
-	  if (autoKey)
-	    W_AutoRepeatOn();
+    if (autoKey)
+      W_AutoRepeatOn();
 #endif
-	}
+  }
       return;
     }
   /* Ask about the user */
@@ -404,16 +403,16 @@ loaddude(void)
       socketPause();
       readFromServer(NULL);
       if (isServerDead())
-	{
-	  printf("Server is hosed.\n");
+  {
+    printf("Server is hosed.\n");
 
 #ifdef AUTOKEY
-	  if (autoKey)
-	    W_AutoRepeatOn();
+    if (autoKey)
+      W_AutoRepeatOn();
 #endif
 
-	  terminate(0);
-	}
+    terminate(0);
+  }
     }
   *password1 = *password2 = 0;
   if (loginAccept == 0)
@@ -438,29 +437,29 @@ checkpassword(void)
       socketPause();
       readFromServer(NULL);
       if (isServerDead())
-	{
-	  printf("Server is hosed.\n");
+  {
+    printf("Server is hosed.\n");
 
 #ifdef AUTOKEY
-	  if (autoKey)
-	    W_AutoRepeatOn();
+    if (autoKey)
+      W_AutoRepeatOn();
 #endif
 
-	  terminate(0);
-	}
+    terminate(0);
+  }
     }
   if (loginAccept == 0)
     {
       if (!autolog)
-	{
-	  s = "Bad password!";
-	  W_WriteText(w, 100, 100, textColor, s, strlen(s), W_BoldFont);
-	  (void) W_EventsPending();
-	  sleep(3);
-	  W_ClearWindow(w);
-	}
+  {
+    s = "Bad password!";
+    W_WriteText(w, 100, 100, textColor, s, strlen(s), W_BoldFont);
+    (void) W_EventsPending();
+    sleep(3);
+    W_ClearWindow(w);
+  }
       else
-	noautologin();
+  noautologin();
       *tempname = 0;
       state = ST_GETNAME;
       return;
@@ -479,15 +478,15 @@ makeNewGuy(void)
   if (strcmp(password1, password2) != 0)
     {
       if (!autolog)
-	{
-	  s = "Passwords do not match";
-	  W_WriteText(w, 100, 130, textColor, s, strlen(s), W_BoldFont);
-	  (void) W_EventsPending();
-	  sleep(3);
-	  W_ClearWindow(w);
-	}
+  {
+    s = "Passwords do not match";
+    W_WriteText(w, 100, 130, textColor, s, strlen(s), W_BoldFont);
+    (void) W_EventsPending();
+    sleep(3);
+    W_ClearWindow(w);
+  }
       else
-	noautologin();
+  noautologin();
       *tempname = 0;
       state = ST_GETNAME;
       return;
@@ -508,25 +507,25 @@ void
     {
       *str = '\0';
       if (state == ST_GETNAME)
-	displayStartup(defname);
+  displayStartup(defname);
     }
   else if (ch == 8 || ch == '\177')
     {
       if (strLen > 0)
-	{
-	  str[strLen - 1] = '\0';
-	  if (state == ST_GETNAME)
-	    displayStartup(defname);
-	}
+  {
+    str[strLen - 1] = '\0';
+    if (state == ST_GETNAME)
+      displayStartup(defname);
+  }
     }
   else
     {
       if (strLen == 15)
-	return;
+  return;
       str[strLen + 1] = '\0';
       str[strLen] = ch;
       if (state == ST_GETNAME)
-	displayStartup(defname);
+  displayStartup(defname);
     }
 }
 
@@ -602,6 +601,6 @@ showreadme(void)
       length = strlen(README[i]);
 
       W_WriteText(w, 20, i * W_Textheight + 180, textColor, README[i],
-		  length, W_RegularFont);
+      length, W_RegularFont);
     }
 }

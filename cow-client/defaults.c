@@ -1,4 +1,3 @@
-
 /****************************************************************************/
 /***  File:  defaults.c                                                   ***/
 /***  Function: This file reads the default parameters from .xtrekrc and  ***/
@@ -16,7 +15,7 @@
  *
  * Revision 1.4  2001/04/28 04:03:56  quozl
  * change -U to also adopt a local port number for TCP mode.
- * 		-- Benjamin `Quisar' Lerman  <quisar@quisar.ambre.net>
+ *    -- Benjamin `Quisar' Lerman  <quisar@quisar.ambre.net>
  *
  * Revision 1.3  1999/08/05 16:46:32  siegl
  * remove several defines (BRMH, RABBITEARS, NEWDASHBOARD2)
@@ -137,7 +136,7 @@ initDefaults(char *deffile)
     if (findDefaults(deffile, file))
       deffile = file;
     else
-      return;					 /* No defaults file! */
+      return;          /* No defaults file! */
 
   fp = fopen(deffile, "r");
   if (!fp)
@@ -145,279 +144,279 @@ initDefaults(char *deffile)
   printf("Reading defaults file %s\n", deffile);
 
 #ifdef NBT
-  macrocnt = 0;					 /* reset macros */
+  macrocnt = 0;          /* reset macros */
 #endif
 
   STRNCPY(defaultsFile, deffile, sizeof(defaultsFile));
   while (fgets(file, 250, fp))
     {
       if (*file == '#')
-	continue;
+  continue;
       if (*file != 0)
-	file[strlen(file) - 1] = 0;
+  file[strlen(file) - 1] = 0;
       v = file;
       while (*v != ':' && *v != 0)
-	{
-	  v++;
-	}
+  {
+    v++;
+  }
       if (*v == 0)
-	continue;
+  continue;
       *v = 0;
       v++;
       while (*v == ' ' || *v == '\t')
-	{
-	  v++;
-	}
+  {
+    v++;
+  }
 
 #ifdef NBT
       /* not very robust but if it breaks nothing will die horribly I think -
        * * * jmn */
       if (strncmpi(file, "macro.", 6) == 0)
-	{
-	  if (macrocnt == MAX_MACRO)
-	    {
-	      fprintf(stderr, "Maximum number of macros is %d\n", MAX_MACRO);
-	    }
-	  else
-	    {
-	      str = file + 6;
-	      c = getctrlkey((unsigned char **) &str);
-	      if (c == '?')
-		fprintf(stderr, "Cannot use '?' for a macro\n");
-	      else
-		{
-		  macro[macrocnt].type = NBTM;
-		  macro[macrocnt].key = c;
-		  macro[macrocnt].who = str[1];
-		  macro[macrocnt].string = strdup(v);
+  {
+    if (macrocnt == MAX_MACRO)
+      {
+        fprintf(stderr, "Maximum number of macros is %d\n", MAX_MACRO);
+      }
+    else
+      {
+        str = file + 6;
+        c = getctrlkey((unsigned char **) &str);
+        if (c == '?')
+    fprintf(stderr, "Cannot use '?' for a macro\n");
+        else
+    {
+      macro[macrocnt].type = NBTM;
+      macro[macrocnt].key = c;
+      macro[macrocnt].who = str[1];
+      macro[macrocnt].string = strdup(v);
 
 #ifdef MULTILINE_MACROS
-		  if (keysused[macro[macrocnt].key])
-		    {
-		      macro[keysused[macro[macrocnt].key] - 1].type = NEWMULTIM;
-		      macro[macrocnt].type = NEWMULTIM;
-		    }
-		  else
-		    {
-		      keysused[macro[macrocnt].key] = macrocnt + 1;
-		    }
+      if (keysused[macro[macrocnt].key])
+        {
+          macro[keysused[macro[macrocnt].key] - 1].type = NEWMULTIM;
+          macro[macrocnt].type = NEWMULTIM;
+        }
+      else
+        {
+          keysused[macro[macrocnt].key] = macrocnt + 1;
+        }
 #endif /* MULTILINE_MACROS */
 
-		  macrocnt++;
-		}
-	    }
-	}
+      macrocnt++;
+    }
+      }
+  }
       else
 #endif
 
       if (strncmpi(file, "mac.", 4) == 0)
-	{
-	  if (macrocnt == MAX_MACRO)
-	    {
-	      fprintf(stderr, "Maximum number of macros is %d\n", MAX_MACRO);
-	    }
-	  else
-	    {
-	      str = file + 4;
-	      c = getctrlkey((unsigned char **) &str);
-	      if (c == '?')
-		fprintf(stderr, "Cannot use '?' for a macro\n");
-	      else
-		{
-		  macro[macrocnt].key = c;
+  {
+    if (macrocnt == MAX_MACRO)
+      {
+        fprintf(stderr, "Maximum number of macros is %d\n", MAX_MACRO);
+      }
+    else
+      {
+        str = file + 4;
+        c = getctrlkey((unsigned char **) &str);
+        if (c == '?')
+    fprintf(stderr, "Cannot use '?' for a macro\n");
+        else
+    {
+      macro[macrocnt].key = c;
 
-		  if (str[0] == '.')
-		    {
-		      if (str[1] == '%')
-			{
-			  switch (str[2])
-			    {
-			    case 'u':
-			    case 'U':
-			    case 'p':
-			      macro[macrocnt].who = MACRO_PLAYER;
-			      break;
-			    case 't':
-			    case 'z':
-			    case 'Z':
-			      macro[macrocnt].who = MACRO_TEAM;
-			      break;
-			    case 'g':
-			      macro[macrocnt].who = MACRO_FRIEND;
-			      break;
-			    case 'h':
-			      macro[macrocnt].who = MACRO_ENEMY;
-			      break;
-			    default:
-			      macro[macrocnt].who = MACRO_ME;
-			      break;
-			    }
-			  macro[macrocnt].type = NEWMMOUSE;
-			}
-		      else
-			{
-			  macro[macrocnt].who = str[1];
-			  macro[macrocnt].type = NEWMSPEC;
-			}
-		    }
-		  else
-		    {
-		      macro[macrocnt].who = '\0';
-		      macro[macrocnt].type = NEWM;
-
-#ifdef MULTILINE_MACROS
-		      if (keysused[macro[macrocnt].key])
-			{
-			  printf("Multiline macros of nonstandard types are not recommended.\n");
-			  printf("You might experience strange behaviour of macros.\n");
-			  printf("Type: unspecified macro, key: %c.\n", macro[macrocnt].key);
-			}
-#endif /* MULTILINE_MACROS */
-		    }
+      if (str[0] == '.')
+        {
+          if (str[1] == '%')
+      {
+        switch (str[2])
+          {
+          case 'u':
+          case 'U':
+          case 'p':
+            macro[macrocnt].who = MACRO_PLAYER;
+            break;
+          case 't':
+          case 'z':
+          case 'Z':
+            macro[macrocnt].who = MACRO_TEAM;
+            break;
+          case 'g':
+            macro[macrocnt].who = MACRO_FRIEND;
+            break;
+          case 'h':
+            macro[macrocnt].who = MACRO_ENEMY;
+            break;
+          default:
+            macro[macrocnt].who = MACRO_ME;
+            break;
+          }
+        macro[macrocnt].type = NEWMMOUSE;
+      }
+          else
+      {
+        macro[macrocnt].who = str[1];
+        macro[macrocnt].type = NEWMSPEC;
+      }
+        }
+      else
+        {
+          macro[macrocnt].who = '\0';
+          macro[macrocnt].type = NEWM;
 
 #ifdef MULTILINE_MACROS
-		  if (keysused[macro[macrocnt].key])
-		    {
-		      macro[keysused[macro[macrocnt].key] - 1].type = NEWMULTIM;
-		      macro[macrocnt].type = NEWMULTIM;
-		    }
-		  else
-		    {
-		      keysused[macro[macrocnt].key] = macrocnt + 1;
-		    }
+          if (keysused[macro[macrocnt].key])
+      {
+        printf("Multiline macros of nonstandard types are not recommended.\n");
+        printf("You might experience strange behaviour of macros.\n");
+        printf("Type: unspecified macro, key: %c.\n", macro[macrocnt].key);
+      }
+#endif /* MULTILINE_MACROS */
+        }
+
+#ifdef MULTILINE_MACROS
+      if (keysused[macro[macrocnt].key])
+        {
+          macro[keysused[macro[macrocnt].key] - 1].type = NEWMULTIM;
+          macro[macrocnt].type = NEWMULTIM;
+        }
+      else
+        {
+          keysused[macro[macrocnt].key] = macrocnt + 1;
+        }
 #endif /* MULTILINE_MACROS */
 
-		  macro[macrocnt].string = strdup(v);
-		  macrocnt++;
-		}
-	    }
-	}
+      macro[macrocnt].string = strdup(v);
+      macrocnt++;
+    }
+      }
+  }
 
       else if (strncmpi(file, "dist.", 5) == 0)
-	{
-	  str = file + 5;
-	  c = getctrlkey((unsigned char **) &str);
-	  if (*str != '.')
-	    {
-	      str = file + 4;
-	      c = '\0';
-	    }
-	  str++;
+  {
+    str = file + 5;
+    c = getctrlkey((unsigned char **) &str);
+    if (*str != '.')
+      {
+        str = file + 4;
+        c = '\0';
+      }
+    str++;
 
-	  notdone = 1;
-	  for (dm = &dist_prefered[take], dm_def = &dist_defaults[take];
-	       dm->name && notdone; dm++, dm_def++)
+    notdone = 1;
+    for (dm = &dist_prefered[take], dm_def = &dist_defaults[take];
+         dm->name && notdone; dm++, dm_def++)
 
-	    {
-	      if (strcmpi(str, dm->name) == 0)
-		{
-		  dm->macro = strdup(v);
+      {
+        if (strcmpi(str, dm->name) == 0)
+    {
+      dm->macro = strdup(v);
 
 #ifdef DIST_KEY_NAME
-		  if (c)
-		    {
-		      dm->c = c;
-		      dm_def->c = c;
-		    }
+      if (c)
+        {
+          dm->c = c;
+          dm_def->c = c;
+        }
 #endif /* DIST_KEY_NAME */
 
-		  notdone = 0;
-		}
-	    }
-	}
+      notdone = 0;
+    }
+      }
+  }
 
 #ifdef BEEPLITE
       else if (strncasecmp(file, "lite.", 5) == 0)
-	{
-	  int     offset = 5;
-	  char  **lt;
+  {
+    int     offset = 5;
+    char  **lt;
 
-	  if (file[6] == '.')
-	    offset = 7;
+    if (file[6] == '.')
+      offset = 7;
 
-	  notdone = 1;
+    notdone = 1;
 
-	  for (lt = &distlite[take], dm = &dist_prefered[take],
-	       dm_def = &dist_defaults[take];
-	       dm->name && notdone; dm++, dm_def++, lt++)
-	    {
-	      if (strcmpi(file + offset, dm->name) == 0)
-		{
-		  *lt = strdup(v);
+    for (lt = &distlite[take], dm = &dist_prefered[take],
+         dm_def = &dist_defaults[take];
+         dm->name && notdone; dm++, dm_def++, lt++)
+      {
+        if (strcmpi(file + offset, dm->name) == 0)
+    {
+      *lt = strdup(v);
 
-		  notdone = 0;
-		}
-	    }
-	}
+      notdone = 0;
+    }
+      }
+  }
 #endif /* BEEPLITE */
 
 #ifdef RCM
       else if (strncmpi(file, "msg.", 4) == 0)
-	{
-	  str = file + 4;
-	  notdone = 1;
+  {
+    str = file + 4;
+    notdone = 1;
 
-	  for (dm = &rcm_msg[0]; dm->name && notdone; dm++)
-	    {
-	      if (strcmpi(str, dm->name) == 0)
-		{
-		  dm->macro = strdup(v);
-		  notdone = 0;
-		}
-	    }
-	}
+    for (dm = &rcm_msg[0]; dm->name && notdone; dm++)
+      {
+        if (strcmpi(str, dm->name) == 0)
+    {
+      dm->macro = strdup(v);
+      notdone = 0;
+    }
+      }
+  }
 #endif /* RCM */
 
-#ifdef TOOLS					 /* Free configurable macro * 
-						  * keys */
+#ifdef TOOLS           /* Free configurable macro *
+              * keys */
       else if (strncmpi(file, "key.", 4) == 0)
-	{
-	  int     keycnt;
+  {
+    int     keycnt;
 
-	  if ((keycnt = strlen((char *) keys)) == MAX_KEY - 1)
-	    {
-	      fprintf(stderr, "Maximum number of keys is %d\n", MAX_KEY - 1);
-	    }
-	  else
-	    {
-	      str = file + 4;
-	      c = getctrlkey((unsigned char **) &str);
-	      keys[keycnt] = c;
-	      keys[keycnt + 1] = '\0';
-	      if (*str != '.')
-		{
-		  c = 't';
-		}
-	      else
-		{
-		  str++;
-		  c = getctrlkey((unsigned char **) &str);
-		}
-	      macroKeys[keycnt].dest = c;
-	      macroKeys[keycnt].name = strdup(v);
-	    }
-	}
+    if ((keycnt = strlen((char *) keys)) == MAX_KEY - 1)
+      {
+        fprintf(stderr, "Maximum number of keys is %d\n", MAX_KEY - 1);
+      }
+    else
+      {
+        str = file + 4;
+        c = getctrlkey((unsigned char **) &str);
+        keys[keycnt] = c;
+        keys[keycnt + 1] = '\0';
+        if (*str != '.')
+    {
+      c = 't';
+    }
+        else
+    {
+      str++;
+      c = getctrlkey((unsigned char **) &str);
+    }
+        macroKeys[keycnt].dest = c;
+        macroKeys[keycnt].name = strdup(v);
+      }
+  }
 #endif /* Macro Keys */
 
       else if (strncmpi(file, "singleMacro", 11) == 0)
-	{
-	  int     i;
+  {
+    int     i;
 
-	  str = v;
-	  for (i = 0; *str; i++)
-	    singleMacro[i] = getctrlkey((unsigned char **) &str);
-	  singleMacro[i] = '\0';
-	}
+    str = v;
+    for (i = 0; *str; i++)
+      singleMacro[i] = getctrlkey((unsigned char **) &str);
+    singleMacro[i] = '\0';
+  }
 
       if (*v != 0)
-	{
-	  new = (struct stringlist *) malloc(sizeof(struct stringlist));
+  {
+    new = (struct stringlist *) malloc(sizeof(struct stringlist));
 
-	  new->next = defaults;
-	  new->string = strdup(file);
-	  new->value = strdup(v);
-	  defaults = new;
-	}
+    new->next = defaults;
+    new->string = strdup(file);
+    new->value = strdup(v);
+    defaults = new;
+  }
     }
   fclose(fp);
 }
@@ -431,9 +430,9 @@ char   *
   while (sl != NULL)
     {
       if (strcmpi(sl->string, str) == 0)
-	{
-	  return (sl->value);
-	}
+  {
+    return (sl->value);
+  }
       sl = sl->next;
     }
   return (NULL);
@@ -460,13 +459,13 @@ strcmpi(char *str1, char *str2)
       chr1 = isupper(str1[duh]) ? str1[duh] : toupper(str1[duh]);
       chr2 = isupper(str2[duh]) ? str2[duh] : toupper(str2[duh]);
       if (chr1 == 0 || chr2 == 0)
-	{
-	  return (0);
-	}
+  {
+    return (0);
+  }
       if (chr1 != chr2)
-	{
-	  return (chr2 - chr1);
-	}
+  {
+    return (chr2 - chr1);
+  }
     }
   return (0);
 }
@@ -496,13 +495,13 @@ strncmpi(char *str1, char *str2, int max)
       chr1 = isupper(str1[duh]) ? str1[duh] : toupper(str1[duh]);
       chr2 = isupper(str2[duh]) ? str2[duh] : toupper(str2[duh]);
       if (chr1 == 0 || chr2 == 0)
-	{
-	  return (0);
-	}
+  {
+    return (0);
+  }
       if (chr1 != chr2)
-	{
-	  return (chr2 - chr1);
-	}
+  {
+    return (chr2 - chr1);
+  }
     }
   return (0);
 }
@@ -542,10 +541,10 @@ intDefault(char *def, int preferred)
  * access() system call to determine if a defaults *  file exists. * note,
  * access() returns 0 if user can read file, -1 on error or if * they can't. *
  * -EM *
- * 
+ *
  * Is anyone else bothered by the fact that this writes to deffile * without
  * really knowing how much of deffile is allocated? *
- * 
+ *
  */
 
 int     findDefaults(char *deffile, char *file)
@@ -725,7 +724,7 @@ resetdefaults(void)
       ignore_signals = booleanDefault("ignoreSignals", ignore_signals);
 
       if (ignore_signals)
-	printf("Ignoring signals SIGSEGV and SIGBUS\n");
+  printf("Ignoring signals SIGSEGV and SIGBUS\n");
     }
   else
     {
@@ -735,7 +734,7 @@ resetdefaults(void)
 #endif
 
   highlightFriendlyPhasers = booleanDefault("highlightFriendlyPhasers",
-					    highlightFriendlyPhasers);
+              highlightFriendlyPhasers);
 
 #ifdef MOUSE_AS_SHIFT
   mouse_as_shift = booleanDefault("mouseAsShift", mouse_as_shift);
@@ -802,30 +801,30 @@ resetdefaults(void)
       STRNCPY(tmp, "rcfile-", 8);
       strcat(tmp, shipdefaults[i].name);
       if (pek = getdefault(tmp))
-	shipdefaults[i].rcfile = pek;
+  shipdefaults[i].rcfile = pek;
       else
-	shipdefaults[i].rcfile = shipdefaults[DEFAULTSHIP].rcfile;
+  shipdefaults[i].rcfile = shipdefaults[DEFAULTSHIP].rcfile;
 
       STRNCPY(tmp, "keymap-", 8);
       strcat(tmp, shipdefaults[i].name);
       if (pek = getdefault(tmp))
-	shipdefaults[i].keymap = (unsigned char *) pek;
+  shipdefaults[i].keymap = (unsigned char *) pek;
       else
-	shipdefaults[i].keymap = shipdefaults[DEFAULTSHIP].keymap;
+  shipdefaults[i].keymap = shipdefaults[DEFAULTSHIP].keymap;
 
       STRNCPY(tmp, "ckeymap-", 9);
       strcat(tmp, shipdefaults[i].name);
       if (pek = getdefault(tmp))
-	shipdefaults[i].ckeymap = (unsigned char *) pek;
+  shipdefaults[i].ckeymap = (unsigned char *) pek;
       else
-	shipdefaults[i].ckeymap = shipdefaults[DEFAULTSHIP].ckeymap;
+  shipdefaults[i].ckeymap = shipdefaults[DEFAULTSHIP].ckeymap;
 
       STRNCPY(tmp, "buttonmap-", 11);
       strcat(tmp, shipdefaults[i].name);
       if (pek = getdefault(tmp))
-	shipdefaults[i].buttonmap = (unsigned char *) pek;
+  shipdefaults[i].buttonmap = (unsigned char *) pek;
       else
-	shipdefaults[i].buttonmap = shipdefaults[DEFAULTSHIP].buttonmap;
+  shipdefaults[i].buttonmap = shipdefaults[DEFAULTSHIP].buttonmap;
     }
   myshipdef = &shipdefaults[myshiptype];
 }
@@ -848,7 +847,7 @@ shipchange(int type)
 /* Generally useful function that searches for a file
  * in the current and home directories, also
  * the executable directory on Win32
- * 
+ *
  * Added a check for 0 length strings.  For some reason if you give
  * an empty string to the GnuWin32 stuff it says the file exists. -- DRG
  */
@@ -896,13 +895,13 @@ int     findfile(char *fname, char *found)
       if (home[len - 1] == '/'
 
 #ifdef HAVE_WIN32
-	  || home[len - 1] == '\\'
+    || home[len - 1] == '\\'
 #endif
 
-	  )
-	sprintf(found, "%s%s", home, fname);
+    )
+  sprintf(found, "%s%s", home, fname);
       else
-	sprintf(found, "%s/%s", home, fname);
+  sprintf(found, "%s/%s", home, fname);
     }
   CHECK_FILE;
 
@@ -914,9 +913,9 @@ int     findfile(char *fname, char *found)
       int     len = strlen(home);
 
       if (home[len - 1] == '/' || home[len - 1] == '\\')
-	sprintf(found, "%s%s", home, fname);
+  sprintf(found, "%s%s", home, fname);
       else
-	sprintf(found, "%s/%s", home, fname);
+  sprintf(found, "%s/%s", home, fname);
     }
   CHECK_FILE;
 #endif /* Win32 */

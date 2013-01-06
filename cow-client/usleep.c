@@ -35,10 +35,10 @@ U_LONG microSeconds;
 
         if( select( nfds, &readfds, &writefds, &exceptfds, &Timer ) < 0 )
         {
-		if (errno != EINTR) {
-                	perror( "usleep (select) failed" );
-                	return -1;
-		}
+    if (errno != EINTR) {
+                  perror( "usleep (select) failed" );
+                  return -1;
+    }
         }
 
         return 0;

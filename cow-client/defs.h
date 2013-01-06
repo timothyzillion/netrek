@@ -1,5 +1,4 @@
 
-
 /* defs.h
  *
  * $Log: defs.h,v $
@@ -44,13 +43,13 @@
 #define TWINSIDE 500
 #else
 #define GWINSIDE 500
-#define TWINSIDE 500				 /* Size of strategic and * * 
-						  * tactical windows */
+#define TWINSIDE 500         /* Size of strategic and * *
+              * tactical windows */
 #endif
 
-#define BORDER 3				 /* border width for option * 
-						  * 
-						  * * windows */
+#define BORDER 3         /* border width for option *
+              *
+              * * windows */
 #define PSEUDOSIZE 16
 #define CLOAK_PHASES 7          /* number of drawing phases
                                  * in a cloak
@@ -59,33 +58,33 @@
 
 /* These are configuration definitions */
 
-#define GWIDTH 100000				 /* galaxy is 100000 spaces * 
-						  * 
-						  * * on a side */
-#define WARP1 20				 /* warp one will move 20 * * 
-						  * spaces per update */
-#define SCALE 40				 /* Window will be one pixel
-						  * * * for 20 spaces */
-#define EXPDIST 350				 /* At this range a torp will
-						  * * * explode */
-#define DETDIST 1700				 /* At this range a player *
-						  * * can detonate a torp */
+#define GWIDTH 100000        /* galaxy is 100000 spaces *
+              *
+              * * on a side */
+#define WARP1 20         /* warp one will move 20 * *
+              * spaces per update */
+#define SCALE 40         /* Window will be one pixel
+              * * * for 20 spaces */
+#define EXPDIST 350        /* At this range a torp will
+              * * * explode */
+#define DETDIST 1700         /* At this range a player *
+              * * can detonate a torp */
 #define NUM_PLANET_BITMAPS 7
 #define NUM_PLANET_BITMAPS2 8
 
-#define PHASEDIST 6000				 /* At this range a player *
-						  * * can do damage with * *
-						  * phasers */
-#define ENTORBDIST 900				 /* At this range a player *
-						  * * can orbit a planet */
-#define ORBDIST 800				 /* A player will orbit at *
-						  * * this radius */
-#define ORBSPEED 2				 /* This is the fastest a * * 
-						  * person can go into orbit */
-#define PFIREDIST 1500				 /* At this range a planet *
-						  * * will shoot at a player */
-#define UPDATE 100000				 /* Update time is 100000 * * 
-						  * micro-seconds */
+#define PHASEDIST 6000         /* At this range a player *
+              * * can do damage with * *
+              * phasers */
+#define ENTORBDIST 900         /* At this range a player *
+              * * can orbit a planet */
+#define ORBDIST 800        /* A player will orbit at *
+              * * this radius */
+#define ORBSPEED 2         /* This is the fastest a * *
+              * person can go into orbit */
+#define PFIREDIST 1500         /* At this range a planet *
+              * * will shoot at a player */
+#define UPDATE 100000        /* Update time is 100000 * *
+              * micro-seconds */
 
 /* 6 minutes is maximum for autoquit -- anything more causes problems in the
  * server.  (?) */
@@ -150,63 +149,63 @@
 #define MESSTIME 30             /* Number of updates to have
                                  * a message on the screen */
 
-#define TARG_PLAYER	0x1     /* Flags for gettarget */
-#define TARG_PLANET	0x2
-#define TARG_CLOAK	0x4     /* Include cloaked ships in
+#define TARG_PLAYER 0x1     /* Flags for gettarget */
+#define TARG_PLANET 0x2
+#define TARG_CLOAK  0x4     /* Include cloaked ships in
                                  * search */
-#define TARG_SELF	0x8
+#define TARG_SELF 0x8
 #define TARG_ENEMY      0x10
 #define TARG_FRIEND     0x20
 
 
-#define DEFAULT_PORT	2592
+#define DEFAULT_PORT  2592
 
 /* Other stuff that Ed added */
 
-#define ABS(a)			/* abs(a) */ (((a) < 0) ? -(a) : (a))
+#define ABS(a)      /* abs(a) */ (((a) < 0) ? -(a) : (a))
 
 #ifndef MAX
-#define MAX(a,b)		((a) > (b) ? (a) : (b))
+#define MAX(a,b)    ((a) > (b) ? (a) : (b))
 #endif
 
-#define myPlasmaTorp(t)		(me->p_no == (t)->pt_owner)
-#define myTorp(t)		(me->p_no == (t)->t_owner)
-#define friendlyPlasmaTorp(t)	((!(me->p_team & (t)->pt_war)) || (myPlasmaTorp(t)))
-#define friendlyTorp(t)		((!(me->p_team & (t)->t_war)) || (myTorp(t)))
-#define myPhaser(p)		(&phasers[me->p_no] == (p))
-#define friendlyPhaser(p)	(me->p_team == players[(p) - phasers].p_team)
-#define myPlayer(p)		(me == (p))
-#define myPlanet(p)		(me->p_team == (p)->pl_owner)
-#define friendlyPlayer(p)	((!(me->p_team & \
-				    ((p)->p_swar | (p)->p_hostile))) && \
-				    (!((p)->p_team & \
-				    (me->p_swar | me->p_hostile))))
-#define isAlive(p)		(((p)->p_status == PALIVE) || ((p)->p_status == POBSERV))
-#define friendlyPlanet(p)	((p)->pl_info & me->p_team && \
-			     !((p)->pl_owner & (me->p_swar | me->p_hostile)))
+#define myPlasmaTorp(t)   (me->p_no == (t)->pt_owner)
+#define myTorp(t)   (me->p_no == (t)->t_owner)
+#define friendlyPlasmaTorp(t) ((!(me->p_team & (t)->pt_war)) || (myPlasmaTorp(t)))
+#define friendlyTorp(t)   ((!(me->p_team & (t)->t_war)) || (myTorp(t)))
+#define myPhaser(p)   (&phasers[me->p_no] == (p))
+#define friendlyPhaser(p) (me->p_team == players[(p) - phasers].p_team)
+#define myPlayer(p)   (me == (p))
+#define myPlanet(p)   (me->p_team == (p)->pl_owner)
+#define friendlyPlayer(p) ((!(me->p_team & \
+            ((p)->p_swar | (p)->p_hostile))) && \
+            (!((p)->p_team & \
+            (me->p_swar | me->p_hostile))))
+#define isAlive(p)    (((p)->p_status == PALIVE) || ((p)->p_status == POBSERV))
+#define friendlyPlanet(p) ((p)->pl_info & me->p_team && \
+           !((p)->pl_owner & (me->p_swar | me->p_hostile)))
 
-#define isLockPlanet(p)		((me->p_flags & PFPLLOCK) && (me->p_planet == p->pl_no))
-#define isLockPlayer(p)		((me->p_flags & PFPLOCK) && (me->p_playerl == p->p_no))
+#define isLockPlanet(p)   ((me->p_flags & PFPLLOCK) && (me->p_planet == p->pl_no))
+#define isLockPlayer(p)   ((me->p_flags & PFPLOCK) && (me->p_playerl == p->p_no))
 #define isObsLockPlayer(p)      ((me->p_flags & PFOBSERV) && (me->p_flags & PFPLOCK) && \
                                     (me->p_playerl == p->p_no))
-#define torpColor(t)		\
-	(myTorp(t) ? myColor : shipCol[remap[players[(t)->t_owner].p_team]])
-#define plasmatorpColor(t)		\
-	(myPlasmaTorp(t) ? myColor : shipCol[remap[players[(t)->pt_owner].p_team]])
-#define phaserColor(p)		\
-	(myPhaser(p) ? myColor : shipCol[remap[players[(p) - phasers].p_team]])
+#define torpColor(t)    \
+  (myTorp(t) ? myColor : shipCol[remap[players[(t)->t_owner].p_team]])
+#define plasmatorpColor(t)    \
+  (myPlasmaTorp(t) ? myColor : shipCol[remap[players[(t)->pt_owner].p_team]])
+#define phaserColor(p)    \
+  (myPhaser(p) ? myColor : shipCol[remap[players[(p) - phasers].p_team]])
 /* Cloaking phase (and not the cloaking flag) is the factor in determining
  * the color of the ship.  Color 0 is white (same as 'myColor' used to be). */
-#define playerColor(p)		\
-	(myPlayer(p) ? myColor : shipCol[remap[(p)->p_team]])
+#define playerColor(p)    \
+  (myPlayer(p) ? myColor : shipCol[remap[(p)->p_team]])
 
 #ifdef RECORDGAME
 #define planetColor(p)    \
   ((((p)->pl_info & me->p_team) || playback) \
    ? shipCol[remap[(p)->pl_owner]] : unColor)
 #else
-#define planetColor(p)		\
-	(((p)->pl_info & me->p_team) ? shipCol[remap[(p)->pl_owner]] : unColor)
+#define planetColor(p)    \
+  (((p)->pl_info & me->p_team) ? shipCol[remap[(p)->pl_owner]] : unColor)
 #endif
 
 #define planetFont(p)           \
@@ -214,23 +213,23 @@
             : W_RegularFont)
 
 //SRS - changed this from UnderlineFont to HighlightFont
-#define shipFont(p)		\
-	(myPlayer(p) ? W_BoldFont : friendlyPlayer(p) ? W_HighlightFont \
-	    : W_RegularFont)
-#define bombingRating(p)	\
-	((float) (p)->p_stats.st_tarmsbomb * status->timeprod / \
-	 ((float) (p)->p_stats.st_tticks * status->armsbomb))
-#define planetRating(p)		\
-	((float) (p)->p_stats.st_tplanets * status->timeprod / \
-	 ((float) (p)->p_stats.st_tticks * status->planets))
-#define offenseRating(p)	\
-	((float) (p)->p_stats.st_tkills * status->timeprod / \
-	 ((float) (p)->p_stats.st_tticks * status->kills))
-#define defenseRating(p)	\
-	((float) (p)->p_stats.st_tticks * status->losses / \
-	 ((p)->p_stats.st_tlosses!=0 ? \
-	  ((float) (p)->p_stats.st_tlosses * status->timeprod) : \
-	  (status->timeprod)))
+#define shipFont(p)   \
+  (myPlayer(p) ? W_BoldFont : friendlyPlayer(p) ? W_HighlightFont \
+      : W_RegularFont)
+#define bombingRating(p)  \
+  ((float) (p)->p_stats.st_tarmsbomb * status->timeprod / \
+   ((float) (p)->p_stats.st_tticks * status->armsbomb))
+#define planetRating(p)   \
+  ((float) (p)->p_stats.st_tplanets * status->timeprod / \
+   ((float) (p)->p_stats.st_tticks * status->planets))
+#define offenseRating(p)  \
+  ((float) (p)->p_stats.st_tkills * status->timeprod / \
+   ((float) (p)->p_stats.st_tticks * status->kills))
+#define defenseRating(p)  \
+  ((float) (p)->p_stats.st_tticks * status->losses / \
+   ((p)->p_stats.st_tlosses!=0 ? \
+    ((float) (p)->p_stats.st_tlosses * status->timeprod) : \
+    (status->timeprod)))
 
 #define INVISIBLE(j)        (((j)->p_flags & PFCLOAK) && \
         ((j)->p_cloakphase == (CLOAK_PHASES-1)))
@@ -240,13 +239,13 @@
 
 #if !defined(_IBMR2)
 /* typedef enum { FALSE = 0, TRUE }
- * 
+ *
  * boolean; */
 #else
 /* Hmmm, this will only work if TRUE/FALSE were undef'ed first. Would that
  * break things?  I don't know.  Since "boolean" type is never used, we will
  * just leave it commented out for now.
- * 
+ *
  * typedef enum {FALSE=0, TRUE} boolean; */
 #endif
 
@@ -306,17 +305,17 @@ char   *getdefault(char *str);
 #define UDP_STATUS      1
 #define UDP_DROPPED     2
 #define UDP_SEQUENCE    3
-#define UDP_SEND	4
-#define UDP_RECV	5
+#define UDP_SEND  4
+#define UDP_RECV  5
 #define UDP_DEBUG       6
-#define UDP_FORCE_RESET	7
-#define UDP_UPDATE_ALL	8
+#define UDP_FORCE_RESET 7
+#define UDP_UPDATE_ALL  8
 #define UDP_DONE        9
 #define COMM_TCP        0
 #define COMM_UDP        1
 #define COMM_VERIFY     2
-#define COMM_UPDATE	3
-#define COMM_MODE	4
+#define COMM_UPDATE 3
+#define COMM_MODE 4
 #define SWITCH_TCP_OK   0
 #define SWITCH_UDP_OK   1
 #define SWITCH_DENIED   2
@@ -329,11 +328,11 @@ char   *getdefault(char *str);
 #define STAT_VERIFY_UDP 3
 #define MODE_TCP        0
 #define MODE_SIMPLE     1
-#define MODE_FAT	2
+#define MODE_FAT  2
 #define MODE_DOUBLE     3
 
 #define UDP_RECENT_INTR 300
-#define UDP_UPDATE_WAIT	5
+#define UDP_UPDATE_WAIT 5
 
 /* client version of UDPDIAG */
 #define UDPDIAG(x)      { if (udpDebug == 2) { printf("UDP: "); printf x; }}
@@ -418,7 +417,7 @@ char   *getdefault(char *str);
 #define NEWM            1
 #define NEWMSPEC        2
 #define NEWMMOUSE       3
-#define NEWMULTIM	4
+#define NEWMULTIM 4
 
 #define MACRO_ME        0
 #define MACRO_PLAYER    1
@@ -448,7 +447,7 @@ char   *getdefault(char *str);
 #endif
 
 #ifdef WARP_DEAD
-#define DEADPACKETS	3
+#define DEADPACKETS 3
 #endif
 
 #endif /* _h_defs */

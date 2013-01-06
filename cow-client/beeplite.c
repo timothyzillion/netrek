@@ -62,10 +62,10 @@ litedefaults(void)
 liteplanet(struct planet *l)
 {
   emph_planet_seq_n[l->pl_no] = beep_lite_cycle_time_planet;
-  l->pl_flags |= PLREDRAW;			 /* Leave redraw on until * * 
-						  * done highlighting */
-  l->pl_flags |= PLCLEAR;			 /* Leave redraw on until * * 
-						  * done highlighting */
+  l->pl_flags |= PLREDRAW;       /* Leave redraw on until * *
+              * done highlighting */
+  l->pl_flags |= PLCLEAR;      /* Leave redraw on until * *
+              * done highlighting */
 }
 
 liteplayer(struct player *j)
@@ -104,169 +104,169 @@ makelite(struct distress * dist, char *pm)
   while (*pm)
     {
       if (*pm == '/')
-	{
-	  pm++;
+  {
+    pm++;
 
-	  if (!pm)
-	    continue;
+    if (!pm)
+      continue;
 
-	  switch (c = *(pm++))
-	    {
+    switch (c = *(pm++))
+      {
 
-	    case 'P':				 /* push player id into buf */
-	    case 'G':				 /* push friendly player id * 
-						  * 
-						  * * into buf */
-	    case 'H':				 /* push enemy target player
-						  * * * id into buf */
+      case 'P':        /* push player id into buf */
+      case 'G':        /* push friendly player id *
+              *
+              * * into buf */
+      case 'H':        /* push enemy target player
+              * * * id into buf */
 
-	    case 'p':				 /* push player id into buf */
-	    case 'g':				 /* push friendly player id * 
-						  * 
-						  * * into buf */
-	    case 'h':				 /* push enemy target player
-						  * * * id into buf */
+      case 'p':        /* push player id into buf */
+      case 'g':        /* push friendly player id *
+              *
+              * * into buf */
+      case 'h':        /* push enemy target player
+              * * * id into buf */
 
-	      switch (c)
-		{
-		case 'p':
-		  j = &players[dist->tclose_j];
-		  break;
-		case 'g':
-		  j = &players[dist->tclose_fr];
-		  break;
-		case 'h':
-		  j = &players[dist->tclose_en];
-		  break;
-		case 'P':
-		  j = &players[dist->close_j];
-		  break;
-		case 'G':
-		  j = &players[dist->close_fr];
-		  break;
-		default:
-		  j = &players[dist->close_en];
-		  break;
-		}
-	      liteflag = (F_beeplite_flags & (LITE_PLAYERS_MAP | LITE_PLAYERS_LOCAL));
-	      liteplayer(j);
-	      break;
+        switch (c)
+    {
+    case 'p':
+      j = &players[dist->tclose_j];
+      break;
+    case 'g':
+      j = &players[dist->tclose_fr];
+      break;
+    case 'h':
+      j = &players[dist->tclose_en];
+      break;
+    case 'P':
+      j = &players[dist->close_j];
+      break;
+    case 'G':
+      j = &players[dist->close_fr];
+      break;
+    default:
+      j = &players[dist->close_en];
+      break;
+    }
+        liteflag = (F_beeplite_flags & (LITE_PLAYERS_MAP | LITE_PLAYERS_LOCAL));
+        liteplayer(j);
+        break;
 
-	    case 'B':				 /* highlites planet nearest
-						  * * * sender */
-	    case 'b':
-	      l = &planets[dist->close_pl];
-	      if (F_beeplite_flags & LITE_PLANETS)
-		liteplanet(l);
-	      break;
-	    case 'L':				 /* highlites planet nearest
-						  * * * pointer */
-	    case 'l':
-	      l = &planets[dist->tclose_pl];
-	      if (F_beeplite_flags & LITE_PLANETS)
-		liteplanet(l);
-	      break;
-	    case 'U':				 /* highlites enemy nearest * 
-						  * 
-						  * * pointer */
-	    case 'u':
-	      j = &players[dist->tclose_en];
-	      liteflag = (F_beeplite_flags & (LITE_PLAYERS_MAP | LITE_PLAYERS_LOCAL));
-	      liteplayer(j);
-	      break;
-	    case 'c':				 /* highlites sender */
-	    case 'I':
-	    case 'i':
-	      liteflag = (F_beeplite_flags & (LITE_PLAYERS_MAP | LITE_PLAYERS_LOCAL));
-	      liteplayer(sender);
-	      break;
-	    case 'M':				 /* highlites me */
-	    case 'm':
-	      if (F_beeplite_flags & LITE_SELF)
-		{
-		  liteflag = (LITE_PLAYERS_MAP | LITE_PLAYERS_LOCAL);
-		  liteplayer(me);
-		}
-	      break;
-	    case '0':
+      case 'B':        /* highlites planet nearest
+              * * * sender */
+      case 'b':
+        l = &planets[dist->close_pl];
+        if (F_beeplite_flags & LITE_PLANETS)
+    liteplanet(l);
+        break;
+      case 'L':        /* highlites planet nearest
+              * * * pointer */
+      case 'l':
+        l = &planets[dist->tclose_pl];
+        if (F_beeplite_flags & LITE_PLANETS)
+    liteplanet(l);
+        break;
+      case 'U':        /* highlites enemy nearest *
+              *
+              * * pointer */
+      case 'u':
+        j = &players[dist->tclose_en];
+        liteflag = (F_beeplite_flags & (LITE_PLAYERS_MAP | LITE_PLAYERS_LOCAL));
+        liteplayer(j);
+        break;
+      case 'c':        /* highlites sender */
+      case 'I':
+      case 'i':
+        liteflag = (F_beeplite_flags & (LITE_PLAYERS_MAP | LITE_PLAYERS_LOCAL));
+        liteplayer(sender);
+        break;
+      case 'M':        /* highlites me */
+      case 'm':
+        if (F_beeplite_flags & LITE_SELF)
+    {
+      liteflag = (LITE_PLAYERS_MAP | LITE_PLAYERS_LOCAL);
+      liteplayer(me);
+    }
+        break;
+      case '0':
 
-	      if (F_beeplite_flags & LITE_SOUNDS)
-		{
-
-#ifdef SOUND
-		  if (sound_toggle)
-		    Play_Sound(MESSAGE_SOUND);
-		  else
-#endif
-
-		    W_Beep();
-		}
-	      break;
+        if (F_beeplite_flags & LITE_SOUNDS)
+    {
 
 #ifdef SOUND
-	    case '1':
-	      if (F_beeplite_flags & LITE_SOUNDS)
-		Play_Sound(MESSAGE1_SOUND);
-	      break;
-	    case '2':
-	      if (F_beeplite_flags & LITE_SOUNDS)
-		Play_Sound(MESSAGE2_SOUND);
-	      break;
-	    case '3':
-	      if (F_beeplite_flags & LITE_SOUNDS)
-		Play_Sound(MESSAGE3_SOUND);
-	      break;
-	    case '4':
-	      if (F_beeplite_flags & LITE_SOUNDS)
-		Play_Sound(MESSAGE4_SOUND);
-	      break;
-	    case '5':
-	      if (F_beeplite_flags & LITE_SOUNDS)
-		Play_Sound(MESSAGE5_SOUND);
-	      break;
-	    case '6':
-	      if (F_beeplite_flags & LITE_SOUNDS)
-		Play_Sound(MESSAGE6_SOUND);
-	      break;
-	    case '7':
-	      if (F_beeplite_flags & LITE_SOUNDS)
-		Play_Sound(MESSAGE7_SOUND);
-	      break;
-	    case '8':
-	      if (F_beeplite_flags & LITE_SOUNDS)
-		Play_Sound(MESSAGE8_SOUND);
-	      break;
-	    case '9':
-	      if (F_beeplite_flags & LITE_SOUNDS)
-		Play_Sound(MESSAGE9_SOUND);
-	      break;
-#endif
-
-	      /* Text between:  /|    |   will be displayed with TTS */
-	    case '|':
-	      if (F_beeplite_flags & LITE_TTS)
-		{
-		  for (tts_len = 0; (*pm != '|' && tts_len < tts_max_len); tts_len++)
-		    lastIn[tts_len] = *pm++;
-		  lastIn[tts_len] = '\0';
-		  tts_width = W_TTSTextWidth(lastIn, tts_len);
-		  tts_timer = tts_time;
-		}
-	      break;
-
-	    default:
-	      /* try to continue * bad macro character is skipped entirely, *
-	       * * * the message will be parsed without whatever argument has
-	       * * * occurred. - jn */
-	      warning("Bad Macro character in distress!");
-	      fprintf(stderr, "Unrecognizable special character in distress pass 1: %c\n", *(pm - 1));
-	      break;
-	    }
-	}
+      if (sound_toggle)
+        Play_Sound(MESSAGE_SOUND);
       else
-	{
-	  pm++;
-	}
+#endif
+
+        W_Beep();
+    }
+        break;
+
+#ifdef SOUND
+      case '1':
+        if (F_beeplite_flags & LITE_SOUNDS)
+    Play_Sound(MESSAGE1_SOUND);
+        break;
+      case '2':
+        if (F_beeplite_flags & LITE_SOUNDS)
+    Play_Sound(MESSAGE2_SOUND);
+        break;
+      case '3':
+        if (F_beeplite_flags & LITE_SOUNDS)
+    Play_Sound(MESSAGE3_SOUND);
+        break;
+      case '4':
+        if (F_beeplite_flags & LITE_SOUNDS)
+    Play_Sound(MESSAGE4_SOUND);
+        break;
+      case '5':
+        if (F_beeplite_flags & LITE_SOUNDS)
+    Play_Sound(MESSAGE5_SOUND);
+        break;
+      case '6':
+        if (F_beeplite_flags & LITE_SOUNDS)
+    Play_Sound(MESSAGE6_SOUND);
+        break;
+      case '7':
+        if (F_beeplite_flags & LITE_SOUNDS)
+    Play_Sound(MESSAGE7_SOUND);
+        break;
+      case '8':
+        if (F_beeplite_flags & LITE_SOUNDS)
+    Play_Sound(MESSAGE8_SOUND);
+        break;
+      case '9':
+        if (F_beeplite_flags & LITE_SOUNDS)
+    Play_Sound(MESSAGE9_SOUND);
+        break;
+#endif
+
+        /* Text between:  /|    |   will be displayed with TTS */
+      case '|':
+        if (F_beeplite_flags & LITE_TTS)
+    {
+      for (tts_len = 0; (*pm != '|' && tts_len < tts_max_len); tts_len++)
+        lastIn[tts_len] = *pm++;
+      lastIn[tts_len] = '\0';
+      tts_width = W_TTSTextWidth(lastIn, tts_len);
+      tts_timer = tts_time;
+    }
+        break;
+
+      default:
+        /* try to continue * bad macro character is skipped entirely, *
+         * * * the message will be parsed without whatever argument has
+         * * * occurred. - jn */
+        warning("Bad Macro character in distress!");
+        fprintf(stderr, "Unrecognizable special character in distress pass 1: %c\n", *(pm - 1));
+        break;
+      }
+  }
+      else
+  {
+    pm++;
+  }
 
     }
 

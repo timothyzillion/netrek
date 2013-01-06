@@ -1,4 +1,3 @@
-
 /****************************************************************************/
 /**  File:  war.c                                                          **/
 /**                                                                        **/
@@ -140,13 +139,13 @@ void
   else
     {
       if (me->p_team == enemyteam)
-	{
-	  warning("You can't declare war on your own team, fool.");
-	}
+  {
+    warning("You can't declare war on your own team, fool.");
+  }
       else
-	{
-	  newhostile ^= enemyteam;
-	}
+  {
+    newhostile ^= enemyteam;
+  }
     }
   warrefresh();
 }

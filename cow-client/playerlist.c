@@ -1,15 +1,13 @@
 
-
-
 /* playerlist.c
- * 
+ *
  * Fairly substantial re-write to do variable player lists: Sept 93 DRG Major
  * rewrite for demand driven updates -> huge speedup: Oct. 94 [007] Major
  * rewrite to fix some bugs and speed things up     : Jan. 95 [Zork]
- * 
- * 
+ *
+ *
  * TODO:
- * 
+ *
  * Sort observers separatly: opserver if (pl->p_flags & PFOBSERV) is true.
  *
  * $Log: playerlist.c,v $
@@ -32,8 +30,8 @@
 #include "playerlist.h"
 
 
-#define MaxPlistField 18			 /* The width of the longest
-						  * * * possible plist field */
+#define MaxPlistField 18       /* The width of the longest
+              * * * possible plist field */
 
 #define IsEmpty(x) (!x)
 #define IsNotEmpty(x) (x)
@@ -72,7 +70,7 @@
 
 /*
  * Global Variables
- * 
+ *
  * partitionPlist    : Separate the goodies from baddies in the sorted list?
  * plistCustomLayout : The value of `playerlist' in the defaults file.
  * plistReorder      : True only if the order of the playerlist is out of date.
@@ -81,7 +79,7 @@
  * sortMyTeamFirst   : Should my team go first or second in the sorted list?
  * sortPlayers       : Should the player list be sorted?
  * updatePlayer[plr] : The playerlist entry for "plr" is old.
- * 
+ *
  * plistHasHostile   : True if "Hostile" is a field in the current list.
  * plistHasSpeed     : True if "Speed" is true in the current playerlist.
  */
@@ -104,7 +102,7 @@ int     plistHasSpeed = FALSE;
 
 /*
  * Local Variables
- * 
+ *
  * plistLayout       : The fields in the current playerlist.
  * plistPos[plr]     : The player list row assigned to each player.
  * plistWidth        : The width of the playerlist.
@@ -147,7 +145,7 @@ void    InitPlayerList()
     {
       fputs(
        "Warning: `playerListStyle' set to 0 but `playerlist' is not set.\n",
-	     stderr);
+       stderr);
       fputs("\tPlease correct your defaults (.xtrekrc) file.\n", stderr);
       plistStyle = -1;
     }
@@ -167,23 +165,23 @@ void    InitPlayerList()
       /* Backward compatibility */
 
       if (IsNotEmpty(plistCustomLayout))
-	{
-	  plistStyle = 0;
-	}
+  {
+    plistStyle = 0;
+  }
       else if (booleanDefault("newPlist", FALSE))
-	{
-	  plistStyle = 2;
-	}
+  {
+    plistStyle = 2;
+  }
       else
-	/* use the old playerlist */
-	{
-	  plistStyle = 1;
-	}
+  /* use the old playerlist */
+  {
+    plistStyle = 1;
+  }
     }
 
 
-  /* Read the partitionPlist flag to tell us whether to break up the player * 
-   * 
+  /* Read the partitionPlist flag to tell us whether to break up the player *
+   *
    * * list with blank lines. */
 
   partitionPlist = booleanDefault("partitionPlist", partitionPlist);
@@ -228,10 +226,10 @@ int     PlistMaxWidth()
 void    RedrawPlayerList()
 /* Completly redraw the player list, rather than incrementally updating the
  * list as with UpdatePlayerList().
- * 
+ *
  * This function should be called if the plistStyle changes or if the
  * window has just been revealed.
- * 
+ *
  * This function is called automatically from InitPlayerList. */
 {
   int     i;
@@ -244,29 +242,29 @@ void    RedrawPlayerList()
 
   switch (plistStyle)
     {
-    case 0:					 /* Custom */
-      if (IsEmpty(plistCustomLayout))		 /* this is chacked for in */
-	{					 /* InitPlayerList */
-	  plistLayout = "";
-	  printf("??? empty plistLayout? This can't happen!\n");
-	}
+    case 0:          /* Custom */
+      if (IsEmpty(plistCustomLayout))    /* this is chacked for in */
+  {          /* InitPlayerList */
+    plistLayout = "";
+    printf("??? empty plistLayout? This can't happen!\n");
+  }
       else
-	plistLayout = plistCustomLayout;
+  plistLayout = plistCustomLayout;
       break;
 
-    case 1:					 /* Old Style */
+    case 1:          /* Old Style */
       plistLayout = "nTRNKWLr O D d ";
       break;
 
-    case 2:					 /* COW Style */
+    case 2:          /* COW Style */
       plistLayout = "nTR N  K lrSd";
       break;
 
-    case 3:					 /* Kill Watch Style */
+    case 3:          /* Kill Watch Style */
       plistLayout = "nTK  RNlr Sd";
       break;
 
-    case 4:					 /* BRMH Style */
+    case 4:          /* BRMH Style */
       plistLayout = "nTR N  K l M";
       break;
 
@@ -293,10 +291,10 @@ void    RedrawPlayerList()
 
 void    UpdatePlistFn()
 /* Update the player list.
- * 
+ *
  * This function should usually be called through the UpdatePlayerList() macro
  * (see playerlist.h).
- * 
+ *
  * This function works incrimentally.  If a dramatic change has taken place
  * (i.e. if plistStyle changes) then RedrawPlayerList() should be called
  * instead. */
@@ -316,30 +314,30 @@ void    UpdatePlistFn()
       update = updatePlayer - 1;
 
       for (;;)
-	{
-	  /* Find the changed player as quickly as possible. */
+  {
+    /* Find the changed player as quickly as possible. */
 
-	  do
-	    ++update;
-	  while (!(*update));
-
-
-	  /* Is this a valid player?  Remember updatePlayer[MAXPLAYER] is * * 
-	   * always TRUE to make the above loop more efficient.  */
-
-	  count = update - updatePlayer;
-	  if (count == MAXPLAYER)
-	    break;
-
-	  *update = FALSE;
+    do
+      ++update;
+    while (!(*update));
 
 
-	  /* We should not get updates for free players any more, but just *
-	   * * incase a packet arrives late... */
+    /* Is this a valid player?  Remember updatePlayer[MAXPLAYER] is * *
+     * always TRUE to make the above loop more efficient.  */
 
-	  if (players[count].p_status != PFREE)
-	    PlistLine(players + count, plistPos[count]);
-	}
+    count = update - updatePlayer;
+    if (count == MAXPLAYER)
+      break;
+
+    *update = FALSE;
+
+
+    /* We should not get updates for free players any more, but just *
+     * * incase a packet arrives late... */
+
+    if (players[count].p_status != PFREE)
+      PlistLine(players + count, plistPos[count]);
+  }
     }
   else
     {
@@ -349,9 +347,9 @@ void    UpdatePlistFn()
       plistReorder = FALSE;
 
       if (sortPlayers)
-	WriteSortedPlist();
+  WriteSortedPlist();
       else
-	WriteUnsortedPlist();
+  WriteUnsortedPlist();
     }
 }
 
@@ -377,7 +375,7 @@ static void WriteSortedPlist()
       myTeam = remap[me->p_team];
 
       for (pos = plistPos + MAXPLAYER - 1; pos >= plistPos; --pos)
-	*pos = -1;
+  *pos = -1;
     }
 
 
@@ -398,53 +396,53 @@ static void WriteSortedPlist()
   for (current = players + MAXPLAYER - 1; current >= players; --current)
     {
       if (current->p_status != PFREE)
-	++teamPos[remap[current->p_team]];
+  ++teamPos[remap[current->p_team]];
     }
 
 
   /* Find the row after the last player in each team. */
 
-  last = 1;					 /* The title is line zero */
+  last = 1;          /* The title is line zero */
 
-  if (sortMyTeamFirst)				 /* My team comes at the top */
+  if (sortMyTeamFirst)         /* My team comes at the top */
     {
       last += teamPos[myTeam];
       teamPos[myTeam] = last;
 
       if (partitionPlist)
-	{
-	  if (blankLine != last)
-	    {
-	      blankLine = last;
-	      W_ClearArea(playerw, 0, last, plistWidth, 1);
-	    }
+  {
+    if (blankLine != last)
+      {
+        blankLine = last;
+        W_ClearArea(playerw, 0, last, plistWidth, 1);
+      }
 
-	  ++last;
-	}
+    ++last;
+  }
     }
 
   for (i = 1; i <= NUMTEAM; ++i)
     {
       if (i != myTeam)
-	{
-	  last += teamPos[i];
-	  teamPos[i] = last;
-	}
+  {
+    last += teamPos[i];
+    teamPos[i] = last;
+  }
     }
 
-  if (!sortMyTeamFirst)				 /* My team comes below the * 
-						  * others */
+  if (!sortMyTeamFirst)        /* My team comes below the *
+              * others */
     {
       if (partitionPlist)
-	{
-	  if (blankLine != last)
-	    {
-	      blankLine = last;
-	      W_ClearArea(playerw, 0, last, plistWidth, 1);
-	    }
+  {
+    if (blankLine != last)
+      {
+        blankLine = last;
+        W_ClearArea(playerw, 0, last, plistWidth, 1);
+      }
 
-	  ++last;
-	}
+    ++last;
+  }
 
       last += teamPos[myTeam];
       teamPos[myTeam] = last;
@@ -455,15 +453,15 @@ static void WriteSortedPlist()
       /* Separate the goodies from the arriving players. */
 
       if (partitionPlist)
-	{
-	  if (blankLine2 != last)
-	    {
-	      blankLine2 = last;
-	      W_ClearArea(playerw, 0, last, plistWidth, 1);
-	    }
+  {
+    if (blankLine2 != last)
+      {
+        blankLine2 = last;
+        W_ClearArea(playerw, 0, last, plistWidth, 1);
+      }
 
-	  ++last;
-	}
+    ++last;
+  }
 
       last += teamPos[NOBODY];
       teamPos[NOBODY] = last;
@@ -487,15 +485,15 @@ static void WriteSortedPlist()
        --i, --current)
     {
       if (current->p_status == PFREE)
-	{
-	  updatePlayer[i] = FALSE;
-	  continue;
-	}
+  {
+    updatePlayer[i] = FALSE;
+    continue;
+  }
 
       row = --(teamPos[remap[current->p_team]]);
 
       if ((!updatePlayer[i]) && plistPos[i] == row)
-	continue;
+  continue;
 
       plistPos[i] = row;
       updatePlayer[i] = FALSE;
@@ -518,7 +516,7 @@ static void WriteUnsortedPlist(void)
   static int myTeam = -1;
 
 
-  /* 
+  /*
    *  If I have changed team, redraw everything (to get the colors
    *  right).
    */
@@ -528,11 +526,11 @@ static void WriteUnsortedPlist(void)
       myTeam = remap[me->p_team];
 
       for (update = updatePlayer + MAXPLAYER
-	   ; update >= updatePlayer
-	   ; --update)
-	{
-	  *update = TRUE;
-	}
+     ; update >= updatePlayer
+     ; --update)
+  {
+    *update = TRUE;
+  }
     }
 
 
@@ -543,7 +541,7 @@ static void WriteUnsortedPlist(void)
       /* Find the changed player as quickly as possible. */
 
       do
-	++update;
+  ++update;
       while (!(*update));
 
 
@@ -552,7 +550,7 @@ static void WriteUnsortedPlist(void)
 
       count = update - updatePlayer;
       if (count == MAXPLAYER)
-	break;
+  break;
 
 
       /* Update the player. */
@@ -562,9 +560,9 @@ static void WriteUnsortedPlist(void)
       plistPos[count] = pos;
 
       if (players[count].p_status != PFREE)
-	PlistLine(players + count, pos);
+  PlistLine(players + count, pos);
       else
-	W_ClearArea(playerw, 0, pos, plistWidth, 1);
+  W_ClearArea(playerw, 0, pos, plistWidth, 1);
     }
 }
 
@@ -573,9 +571,9 @@ static void WriteUnsortedPlist(void)
 static int PlistHeader(char *layout, int doWrite)
 /* Analyse the heading (field names) for a player list, and set the
  * plistHasSpeed and plistHasHostile flags.
- * 
+ *
  * If doWrite is TRUE, write the heading to the list.
- * 
+ *
  * RETURN the width of the player list. */
 {
   char    header[BUFSIZ];
@@ -589,137 +587,137 @@ static int PlistHeader(char *layout, int doWrite)
   for (; IsNotZero(*layout); ++layout)
     {
       if (num + MaxPlistField >= BUFSIZ)
-	{
-	  /* Assume that we have tested the standard layouts so that only * * 
-	   * custom layouts can be too long. *  * If a standard layout is *
-	   * found to be too long then some compiler's * code will dump core
-	   * * here because of an attempt to write over a * constant string. */
+  {
+    /* Assume that we have tested the standard layouts so that only * *
+     * custom layouts can be too long. *  * If a standard layout is *
+     * found to be too long then some compiler's * code will dump core
+     * * here because of an attempt to write over a * constant string. */
 
-	  fprintf(stderr, "Playerlist truncated to fit buffer.\n");
-	  layout = '\0';
-	  break;
-	}
+    fprintf(stderr, "Playerlist truncated to fit buffer.\n");
+    layout = '\0';
+    break;
+  }
 
       switch (*layout)
-	{
-	case 'n':				 /* Ship Number */
-	  STRNCPY(&header[num], " No", 3);
-	  num += 3;
-	  break;
-	case 'T':				 /* Ship Type */
-	  STRNCPY(&header[num], " Ty", 3);
-	  num += 3;
-	  break;
-	case 'C':				 /* Curt (short) Rank */
-	  STRNCPY(&header[num], " Rank", 5);
-	  num += 5;
-	  break;
-	case 'R':				 /* Rank */
-	  STRNCPY(&header[num], " Rank      ", 11);
-	  num += 11;
-	  break;
-	case 'N':				 /* Name */
-	  STRNCPY(&header[num], " Name            ", 17);
-	  num += 17;
-	  break;
-	case 'K':				 /* Kills */
-	  STRNCPY(&header[num], " Kills", 6);
-	  num += 6;
-	  break;
-	case 'l':				 /* Login Name */
-	  STRNCPY(&header[num], " Login           ", 17);
-	  num += 17;
-	  break;
-	case 'O':				 /* Offense */
-	  STRNCPY(&header[num], " Offse", 6);
-	  num += 6;
-	  break;
-	case 'W':				 /* Wins */
-	  STRNCPY(&header[num], "  Wins", 6);
-	  num += 6;
-	  break;
-	case 'D':				 /* Defense */
-	  STRNCPY(&header[num], " Defse", 6);
-	  num += 6;
-	  break;
-	case 'L':				 /* Losses */
-	  STRNCPY(&header[num], "  Loss", 6);
-	  num += 6;
-	  break;
-	case 'S':				 /* Total Rating (stats) */
-	  STRNCPY(&header[num], " Stats", 6);
-	  num += 6;
-	  break;
-	case 'r':				 /* Ratio */
-	  STRNCPY(&header[num], " Ratio", 6);
-	  num += 6;
-	  break;
-	case 'd':				 /* Damage Inflicted (DI) */
-	  STRNCPY(&header[num], "      DI", 8);
-	  num += 8;
-	  break;
-	case ' ':				 /* White Space */
-	  header[num] = ' ';
-	  num += 1;
-	  break;
+  {
+  case 'n':        /* Ship Number */
+    STRNCPY(&header[num], " No", 3);
+    num += 3;
+    break;
+  case 'T':        /* Ship Type */
+    STRNCPY(&header[num], " Ty", 3);
+    num += 3;
+    break;
+  case 'C':        /* Curt (short) Rank */
+    STRNCPY(&header[num], " Rank", 5);
+    num += 5;
+    break;
+  case 'R':        /* Rank */
+    STRNCPY(&header[num], " Rank      ", 11);
+    num += 11;
+    break;
+  case 'N':        /* Name */
+    STRNCPY(&header[num], " Name            ", 17);
+    num += 17;
+    break;
+  case 'K':        /* Kills */
+    STRNCPY(&header[num], " Kills", 6);
+    num += 6;
+    break;
+  case 'l':        /* Login Name */
+    STRNCPY(&header[num], " Login           ", 17);
+    num += 17;
+    break;
+  case 'O':        /* Offense */
+    STRNCPY(&header[num], " Offse", 6);
+    num += 6;
+    break;
+  case 'W':        /* Wins */
+    STRNCPY(&header[num], "  Wins", 6);
+    num += 6;
+    break;
+  case 'D':        /* Defense */
+    STRNCPY(&header[num], " Defse", 6);
+    num += 6;
+    break;
+  case 'L':        /* Losses */
+    STRNCPY(&header[num], "  Loss", 6);
+    num += 6;
+    break;
+  case 'S':        /* Total Rating (stats) */
+    STRNCPY(&header[num], " Stats", 6);
+    num += 6;
+    break;
+  case 'r':        /* Ratio */
+    STRNCPY(&header[num], " Ratio", 6);
+    num += 6;
+    break;
+  case 'd':        /* Damage Inflicted (DI) */
+    STRNCPY(&header[num], "      DI", 8);
+    num += 8;
+    break;
+  case ' ':        /* White Space */
+    header[num] = ' ';
+    num += 1;
+    break;
 
 #ifdef PLIST1
-	case 'B':				 /* Bombing */
-	  STRNCPY(&header[num], " Bmbng", 6);
-	  num += 6;
-	  break;
-	case 'b':				 /* Armies Bombed */
-	  STRNCPY(&header[num], " Bmbed", 6);
-	  num += 6;
-	  break;
-	case 'P':				 /* Planets */
-	  STRNCPY(&header[num], " Plnts", 6);
-	  num += 6;
-	  break;
-	case 'p':				 /* Planets Taken */
-	  STRNCPY(&header[num], " Plnts", 6);
-	  num += 6;
-	  break;
-	case 'M':				 /* Display, Host Machine */
-	  STRNCPY(&header[num], " Host Machine    ", 17);
-	  num += 17;
-	  break;
-	case 'H':				 /* Hours Played */
-	  STRNCPY(&header[num], " Hours ", 7);
-	  num += 7;
-	  break;
-	case 'k':				 /* Max Kills */
-	  STRNCPY(&header[num], " Max K", 6);
-	  num += 6;
-	  break;
-	case 'V':				 /* Kills per hour */
-	  STRNCPY(&header[num], "   KPH", 6);
-	  num += 6;
-	  break;
-	case 'v':				 /* Deaths per hour */
-	  STRNCPY(&header[num], "   DPH", 6);
-	  num += 6;
-	  break;
+  case 'B':        /* Bombing */
+    STRNCPY(&header[num], " Bmbng", 6);
+    num += 6;
+    break;
+  case 'b':        /* Armies Bombed */
+    STRNCPY(&header[num], " Bmbed", 6);
+    num += 6;
+    break;
+  case 'P':        /* Planets */
+    STRNCPY(&header[num], " Plnts", 6);
+    num += 6;
+    break;
+  case 'p':        /* Planets Taken */
+    STRNCPY(&header[num], " Plnts", 6);
+    num += 6;
+    break;
+  case 'M':        /* Display, Host Machine */
+    STRNCPY(&header[num], " Host Machine    ", 17);
+    num += 17;
+    break;
+  case 'H':        /* Hours Played */
+    STRNCPY(&header[num], " Hours ", 7);
+    num += 7;
+    break;
+  case 'k':        /* Max Kills */
+    STRNCPY(&header[num], " Max K", 6);
+    num += 6;
+    break;
+  case 'V':        /* Kills per hour */
+    STRNCPY(&header[num], "   KPH", 6);
+    num += 6;
+    break;
+  case 'v':        /* Deaths per hour */
+    STRNCPY(&header[num], "   DPH", 6);
+    num += 6;
+    break;
 #endif
 
 #ifdef PLIST2
-	case 'w':				 /* War staus */
-	  STRNCPY(&header[num], " War Stat", 9);
-	  num += 9;
-	  plistHasHostile = TRUE;
-	  break;
-	case 's':				 /* Speed */
-	  STRNCPY(&header[num], " Sp", 3);
-	  num += 3;
-	  plistHasSpeed = TRUE;
-	  break;
+  case 'w':        /* War staus */
+    STRNCPY(&header[num], " War Stat", 9);
+    num += 9;
+    plistHasHostile = TRUE;
+    break;
+  case 's':        /* Speed */
+    STRNCPY(&header[num], " Sp", 3);
+    num += 3;
+    plistHasSpeed = TRUE;
+    break;
 #endif
 
-	default:
-	  fprintf(stderr,
-		  "%c is not an option for the playerlist\n", *layout);
-	  break;
-	}
+  default:
+    fprintf(stderr,
+      "%c is not an option for the playerlist\n", *layout);
+    break;
+  }
     }
 
   header[num] = '\0';
@@ -739,7 +737,7 @@ static void PlistLine(struct player *j, int pos)
   char   *buffPoint;
   int     kills, losses, my_ticks;
   float   pRating, oRating, dRating, bRating, Ratings;
-  float   KillsPerHour, LossesPerHour;		 /* Added 12/27/93 ATH */
+  float   KillsPerHour, LossesPerHour;     /* Added 12/27/93 ATH */
   double  ratio, max_kills;
 
   if (j->p_ship.s_type == STARBASE)
@@ -749,15 +747,15 @@ static void PlistLine(struct player *j, int pos)
       max_kills = j->p_stats.st_sbmaxkills;
 
       if (SBhours)
-	my_ticks = j->p_stats.st_sbticks;
+  my_ticks = j->p_stats.st_sbticks;
       else
-	my_ticks = j->p_stats.st_tticks;
+  my_ticks = j->p_stats.st_tticks;
 
       KillsPerHour = (float) (my_ticks == 0) ? 0.0 :
-	  (float) kills *36000.0 / (float) my_ticks;
+    (float) kills *36000.0 / (float) my_ticks;
 
       LossesPerHour = (float) (my_ticks == 0) ? 0.0 :
-	  (float) losses *36000.0 / (float) my_ticks;
+    (float) losses *36000.0 / (float) my_ticks;
     }
   else
     {
@@ -766,9 +764,9 @@ static void PlistLine(struct player *j, int pos)
       max_kills = j->p_stats.st_maxkills;
       my_ticks = j->p_stats.st_tticks;
       KillsPerHour = (float) (my_ticks == 0) ? 0.0 :
-	  (float) j->p_stats.st_tkills * 36000.0 / (float) my_ticks;
+    (float) j->p_stats.st_tkills * 36000.0 / (float) my_ticks;
       LossesPerHour = (float) (my_ticks == 0) ? 0.0 :
-	  (float) j->p_stats.st_tlosses * 36000.0 / (float) my_ticks;
+    (float) j->p_stats.st_tlosses * 36000.0 / (float) my_ticks;
     }
 
   if (losses == 0)
@@ -789,11 +787,11 @@ static void PlistLine(struct player *j, int pos)
       Ratings = oRating + pRating + bRating;
       dRating = defenseRating(j);
       if ((j->p_ship.s_type == STARBASE) && (SBhours))
-	{					 /* If SB, show KPH for * *
-						  * offense etc. */
-	  oRating = KillsPerHour;
-	  dRating = LossesPerHour;
-	}
+  {          /* If SB, show KPH for * *
+              * offense etc. */
+    oRating = KillsPerHour;
+    dRating = LossesPerHour;
+  }
     }
 
 
@@ -804,176 +802,176 @@ static void PlistLine(struct player *j, int pos)
       *(buffPoint++) = ' ';
 
       switch (*ptr)
-	{
-	case 'n':				 /* Ship Number */
-	  if (j->p_status != PALIVE)
-	    {
-	      *(buffPoint++) = ' ';
-	      *(buffPoint++) = shipnos[j->p_no];
-	    }
-	  else
-	    {
-	      *(buffPoint++) = teamlet[j->p_team];
-	      *(buffPoint++) = shipnos[j->p_no];
-	    }
+  {
+  case 'n':        /* Ship Number */
+    if (j->p_status != PALIVE)
+      {
+        *(buffPoint++) = ' ';
+        *(buffPoint++) = shipnos[j->p_no];
+      }
+    else
+      {
+        *(buffPoint++) = teamlet[j->p_team];
+        *(buffPoint++) = shipnos[j->p_no];
+      }
 
-	  break;
+    break;
 
-	case 'T':				 /* Ship Type */
-	  if (j->p_status != PALIVE)
-	    {
-	      *(buffPoint++) = ' ';
-	      *(buffPoint++) = ' ';
-	    }
-	  else
-	    {
-	      *(buffPoint++) = my_classes[j->p_ship.s_type][0];
-	      *(buffPoint++) = my_classes[j->p_ship.s_type][1];
-	    }
+  case 'T':        /* Ship Type */
+    if (j->p_status != PALIVE)
+      {
+        *(buffPoint++) = ' ';
+        *(buffPoint++) = ' ';
+      }
+    else
+      {
+        *(buffPoint++) = my_classes[j->p_ship.s_type][0];
+        *(buffPoint++) = my_classes[j->p_ship.s_type][1];
+      }
 
-	  break;
+    break;
 
-	case 'C':				 /* Curt (short) Rank */
-	  format(buffPoint, ranks[j->p_stats.st_rank].cname, 4, 0);
-	  buffPoint += 4;
-	  break;
+  case 'C':        /* Curt (short) Rank */
+    format(buffPoint, ranks[j->p_stats.st_rank].cname, 4, 0);
+    buffPoint += 4;
+    break;
 
-	case 'R':				 /* Rank */
-	  format(buffPoint, ranks[j->p_stats.st_rank].name, 10, 0);
-	  buffPoint += 10;
-	  break;
+  case 'R':        /* Rank */
+    format(buffPoint, ranks[j->p_stats.st_rank].name, 10, 0);
+    buffPoint += 10;
+    break;
 
-	case 'N':				 /* Name */
-	  format(buffPoint, j->p_name, 16, 0);
-	  buffPoint += 16;
-	  break;
+  case 'N':        /* Name */
+    format(buffPoint, j->p_name, 16, 0);
+    buffPoint += 16;
+    break;
 
-	case 'K':				 /* Kills */
-	  if (j->p_kills > 100.0)
-	    /* Cheat a bit */
-	    ftoa(j->p_kills, buffPoint - 1, 0, 3, 2);
-	  else
-	    ftoa(j->p_kills, buffPoint, 0, 2, 2);
-	  buffPoint += 5;
-	  break;
+  case 'K':        /* Kills */
+    if (j->p_kills > 100.0)
+      /* Cheat a bit */
+      ftoa(j->p_kills, buffPoint - 1, 0, 3, 2);
+    else
+      ftoa(j->p_kills, buffPoint, 0, 2, 2);
+    buffPoint += 5;
+    break;
 
-	case 'l':				 /* Login Name */
-	  format(buffPoint, j->p_login, 16, 0);
-	  buffPoint += 16;
-	  break;
+  case 'l':        /* Login Name */
+    format(buffPoint, j->p_login, 16, 0);
+    buffPoint += 16;
+    break;
 
-	case 'O':				 /* Offense */
-	  ftoa(oRating, buffPoint, 0, 2, 2);
-	  buffPoint += 5;
-	  break;
+  case 'O':        /* Offense */
+    ftoa(oRating, buffPoint, 0, 2, 2);
+    buffPoint += 5;
+    break;
 
-	case 'W':				 /* Wins */
-	  itoapad(kills, buffPoint, 0, 5);
-	  buffPoint += 5;
-	  break;
+  case 'W':        /* Wins */
+    itoapad(kills, buffPoint, 0, 5);
+    buffPoint += 5;
+    break;
 
-	case 'D':				 /* Defense */
-	  ftoa(dRating, buffPoint, 0, 2, 2);
-	  buffPoint += 5;
-	  break;
+  case 'D':        /* Defense */
+    ftoa(dRating, buffPoint, 0, 2, 2);
+    buffPoint += 5;
+    break;
 
-	case 'L':				 /* Losses */
-	  itoapad(losses, buffPoint, 0, 5);
-	  buffPoint += 5;
-	  break;
+  case 'L':        /* Losses */
+    itoapad(losses, buffPoint, 0, 5);
+    buffPoint += 5;
+    break;
 
-	case 'S':				 /* Total Rating (stats) */
-	  ftoa(Ratings, buffPoint, 0, 2, 2);
-	  buffPoint += 5;
-	  break;
+  case 'S':        /* Total Rating (stats) */
+    ftoa(Ratings, buffPoint, 0, 2, 2);
+    buffPoint += 5;
+    break;
 
-	case 'r':				 /* Ratio */
-	  ftoa(ratio, buffPoint, 0, 2, 2);
-	  buffPoint += 5;
-	  break;
+  case 'r':        /* Ratio */
+    ftoa(ratio, buffPoint, 0, 2, 2);
+    buffPoint += 5;
+    break;
 
-	case 'd':				 /* Damage Inflicted (DI) */
-	  ftoa(Ratings * (j->p_stats.st_tticks / 36000.0),
-	       buffPoint, 0, 4, 2);
-	  buffPoint += 7;
-	  break;
+  case 'd':        /* Damage Inflicted (DI) */
+    ftoa(Ratings * (j->p_stats.st_tticks / 36000.0),
+         buffPoint, 0, 4, 2);
+    buffPoint += 7;
+    break;
 
-	case ' ':				 /* White Space */
-	  break;
+  case ' ':        /* White Space */
+    break;
 
 #ifdef PLIST1
-	case 'B':				 /* Bombing */
-	  ftoa(bRating, buffPoint, 0, 2, 2);
-	  buffPoint += 5;
-	  break;
+  case 'B':        /* Bombing */
+    ftoa(bRating, buffPoint, 0, 2, 2);
+    buffPoint += 5;
+    break;
 
-	case 'b':				 /* Armies Bombed */
-	  itoapad(j->p_stats.st_tarmsbomb + j->p_stats.st_armsbomb,
-		  buffPoint, 0, 5);
-	  buffPoint += 5;
-	  break;
+  case 'b':        /* Armies Bombed */
+    itoapad(j->p_stats.st_tarmsbomb + j->p_stats.st_armsbomb,
+      buffPoint, 0, 5);
+    buffPoint += 5;
+    break;
 
-	case 'P':				 /* Planets */
-	  ftoa(pRating, buffPoint, 0, 2, 2);
-	  buffPoint += 5;
-	  break;
+  case 'P':        /* Planets */
+    ftoa(pRating, buffPoint, 0, 2, 2);
+    buffPoint += 5;
+    break;
 
-	case 'p':				 /* Planets Taken */
-	  itoapad(j->p_stats.st_tplanets + j->p_stats.st_planets,
-		  buffPoint, 0, 5);
-	  buffPoint += 5;
-	  break;
+  case 'p':        /* Planets Taken */
+    itoapad(j->p_stats.st_tplanets + j->p_stats.st_planets,
+      buffPoint, 0, 5);
+    buffPoint += 5;
+    break;
 
-	case 'M':				 /* Display, Host Machine */
-	  format(buffPoint, j->p_monitor, 16, 0);
-	  buffPoint += 16;
-	  break;
+  case 'M':        /* Display, Host Machine */
+    format(buffPoint, j->p_monitor, 16, 0);
+    buffPoint += 16;
+    break;
 
-	case 'H':				 /* Hours Played */
-	  ftoa(my_ticks / 36000.0, buffPoint, 0, 3, 2);
-	  buffPoint += 6;
-	  break;
+  case 'H':        /* Hours Played */
+    ftoa(my_ticks / 36000.0, buffPoint, 0, 3, 2);
+    buffPoint += 6;
+    break;
 
-	case 'k':				 /* Max Kills  */
-	  ftoa(max_kills, buffPoint, 0, 2, 2);
-	  buffPoint += 5;
-	  break;
+  case 'k':        /* Max Kills  */
+    ftoa(max_kills, buffPoint, 0, 2, 2);
+    buffPoint += 5;
+    break;
 
-	case 'V':				 /* Kills Per Hour  */
-	  ftoa(KillsPerHour, buffPoint, 0, 3, 1);
-	  buffPoint += 5;
-	  break;
+  case 'V':        /* Kills Per Hour  */
+    ftoa(KillsPerHour, buffPoint, 0, 3, 1);
+    buffPoint += 5;
+    break;
 
-	case 'v':				 /* Deaths Per Hour  */
-	  ftoa(LossesPerHour, buffPoint, 0, 3, 1);
-	  buffPoint += 5;
-	  break;
+  case 'v':        /* Deaths Per Hour  */
+    ftoa(LossesPerHour, buffPoint, 0, 3, 1);
+    buffPoint += 5;
+    break;
 #endif
 
 #ifdef PLIST2
-	case 'w':				 /* War staus */
-	  if (j->p_swar & me->p_team)
-	    STRNCPY(buffPoint, "WAR     ", 8);
-	  else if (j->p_hostile & me->p_team)
-	    STRNCPY(buffPoint, "HOSTILE ", 8);
-	  else
-	    STRNCPY(buffPoint, "PEACEFUL", 8);
+  case 'w':        /* War staus */
+    if (j->p_swar & me->p_team)
+      STRNCPY(buffPoint, "WAR     ", 8);
+    else if (j->p_hostile & me->p_team)
+      STRNCPY(buffPoint, "HOSTILE ", 8);
+    else
+      STRNCPY(buffPoint, "PEACEFUL", 8);
 
-	  buffPoint += 8;
-	  break;
+    buffPoint += 8;
+    break;
 
-	case 's':				 /* Speed */
-	  itoapad(j->p_speed, buffPoint, 0, 2);
-	  buffPoint += 2;
-	  break;
+  case 's':        /* Speed */
+    itoapad(j->p_speed, buffPoint, 0, 2);
+    buffPoint += 2;
+    break;
 #endif
 
-	default:
-	  break;
-	}
+  default:
+    break;
+  }
     }
 
   *buffPoint = '\0';
   W_WriteText(playerw, 0, pos, playerColor(j),
-	      buf, buffPoint - buf, shipFont(j));
+        buf, buffPoint - buf, shipFont(j));
 }

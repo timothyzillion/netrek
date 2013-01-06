@@ -1,4 +1,3 @@
-
 /* map.c
  *
  * Functions to maintain the galactic map.  This file is a merger
@@ -39,10 +38,10 @@ extern int W_DrawSprite(void *, int, int, int);
 
 /*
  *  Local Constants:
- *  
+ *
  *  DETAIL              -- Size of the redraw array.
  *  SIZE                -- Scale of the rough planet map "roughMap".
- *  
+ *
  *  Note: Detail *MUST* be a factor of GWIDTH.
  */
 
@@ -52,7 +51,7 @@ extern int W_DrawSprite(void *, int, int, int);
 
 /*
  *  Local Variables:
- *  
+ *
  *  roughMap[x][y]      -- Rough map of planets to help find overlaps.
  *  roughMap2[x][y]     -- Secondary rought map, to help with overlap.
  *  initialized         -- Has initPlanets() been called?
@@ -97,18 +96,18 @@ void
   for (x = 0; x < DETAIL; x++)
     {
       for (y = 0; y < DETAIL; y++)
-	{
-	  roughMap[x][y] = -1;
-	  roughMap2[x][y] = -1;
-	}
+  {
+    roughMap[x][y] = -1;
+    roughMap2[x][y] = -1;
+  }
     }
 
   for (k = 0, pl = planets; k < MAXPLANETS; k++, pl++)
     {
-      /* 
+      /*
        * Size of planet is pRadius but a ship will touch the planet if it is
        * one character away horizontally or half a character vertically.
-       * Also remember the planet name at the bottom. This name can stick out 
+       * Also remember the planet name at the bottom. This name can stick out
        * about half a character to the right. */
 
       startX = (pl->pl_x - pRadius - tWidth) / SIZE;
@@ -118,34 +117,34 @@ void
       endY = (pl->pl_y + pRadius + tHeight + (tHeight / 2)) / SIZE;
 
       if (startX < 0)
-	startX = 0;
+  startX = 0;
 
       if (endX >= DETAIL)
-	endX = DETAIL - 1;
+  endX = DETAIL - 1;
 
       if (startY < 0)
-	startY = 0;
+  startY = 0;
 
       if (endY >= DETAIL)
-	endY = DETAIL - 1;
+  endY = DETAIL - 1;
 
       for (x = startX; x <= endX; x++)
-	{
-	  for (y = startY; y <= endY; y++)
-	    {
-	      if (roughMap[x][y] == -1)
-		roughMap[x][y] = k;
-	      else
-		roughMap2[x][y] = k;
-	    }
-	}
+  {
+    for (y = startY; y <= endY; y++)
+      {
+        if (roughMap[x][y] == -1)
+    roughMap[x][y] = k;
+        else
+    roughMap2[x][y] = k;
+      }
+  }
     }
 
   initialized = 1;
 }
 
 
-#ifdef none					 /* Debugging code */
+#ifdef none          /* Debugging code */
 void
         showRegions(void)
 /*
@@ -170,16 +169,16 @@ void
       endY = (pl->pl_y + pRadius + tHeight + (tHeight / 2)) / SIZE;
 
       if (startX < 0)
-	startX = 0;
+  startX = 0;
 
       if (endX > DETAIL)
-	endX = DETAIL;
+  endX = DETAIL;
 
       if (startY < 0)
-	startY = 0;
+  startY = 0;
 
       if (endY > DETAIL)
-	endY = DETAIL;
+  endY = DETAIL;
 
       startX = startX * SIZE * GWINSIDE / GWIDTH;
       startY = startY * SIZE * GWINSIDE / GWIDTH;
@@ -192,7 +191,7 @@ void
       W_MakeLine(mapw, endX, endY, endX, startY, W_White);
     }
 }
-#endif	/* none */ /* Debugging code */
+#endif  /* none */ /* Debugging code */
 
 
 inline static void
@@ -217,9 +216,9 @@ inline static void
       i = roughMap2[x][y];
 
       if (i != -1)
-	{
-	  planets[i].pl_flags |= PLREDRAW;
-	}
+  {
+    planets[i].pl_flags |= PLREDRAW;
+  }
     }
 }
 
@@ -232,44 +231,44 @@ inline static W_Icon
 {
   int     i;
 
-  if (showgalactic == 0)			 /* nothing */
+  if (showgalactic == 0)       /* nothing */
     {
       return (mbplanets[0]);
     }
   else if ((p->pl_info & me->p_team)
 
 #ifdef RECORDGAME
-	   || playback
+     || playback
 #endif
 
       )
     {
-      if (showgalactic == 1)			 /* owner */
-	{
-	  return (mbplanets[remap[p->pl_owner]]);
-	}
+      if (showgalactic == 1)       /* owner */
+  {
+    return (mbplanets[remap[p->pl_owner]]);
+  }
       else
-	/* resources */
-	{
-	  i = 0;
-	  if (p->pl_armies > 4)
-	    i += 4;
-	  if (p->pl_flags & PLREPAIR)
-	    i += 2;
-	  if (p->pl_flags & PLFUEL)
-	    i += 1;
-	  switch (showgalactic)
-	    {
-	    case 2:                                      /* standard */
-	      return (mbplanets2[i]);
-	    case 3:                                      /* MOO bitmap */
-	      return (mbplanets3[i]);
-	    case 4:                                      /* rabbit ears */
-	      return (mbplanets4[i]);
-	    default:
-	      return (mbplanets[0]);
-	    }
-	}
+  /* resources */
+  {
+    i = 0;
+    if (p->pl_armies > 4)
+      i += 4;
+    if (p->pl_flags & PLREPAIR)
+      i += 2;
+    if (p->pl_flags & PLFUEL)
+      i += 1;
+    switch (showgalactic)
+      {
+      case 2:                                      /* standard */
+        return (mbplanets2[i]);
+      case 3:                                      /* MOO bitmap */
+        return (mbplanets3[i]);
+      case 4:                                      /* rabbit ears */
+        return (mbplanets4[i]);
+      default:
+        return (mbplanets[0]);
+      }
+  }
     }
   else
     {
@@ -294,9 +293,9 @@ static void DrawPlanets()
   for (l = planets + MAXPLANETS - 1; l >= planets; --l)
     {
       if (!(l->pl_flags & PLREDRAW))
-	continue;
+  continue;
 
-      l->pl_flags &= ~PLREDRAW;			 /* Turn redraw flag off! */
+      l->pl_flags &= ~PLREDRAW;      /* Turn redraw flag off! */
 
       dx = l->pl_x * GWINSIDE / GWIDTH;
       dy = l->pl_y * GWINSIDE / GWIDTH;
@@ -305,128 +304,128 @@ static void DrawPlanets()
       /* Erase the planet first */
 
       if (pl_update[l->pl_no].plu_update == 1)
-	{
-	  /* Allow Moving Planets */
+  {
+    /* Allow Moving Planets */
 
-	  int     odx, ody;
+    int     odx, ody;
 
-	  odx = pl_update[l->pl_no].plu_x * GWINSIDE / GWIDTH;
-	  ody = pl_update[l->pl_no].plu_y * GWINSIDE / GWIDTH;
+    odx = pl_update[l->pl_no].plu_x * GWINSIDE / GWIDTH;
+    ody = pl_update[l->pl_no].plu_y * GWINSIDE / GWIDTH;
 
-	  /* XFIX */
-	  W_ClearArea(mapw, odx - (mplanet_width / 2),
-		      ody - (mplanet_height / 2),
-		      mplanet_width, mplanet_height);
-	  W_WriteText(mapw, odx - (mplanet_width / 2),
-		      ody + (mplanet_height / 2),
-		      backColor, l->pl_name, 3, planetFont(l));
+    /* XFIX */
+    W_ClearArea(mapw, odx - (mplanet_width / 2),
+          ody - (mplanet_height / 2),
+          mplanet_width, mplanet_height);
+    W_WriteText(mapw, odx - (mplanet_width / 2),
+          ody + (mplanet_height / 2),
+          backColor, l->pl_name, 3, planetFont(l));
 
-	  pl_update[l->pl_no].plu_update = 0;
-	}
+    pl_update[l->pl_no].plu_update = 0;
+  }
       else
 
 #ifndef WIN32
       if (l->pl_flags & PLCLEAR)
 #endif
 
-	{
-	  /* Clear the planet normally */
+  {
+    /* Clear the planet normally */
 
-	  /* XFIX */
-	  W_ClearArea(mapw, dx - (mplanet_width / 2 + 4),
-		      dy - (mplanet_height / 2 + 4),
-		      mplanet_width + 8, mplanet_height + 8);
-	  l->pl_flags &= ~PLCLEAR;
-	}
+    /* XFIX */
+    W_ClearArea(mapw, dx - (mplanet_width / 2 + 4),
+          dy - (mplanet_height / 2 + 4),
+          mplanet_width + 8, mplanet_height + 8);
+    l->pl_flags &= ~PLCLEAR;
+  }
 
 
       /* Draw the new planet */
 
 #ifdef BEEPLITE
       if (UseLite && emph_planet_seq_n[l->pl_no] > 0)
-	{
-	  int     seq_n = emph_planet_seq_n[l->pl_no] % emph_planet_seq_frames;
+  {
+    int     seq_n = emph_planet_seq_n[l->pl_no] % emph_planet_seq_frames;
 
-	  W_OverlayBitmap(dx - (emph_planet_seq_width / 2 + 1),
-			  dy - (emph_planet_seq_height / 2),
-			  emph_planet_seq[seq_n],
-			  W_White);
+    W_OverlayBitmap(dx - (emph_planet_seq_width / 2 + 1),
+        dy - (emph_planet_seq_height / 2),
+        emph_planet_seq[seq_n],
+        W_White);
 
-	  W_WriteBitmap(dx - (mplanet_width / 2), dy - (mplanet_height / 2),
-			planetmBitmap(l), planetColor(l));
+    W_WriteBitmap(dx - (mplanet_width / 2), dy - (mplanet_height / 2),
+      planetmBitmap(l), planetColor(l));
 
-	  emph_planet_seq_n[l->pl_no] -= 1;
-	  l->pl_flags |= PLREDRAW;		 /* Leave redraw on until * * 
-						  * done highlighting */
-	  l->pl_flags |= PLCLEAR;		 /* Leave redraw on until * * 
-						  * done highlighting */
-	}
+    emph_planet_seq_n[l->pl_no] -= 1;
+    l->pl_flags |= PLREDRAW;     /* Leave redraw on until * *
+              * done highlighting */
+    l->pl_flags |= PLCLEAR;    /* Leave redraw on until * *
+              * done highlighting */
+  }
       else
-	{
+  {
 #endif
 
 #ifdef HAVE_XPM
-	  sprite = S_mPlanet(l->pl_no);
+    sprite = S_mPlanet(l->pl_no);
 
-	  if (sprite == NULL)
-	    pixFlags |= NO_MAP_PIX;
+    if (sprite == NULL)
+      pixFlags |= NO_MAP_PIX;
 
-	  if (!(pixFlags & NO_MAP_PIX))
-	    {
-	      W_DrawSprite(sprite, dx, dy, GWINSIDE);
-	      W_DrawSprite(S_mArmy(l->pl_no), dx, dy, GWINSIDE);
-	      W_DrawSprite(S_mRepair(l->pl_no), dx, dy, GWINSIDE);
-	      W_DrawSprite(S_mFuel(l->pl_no), dx, dy, GWINSIDE);
-	      W_DrawSprite(S_mOwner(l->pl_no), dx, dy, GWINSIDE);
-	      if (!(pixFlags & NO_HALOS))
-		W_Halo(dx, dy, planetColor(l));
-	    }
+    if (!(pixFlags & NO_MAP_PIX))
+      {
+        W_DrawSprite(sprite, dx, dy, GWINSIDE);
+        W_DrawSprite(S_mArmy(l->pl_no), dx, dy, GWINSIDE);
+        W_DrawSprite(S_mRepair(l->pl_no), dx, dy, GWINSIDE);
+        W_DrawSprite(S_mFuel(l->pl_no), dx, dy, GWINSIDE);
+        W_DrawSprite(S_mOwner(l->pl_no), dx, dy, GWINSIDE);
+        if (!(pixFlags & NO_HALOS))
+    W_Halo(dx, dy, planetColor(l));
+      }
 
-	  else
+    else
 #endif /* HAVE_XPM */
 
-	    W_OverlayBitmap(dx - (mplanet_width / 2), dy - (mplanet_height / 2),
-			    planetmBitmap(l), planetColor(l));
+      W_OverlayBitmap(dx - (mplanet_width / 2), dy - (mplanet_height / 2),
+          planetmBitmap(l), planetColor(l));
 
 
 #ifdef BEEPLITE
-	}
+  }
 #endif
 
 
       W_WriteText(mapw, dx - (mplanet_width / 2), dy + (mplanet_height / 2),
-		  planetColor(l), l->pl_name, 3, planetFont(l));
+      planetColor(l), l->pl_name, 3, planetFont(l));
 
       if (showIND && ((l->pl_info & me->p_team)
 
 #ifdef RECORDGAME
-		      || playback
+          || playback
 #endif
 
-	  ) && (l->pl_owner == NOBODY))
-	{
-	  W_MakeLine(mapw, dx + (mplanet_width / 2 - 1),
-		     dy + (mplanet_height / 2 - 1),
-		     dx - (mplanet_width / 2), dy - (mplanet_height / 2),
-		     W_White);
-	  W_MakeLine(mapw, dx - (mplanet_width / 2),
-		     dy + (mplanet_height / 2 - 1),
-		     dx + (mplanet_width / 2 - 1), dy - (mplanet_height / 2),
-		     W_White);
-	}
+    ) && (l->pl_owner == NOBODY))
+  {
+    W_MakeLine(mapw, dx + (mplanet_width / 2 - 1),
+         dy + (mplanet_height / 2 - 1),
+         dx - (mplanet_width / 2), dy - (mplanet_height / 2),
+         W_White);
+    W_MakeLine(mapw, dx - (mplanet_width / 2),
+         dy + (mplanet_height / 2 - 1),
+         dx + (mplanet_width / 2 - 1), dy - (mplanet_height / 2),
+         W_White);
+  }
 
       if (showPlanetOwner)
-	{
-	  ch = ((l->pl_info & me->p_team)
+  {
+    ch = ((l->pl_info & me->p_team)
 
 #ifdef RECORDGAME
-		|| playback
+    || playback
 #endif
 
-	      )? tolower(teamlet[l->pl_owner]) : '?';
-	  W_WriteText(mapw, dx + (mplanet_width / 2) + 2, dy - 4,
-		      planetColor(l), &ch, 1, planetFont(l));
-	}
+        )? tolower(teamlet[l->pl_owner]) : '?';
+    W_WriteText(mapw, dx + (mplanet_width / 2) + 2, dy - 4,
+          planetColor(l), &ch, 1, planetFont(l));
+  }
     }
 }
 
@@ -451,16 +450,16 @@ void
 
   if (redrawall)
     {
-      /* 
+      /*
        * Set things up so that the galactic will be redraw completely. This
        * code should also put critical variables into a sane state in case
        * COW has just started. */
 
       if (!initialized)
-	{
-	  /* Don't do anything if initPlanets() has not been called */
-	  return;
-	}
+  {
+    /* Don't do anything if initPlanets() has not been called */
+    return;
+  }
 
 #ifdef HAVE_XPM
 #ifdef HOCKEY_LINES
@@ -475,66 +474,66 @@ void
       clearlock = 0;
 
       for (i = 0; i < MAXPLAYER; i++)
-	{
-	  lastUpdate[i] = 0;
-	  mclearzone[2][i] = 0;
-	  redrawPlayer[i] = 1;
-	}
+  {
+    lastUpdate[i] = 0;
+    mclearzone[2][i] = 0;
+    redrawPlayer[i] = 1;
+  }
 
       for (l = planets + MAXPLANETS - 1; l >= planets; --l)
-	l->pl_flags |= PLREDRAW;
+  l->pl_flags |= PLREDRAW;
 
       redrawall = 0;
     }
   else
     {
       if (clearlock)
-	{
-	  clearlock = 0;
-	  W_WriteTriangle(mapw, clearlmark[0], clearlmark[1],
-			  clearlmark[2], clearlmark[3], backColor);
-	}
+  {
+    clearlock = 0;
+    W_WriteTriangle(mapw, clearlmark[0], clearlmark[1],
+        clearlmark[2], clearlmark[3], backColor);
+  }
 
 
       /* Erase the ships */
 
       for (i = 0, update = lastUpdate; i < MAXPLAYER; i++, update++)
-	{
-	  if (redrawPlayer[i])
-	    {
-	      /* Erase the player if redrawPlayer[i] is set * or lastUpdate * 
-	       * allows it. */
+  {
+    if (redrawPlayer[i])
+      {
+        /* Erase the player if redrawPlayer[i] is set * or lastUpdate *
+         * allows it. */
 
-	      if (mclearzone[2][i])
-		{
-		  /* XFIX */
-		  W_ClearArea(mapw, mclearzone[0][i], mclearzone[1][i],
-			      mclearzone[2][i], mclearzone[3][i]);
+        if (mclearzone[2][i])
+    {
+      /* XFIX */
+      W_ClearArea(mapw, mclearzone[0][i], mclearzone[1][i],
+            mclearzone[2][i], mclearzone[3][i]);
 
-		  /* Redraw the hole just left next update */
-		  checkRedraw(mclearzone[4][i], mclearzone[5][i]);
-		  mclearzone[2][i] = 0;
-		}
+      /* Redraw the hole just left next update */
+      checkRedraw(mclearzone[4][i], mclearzone[5][i]);
+      mclearzone[2][i] = 0;
+    }
 
 
-	      /* Reset the last redrawn counter */
+        /* Reset the last redrawn counter */
 
-	      *update = 0;
-	    }
-	  else if (*update == 10)
-	    {
-	      /* 
-	       *  Redraw stationary ships every update so that these
-	       *  ships are not hidden by planet updates.
-	       */
+        *update = 0;
+      }
+    else if (*update == 10)
+      {
+        /*
+         *  Redraw stationary ships every update so that these
+         *  ships are not hidden by planet updates.
+         */
 
-	      redrawPlayer[i] = 1;
-	    }
-	  else
-	    {
-	      ++(*update);
-	    }
-	}
+        redrawPlayer[i] = 1;
+      }
+    else
+      {
+        ++(*update);
+      }
+  }
     }
 
 
@@ -552,13 +551,13 @@ void
        * decisions are made at the top of the file.             */
 
       if (!redrawPlayer[i])
-	continue;
+  continue;
       if (j->p_status != PALIVE)
-	continue;
+  continue;
       if (j->p_flags & PFOBSERV)
-	continue;				 /* jmn - observer support */
+  continue;        /* jmn - observer support */
       if (j->p_x < 0 || j->p_x >= GWIDTH || j->p_y < 0 || j->p_y >= GWIDTH)
-	continue;
+  continue;
 
 
       dx = j->p_x * GWINSIDE / GWIDTH;
@@ -566,55 +565,55 @@ void
 
 
       if (j->p_flags & PFCLOAK)
-	{
-	  W_WriteText(mapw, dx - W_Textwidth,
-		      dy - W_Textheight / 2, unColor, cloakChars,
-		      (cloakChars[1] == '\0' ? 1 : 2), W_RegularFont);
-	}
+  {
+    W_WriteText(mapw, dx - W_Textwidth,
+          dy - W_Textheight / 2, unColor, cloakChars,
+          (cloakChars[1] == '\0' ? 1 : 2), W_RegularFont);
+  }
       else
-	{
-	  W_WriteText(mapw, dx - W_Textwidth,
-		    dy - W_Textheight / 2, playerColor(j), j->p_mapchars, 2,
-		      shipFont(j));
-	}
+  {
+    W_WriteText(mapw, dx - W_Textwidth,
+        dy - W_Textheight / 2, playerColor(j), j->p_mapchars, 2,
+          shipFont(j));
+  }
 
 #ifdef BEEPLITE
       if ((UseLite && emph_player_seq_n[i] > 0)
-	  && (liteflag & LITE_PLAYERS_MAP))
-	{
-	  int     seq_n = emph_player_seq_n[i] % emph_player_seq_frames;
+    && (liteflag & LITE_PLAYERS_MAP))
+  {
+    int     seq_n = emph_player_seq_n[i] % emph_player_seq_frames;
 
-	  W_WriteBitmap(dx - (emph_player_seq_width / 2 - 1),
-			dy - (emph_player_seq_height / 2 + 1),
-			emph_player_seq[seq_n],
-			W_White);
-	  emph_player_seq_n[i] -= 1;
-	  mclearzone[0][i] = dx - (emph_player_seq_width / 2 - 1);
-	  mclearzone[1][i] = dy - (emph_player_seq_height / 2 + 1);
-	  mclearzone[2][i] = emph_player_seq_width;
-	  mclearzone[3][i] = emph_player_seq_height;
-	  mclearzone[4][i] = j->p_x;
-	  mclearzone[5][i] = j->p_y;
+    W_WriteBitmap(dx - (emph_player_seq_width / 2 - 1),
+      dy - (emph_player_seq_height / 2 + 1),
+      emph_player_seq[seq_n],
+      W_White);
+    emph_player_seq_n[i] -= 1;
+    mclearzone[0][i] = dx - (emph_player_seq_width / 2 - 1);
+    mclearzone[1][i] = dy - (emph_player_seq_height / 2 + 1);
+    mclearzone[2][i] = emph_player_seq_width;
+    mclearzone[3][i] = emph_player_seq_height;
+    mclearzone[4][i] = j->p_x;
+    mclearzone[5][i] = j->p_y;
 
-	  /* Leave redraw on until done highlighting */
-	  redrawPlayer[i] = 1;
-	}
+    /* Leave redraw on until done highlighting */
+    redrawPlayer[i] = 1;
+  }
       else
-	{
+  {
 #endif
 
-	  mclearzone[0][i] = dx - W_Textwidth;
-	  mclearzone[1][i] = dy - W_Textheight / 2;
-	  mclearzone[2][i] = W_Textwidth * 2;
-	  mclearzone[3][i] = W_Textheight;
+    mclearzone[0][i] = dx - W_Textwidth;
+    mclearzone[1][i] = dy - W_Textheight / 2;
+    mclearzone[2][i] = W_Textwidth * 2;
+    mclearzone[3][i] = W_Textheight;
 
-	  /* Set these so we can checkRedraw() next time */
-	  mclearzone[4][i] = j->p_x;
-	  mclearzone[5][i] = j->p_y;
-	  redrawPlayer[i] = 0;
+    /* Set these so we can checkRedraw() next time */
+    mclearzone[4][i] = j->p_x;
+    mclearzone[5][i] = j->p_y;
+    redrawPlayer[i] = 0;
 
 #ifdef BEEPLITE
-	}
+  }
 #endif
     }
 
@@ -626,17 +625,17 @@ void
       j = &players[me->p_playerl];
 
       if (j->p_status == PALIVE && !(j->p_flags & PFCLOAK))
-	{
-	  dx = j->p_x * GWINSIDE / GWIDTH;
-	  dy = j->p_y * GWINSIDE / GWIDTH;
-	  W_WriteTriangle(mapw, dx, dy + 6, 4, 1, foreColor);
+  {
+    dx = j->p_x * GWINSIDE / GWIDTH;
+    dy = j->p_y * GWINSIDE / GWIDTH;
+    W_WriteTriangle(mapw, dx, dy + 6, 4, 1, foreColor);
 
-	  clearlmark[0] = dx;
-	  clearlmark[1] = dy + 6;
-	  clearlmark[2] = 4;
-	  clearlmark[3] = 1;
-	  clearlock = 1;
-	}
+    clearlmark[0] = dx;
+    clearlmark[1] = dy + 6;
+    clearlmark[2] = 4;
+    clearlmark[3] = 1;
+    clearlock = 1;
+  }
     }
   else if ((me->p_flags & PFPLLOCK) && (showLock & 1))
     {
@@ -645,7 +644,7 @@ void
       dx = l->pl_x * GWINSIDE / GWIDTH;
       dy = l->pl_y * GWINSIDE / GWIDTH;
       W_WriteTriangle(mapw, dx, dy - (mplanet_height) / 2 - 4,
-		      4, 0, foreColor);
+          4, 0, foreColor);
 
       clearlmark[0] = dx;
       clearlmark[1] = dy - (mplanet_height) / 2 - 4;

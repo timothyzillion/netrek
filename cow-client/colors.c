@@ -1,6 +1,5 @@
-
 /* colors.c
- * 
+ *
  * Kevin P. Smith  6/11/89
  *
  * $Log: colors.c,v $

@@ -82,7 +82,7 @@ struct passwd *getpwuid(int not_used) {
   itmlst.item_code = JPI$_USERNAME;
   itmlst.buffer_address = (long)cptr;
   itmlst.retlen_address = (long)&retlen;
-  
+
   passwd->pw_name = cptr;
 
   status = sys$getjpiw(NULL, NULL, NULL, &itmlst, NULL, NULL, NULL);

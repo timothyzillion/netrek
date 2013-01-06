@@ -1,4 +1,3 @@
-
 /* input.c
  *
  * $Log: input.c,v $
@@ -20,58 +19,58 @@
  * Revision 1.7.2.1  2002/06/13 04:10:16  tanner
  * Wed Jun 12 22:52:13 2002  Bob Tanner  <tanner@real-time.com>
  *
- * 	* playback.c (pbmain):  Converted enter_ship.wav
+ *  * playback.c (pbmain):  Converted enter_ship.wav
  *
- * 	* input.c (Key113): Converted self_destruct.wav
+ *  * input.c (Key113): Converted self_destruct.wav
  *
- * 	* input.c (Key109): Converted message.wav
+ *  * input.c (Key109): Converted message.wav
  *
- * 	* local.c (DrawMisc): Converted warning.wav
+ *  * local.c (DrawMisc): Converted warning.wav
  *
- * 	* local.c (DrawPlasmaTorps): Converted plasma_hit.wav
+ *  * local.c (DrawPlasmaTorps): Converted plasma_hit.wav
  *
- * 	* local.c (DrawTorps): Converted torp_hit.wav
+ *  * local.c (DrawTorps): Converted torp_hit.wav
  *
- * 	* sound.h: added EXPLOSION_OTHER_WAV, PHASER_OTHER_WAV,
- * 	FIRE_TORP_OTHER. and the code to load these new sounds.
+ *  * sound.h: added EXPLOSION_OTHER_WAV, PHASER_OTHER_WAV,
+ *  FIRE_TORP_OTHER. and the code to load these new sounds.
  *
- * 	* local.c (DrawShips): Converted cloak.wav, uncloak.wav,
- * 	shield_down.wav, shield_up.wav, explosion.wav,
- * 	explosion_other.wav, phaser.wav, phaser_other.wav
+ *  * local.c (DrawShips): Converted cloak.wav, uncloak.wav,
+ *  shield_down.wav, shield_up.wav, explosion.wav,
+ *  explosion_other.wav, phaser.wav, phaser_other.wav
  *
- * 	* cowmain.c (cowmain): Converted enter_ship.wav and engine.wav
+ *  * cowmain.c (cowmain): Converted enter_ship.wav and engine.wav
  *
- * 	* sound.c: added isDirectory to check that the sounddir is
- * 	actually a directory.
+ *  * sound.c: added isDirectory to check that the sounddir is
+ *  actually a directory.
  *
  * Tue Jun 11 01:10:51 2002  Bob Tanner  <tanner@real-time.com>
  *
- * 	* system.mk.in: Added SDL_CFLAGS, SDL_CONFIG, SDL_LIBS,
- * 	SDL_MIXER_LIBS
+ *  * system.mk.in: Added SDL_CFLAGS, SDL_CONFIG, SDL_LIBS,
+ *  SDL_MIXER_LIBS
  *
- * 	* sound.c: Added HAVE_SDL wrapper, initialization of SDL system,
- * 	opening of audio device, and loading of 17 cow sounds.
+ *  * sound.c: Added HAVE_SDL wrapper, initialization of SDL system,
+ *  opening of audio device, and loading of 17 cow sounds.
  *
- * 	* cowmain.c (cowmain): HAVE_SDL wrapper to Init_Sound using SDL. I
- * 	moved the Init_Sound method to right after readdefaults() so the
- * 	intro can start playing ASAP.
+ *  * cowmain.c (cowmain): HAVE_SDL wrapper to Init_Sound using SDL. I
+ *  moved the Init_Sound method to right after readdefaults() so the
+ *  intro can start playing ASAP.
  *
- * 	* configure.in: Added AC_CANONICAL_SYSTEM, added check for SDL,
- * 	add check for SDL_mixer.
+ *  * configure.in: Added AC_CANONICAL_SYSTEM, added check for SDL,
+ *  add check for SDL_mixer.
  *
- * 	* config.h.in: add HAVE_SDL
+ *  * config.h.in: add HAVE_SDL
  *
- * 	* spike: See spike/README for details
+ *  * spike: See spike/README for details
  *
  * Revision 1.8  2002/06/13 03:58:41  tanner
  * The changes for sound are mostly isolated in local.c, just a few other changes
  * in the commit.
  *
- * 	* playback.c (pbmain):  Converted enter_ship.wav
+ *  * playback.c (pbmain):  Converted enter_ship.wav
  *
- * 	* input.c (Key113): Converted self_destruct.wav
+ *  * input.c (Key113): Converted self_destruct.wav
  *
- * 	* input.c (Key109): Converted message.wav
+ *  * input.c (Key109): Converted message.wav
  *
  * Revision 1.7  2001/08/21 20:52:15  siegl
  *
@@ -125,11 +124,11 @@
 #include "spopt.h"
 #include "map.h"
 
-int     detallow = 1;				 /* flag used to figure out * 
+int     detallow = 1;        /* flag used to figure out *
 
-						  * 
-						  * 
-						  * * if we're allowing det */
+              *
+              *
+              * * if we're allowing det */
 
 #ifdef DOC_WIN
 static int docline = 0;
@@ -137,10 +136,10 @@ static int xtrekrcline = 0;
 
 #endif
 
-int     opened_info = -2;			 /* counter for infowin *
+int     opened_info = -2;      /* counter for infowin *
 
-						  * 
-						  * * popup, 6/1/93 LAB */
+              *
+              * * popup, 6/1/93 LAB */
 
 void    doMacro(W_Event *);
 
@@ -205,233 +204,233 @@ key_handler_type;
 
 key_handler_type key_handlers[MAXKEY] =
 {
-  emptyKey,					 /* \0 */
-  emptyKey,					 /* 1 */
-  emptyKey,					 /* 2 */
-  emptyKey,					 /* 3 */
-  emptyKey,					 /* 4 */
-  emptyKey,					 /* 5 */
-  emptyKey,					 /* 6 */
-  emptyKey,					 /* 7 */
-  emptyKey,					 /* 8 */
-  emptyKey,					 /* 9 */
-  emptyKey,					 /* 10 */
-  emptyKey,					 /* 11 */
-  emptyKey,					 /* 12 */
-  emptyKey,					 /* 13 */
-  emptyKey,					 /* 14 */
-  emptyKey,					 /* 15 */
-  emptyKey,					 /* 16 */
-  emptyKey,					 /* 17 */
-  emptyKey,					 /* 18 */
-  emptyKey,					 /* 19 */
-  emptyKey,					 /* 20 */
-  emptyKey,					 /* 21 */
-  emptyKey,					 /* 22 */
-  emptyKey,					 /* 23 */
-  emptyKey,					 /* 24 */
-  emptyKey,					 /* 25 */
-  emptyKey,					 /* 26 */
-  emptyKey,					 /* 27 */
-  emptyKey,					 /* 28 */
-  emptyKey,					 /* 29 */
-  emptyKey,					 /* 30 */
-  emptyKey,					 /* 31 */
+  emptyKey,          /* \0 */
+  emptyKey,          /* 1 */
+  emptyKey,          /* 2 */
+  emptyKey,          /* 3 */
+  emptyKey,          /* 4 */
+  emptyKey,          /* 5 */
+  emptyKey,          /* 6 */
+  emptyKey,          /* 7 */
+  emptyKey,          /* 8 */
+  emptyKey,          /* 9 */
+  emptyKey,          /* 10 */
+  emptyKey,          /* 11 */
+  emptyKey,          /* 12 */
+  emptyKey,          /* 13 */
+  emptyKey,          /* 14 */
+  emptyKey,          /* 15 */
+  emptyKey,          /* 16 */
+  emptyKey,          /* 17 */
+  emptyKey,          /* 18 */
+  emptyKey,          /* 19 */
+  emptyKey,          /* 20 */
+  emptyKey,          /* 21 */
+  emptyKey,          /* 22 */
+  emptyKey,          /* 23 */
+  emptyKey,          /* 24 */
+  emptyKey,          /* 25 */
+  emptyKey,          /* 26 */
+  emptyKey,          /* 27 */
+  emptyKey,          /* 28 */
+  emptyKey,          /* 29 */
+  emptyKey,          /* 30 */
+  emptyKey,          /* 31 */
 
-  Key32,					 /* space */
-  Key33,					 /* ! */
-  Key34,					 /* " */
-  Key35,					 /* # */
-  Key36,					 /* $ */
-  Key37,					 /* % */
-  Key38,					 /* & */
-  Key39,					 /* ' */
-  Key40,					 /* ( */
-  Key41,					 /* ) */
-  Key42,					 /* * */
-  Key43,					 /* + */
-  Key44,					 /* , */
-  Key45,					 /* - */
-  Key46,					 /* . */
-  Key47,					 /* / */
-  Key48,					 /* 0 */
-  Key49,					 /* 1 */
-  Key50,					 /* 2 */
-  Key51,					 /* 3 */
-  Key52,					 /* 4 */
-  Key53,					 /* 5 */
-  Key54,					 /* 6 */
-  Key55,					 /* 7 */
-  Key56,					 /* 8 */
-  Key57,					 /* 9 */
-  Key58,					 /* : */
-  Key59,					 /* ; */
-  Key60,					 /* < */
-  Key61,					 /* = */
-  Key62,					 /* > */
-  Key63,					 /* ?  -  you know this is *
-						  * * boring as hell... */
-  Key64,					 /* @ */
-  Key65,					 /* A */
-  Key66,					 /* B */
-  Key67,					 /* C */
-  Key68,					 /* D */
-  Key69,					 /* E */
-  Key70,					 /* F */
-  Key71,					 /* G */
-  Key72,					 /* H */
-  Key73,					 /* I */
-  Key74,					 /* J */
-  Key75,					 /* K */
-  Key76,					 /* L */
-  Key77,					 /* M */
-  Key78,					 /* N */
-  Key79,					 /* O */
-  Key80,					 /* P */
-  Key81,					 /* Q */
-  Key82,					 /* R */
-  Key83,					 /* S */
-  Key84,					 /* T */
-  Key85,					 /* U */
-  Key86,					 /* V */
-  Key87,					 /* W */
-  Key88,					 /* X */
-  Key89,					 /* Y */
-  Key90,					 /* Z */
-  Key91,					 /* [ */
-  Key92,					 /* \ */
-  Key93,					 /* ]  -  ascii is fucked... */
-  Key94,					 /* ^ */
-  Key95,					 /* _ */
-  Key96,					 /* ` */
-  Key97,					 /* a */
-  Key98,					 /* b */
-  Key99,					 /* c */
-  Key100,					 /* d */
-  Key101,					 /* e */
-  Key102,					 /* f */
-  Key103,					 /* g */
-  Key104,					 /* h */
-  Key105,					 /* i */
-  Key106,					 /* j */
-  Key107,					 /* k */
-  Key108,					 /* l */
-  Key109,					 /* m */
-  Key110,					 /* n */
-  Key111,					 /* o */
-  Key112,					 /* p */
-  Key113,					 /* q */
-  Key114,					 /* r */
-  Key115,					 /* s */
-  Key116,					 /* t */
-  Key117,					 /* u */
-  Key118,					 /* v */
-  Key119,					 /* w */
-  Key120,					 /* x */
-  Key121,					 /* y */
-  Key122,					 /* z */
-  Key123,					 /* { */
-  Key124,					 /* | */
-  Key125,					 /* } - my wife was once * *
-						  * bitten by a lhama */
-  Key126,					 /* ~ */
-  Key127,					 /* delete */
-  emptyKey,					 /* 128 */
-  emptyKey,					 /* 31 */
-  emptyKey,					 /* 31 */
-  Key131,					 /* ^# */
-  emptyKey,					 /* 31 */
-  emptyKey,					 /* 31 */
-  emptyKey,					 /* 31 */
-  emptyKey,					 /* 31 */
-  emptyKey,					 /* 31 */
-  emptyKey,					 /* 31 */
-  emptyKey,					 /* 31 */
-  emptyKey,					 /* 31 */
-  emptyKey,					 /* 31 */
-  emptyKey,					 /* 31 */
-  emptyKey,					 /* 31 */
-  emptyKey,					 /* 31 */
-  Key144,					 /* ^0 */
-  Key145,					 /* ^1 */
-  Key146,					 /* ^2 */
-  Key147,					 /* ^3 */
-  Key148,					 /* ^4 */
-  Key149,					 /* ^5 */
-  Key150,					 /* ^6 */
-  Key151,					 /* ^7 */
-  Key152,					 /* ^8 */
-  Key153,					 /* ^9 */
-  emptyKey,					 /* 31 */
-  emptyKey,					 /* 31 */
-  emptyKey,					 /* 31 */
-  emptyKey,					 /* 31 */
-  emptyKey,					 /* 31 */
-  emptyKey,					 /* 31 */
-  Key160,					 /* ^@ */
-  emptyKey,					 /* 31 */
-  Key162,					 /* ^B */
-  Key163,					 /* ^C */
-  emptyKey,					 /* 31 */
-  emptyKey,					 /* 31 */
-  emptyKey,					 /* 31 */
-  emptyKey,					 /* 31 */
-  emptyKey,					 /* 31 */
-  emptyKey,					 /* 31 */
-  emptyKey,					 /* 31 */
-  emptyKey,					 /* 31 */
-  emptyKey,					 /* 31 */
-  emptyKey,					 /* 31 */
-  emptyKey,					 /* 31 */
-  Key175,					 /* ^O */
-  emptyKey,					 /* 31 */
-  emptyKey,					 /* 31 */
-  emptyKey,					 /* 31 */
-  emptyKey,					 /* 31 */
-  Key180,					 /* ^T */
-  emptyKey,					 /* 31 */
-  emptyKey,					 /* 31 */
-  emptyKey,					 /* 31 */
-  emptyKey,					 /* 31 */
-  emptyKey,					 /* 31 */
-  emptyKey,					 /* 31 */
-  emptyKey,					 /* 31 */
-  emptyKey,					 /* 31 */
-  emptyKey,					 /* 31 */
-  emptyKey,					 /* 31 */
-  emptyKey,					 /* 31 */
-  emptyKey,					 /* 31 */
-  emptyKey,					 /* 31 */
-  Key194,					 /* ^b */
-  Key195,					 /* ^c */
-  emptyKey,					 /* 31 */
-  Key197,					 /* ^e */
-  Key198,					 /* ^f */
-  emptyKey,					 /* 31 */
-  Key200,					 /* ^h */
-  emptyKey,					 /* 31 */
-  emptyKey,					 /* 31 */
-  emptyKey,					 /* 31 */
-  Key204,					 /* ^l */
-  Key205,					 /* ^m */
-  Key206,					 /* ^n */
-  Key207,					 /* ^o */
-  Key208,					 /* ^p */
-  emptyKey,					 /* 31 */
-  emptyKey,					 /* 31 */
-  emptyKey,					 /* 31 */
-  Key212,					 /* ^t */
-  emptyKey,					 /* 31 */
-  emptyKey,					 /* 31 */
-  emptyKey,					 /* 31 */
-  emptyKey,					 /* 31 */
-  emptyKey,					 /* 31 */
-  emptyKey,					 /* 31 */
-  emptyKey,					 /* 31 */
-  emptyKey,					 /* 31 */
-  emptyKey,					 /* 31 */
-  emptyKey,					 /* 31 */
-  emptyKey,					 /* 223 */
+  Key32,           /* space */
+  Key33,           /* ! */
+  Key34,           /* " */
+  Key35,           /* # */
+  Key36,           /* $ */
+  Key37,           /* % */
+  Key38,           /* & */
+  Key39,           /* ' */
+  Key40,           /* ( */
+  Key41,           /* ) */
+  Key42,           /* * */
+  Key43,           /* + */
+  Key44,           /* , */
+  Key45,           /* - */
+  Key46,           /* . */
+  Key47,           /* / */
+  Key48,           /* 0 */
+  Key49,           /* 1 */
+  Key50,           /* 2 */
+  Key51,           /* 3 */
+  Key52,           /* 4 */
+  Key53,           /* 5 */
+  Key54,           /* 6 */
+  Key55,           /* 7 */
+  Key56,           /* 8 */
+  Key57,           /* 9 */
+  Key58,           /* : */
+  Key59,           /* ; */
+  Key60,           /* < */
+  Key61,           /* = */
+  Key62,           /* > */
+  Key63,           /* ?  -  you know this is *
+              * * boring as hell... */
+  Key64,           /* @ */
+  Key65,           /* A */
+  Key66,           /* B */
+  Key67,           /* C */
+  Key68,           /* D */
+  Key69,           /* E */
+  Key70,           /* F */
+  Key71,           /* G */
+  Key72,           /* H */
+  Key73,           /* I */
+  Key74,           /* J */
+  Key75,           /* K */
+  Key76,           /* L */
+  Key77,           /* M */
+  Key78,           /* N */
+  Key79,           /* O */
+  Key80,           /* P */
+  Key81,           /* Q */
+  Key82,           /* R */
+  Key83,           /* S */
+  Key84,           /* T */
+  Key85,           /* U */
+  Key86,           /* V */
+  Key87,           /* W */
+  Key88,           /* X */
+  Key89,           /* Y */
+  Key90,           /* Z */
+  Key91,           /* [ */
+  Key92,           /* \ */
+  Key93,           /* ]  -  ascii is fucked... */
+  Key94,           /* ^ */
+  Key95,           /* _ */
+  Key96,           /* ` */
+  Key97,           /* a */
+  Key98,           /* b */
+  Key99,           /* c */
+  Key100,          /* d */
+  Key101,          /* e */
+  Key102,          /* f */
+  Key103,          /* g */
+  Key104,          /* h */
+  Key105,          /* i */
+  Key106,          /* j */
+  Key107,          /* k */
+  Key108,          /* l */
+  Key109,          /* m */
+  Key110,          /* n */
+  Key111,          /* o */
+  Key112,          /* p */
+  Key113,          /* q */
+  Key114,          /* r */
+  Key115,          /* s */
+  Key116,          /* t */
+  Key117,          /* u */
+  Key118,          /* v */
+  Key119,          /* w */
+  Key120,          /* x */
+  Key121,          /* y */
+  Key122,          /* z */
+  Key123,          /* { */
+  Key124,          /* | */
+  Key125,          /* } - my wife was once * *
+              * bitten by a lhama */
+  Key126,          /* ~ */
+  Key127,          /* delete */
+  emptyKey,          /* 128 */
+  emptyKey,          /* 31 */
+  emptyKey,          /* 31 */
+  Key131,          /* ^# */
+  emptyKey,          /* 31 */
+  emptyKey,          /* 31 */
+  emptyKey,          /* 31 */
+  emptyKey,          /* 31 */
+  emptyKey,          /* 31 */
+  emptyKey,          /* 31 */
+  emptyKey,          /* 31 */
+  emptyKey,          /* 31 */
+  emptyKey,          /* 31 */
+  emptyKey,          /* 31 */
+  emptyKey,          /* 31 */
+  emptyKey,          /* 31 */
+  Key144,          /* ^0 */
+  Key145,          /* ^1 */
+  Key146,          /* ^2 */
+  Key147,          /* ^3 */
+  Key148,          /* ^4 */
+  Key149,          /* ^5 */
+  Key150,          /* ^6 */
+  Key151,          /* ^7 */
+  Key152,          /* ^8 */
+  Key153,          /* ^9 */
+  emptyKey,          /* 31 */
+  emptyKey,          /* 31 */
+  emptyKey,          /* 31 */
+  emptyKey,          /* 31 */
+  emptyKey,          /* 31 */
+  emptyKey,          /* 31 */
+  Key160,          /* ^@ */
+  emptyKey,          /* 31 */
+  Key162,          /* ^B */
+  Key163,          /* ^C */
+  emptyKey,          /* 31 */
+  emptyKey,          /* 31 */
+  emptyKey,          /* 31 */
+  emptyKey,          /* 31 */
+  emptyKey,          /* 31 */
+  emptyKey,          /* 31 */
+  emptyKey,          /* 31 */
+  emptyKey,          /* 31 */
+  emptyKey,          /* 31 */
+  emptyKey,          /* 31 */
+  emptyKey,          /* 31 */
+  Key175,          /* ^O */
+  emptyKey,          /* 31 */
+  emptyKey,          /* 31 */
+  emptyKey,          /* 31 */
+  emptyKey,          /* 31 */
+  Key180,          /* ^T */
+  emptyKey,          /* 31 */
+  emptyKey,          /* 31 */
+  emptyKey,          /* 31 */
+  emptyKey,          /* 31 */
+  emptyKey,          /* 31 */
+  emptyKey,          /* 31 */
+  emptyKey,          /* 31 */
+  emptyKey,          /* 31 */
+  emptyKey,          /* 31 */
+  emptyKey,          /* 31 */
+  emptyKey,          /* 31 */
+  emptyKey,          /* 31 */
+  emptyKey,          /* 31 */
+  Key194,          /* ^b */
+  Key195,          /* ^c */
+  emptyKey,          /* 31 */
+  Key197,          /* ^e */
+  Key198,          /* ^f */
+  emptyKey,          /* 31 */
+  Key200,          /* ^h */
+  emptyKey,          /* 31 */
+  emptyKey,          /* 31 */
+  emptyKey,          /* 31 */
+  Key204,          /* ^l */
+  Key205,          /* ^m */
+  Key206,          /* ^n */
+  Key207,          /* ^o */
+  Key208,          /* ^p */
+  emptyKey,          /* 31 */
+  emptyKey,          /* 31 */
+  emptyKey,          /* 31 */
+  Key212,          /* ^t */
+  emptyKey,          /* 31 */
+  emptyKey,          /* 31 */
+  emptyKey,          /* 31 */
+  emptyKey,          /* 31 */
+  emptyKey,          /* 31 */
+  emptyKey,          /* 31 */
+  emptyKey,          /* 31 */
+  emptyKey,          /* 31 */
+  emptyKey,          /* 31 */
+  emptyKey,          /* 31 */
+  emptyKey,          /* 223 */
 };
 
 unsigned char
@@ -446,9 +445,9 @@ unsigned char
       str++;
       /* check for '^' key being specified with "^^" */
       if (*str != '^')
-	c = *str + 96;
+  c = *str + 96;
       else
-	c = *str;
+  c = *str;
     }
   else
     c = *str;
@@ -471,13 +470,13 @@ initkeymap(void)
   if ((str = myshipdef->keymap) != NULL)
     {
       while (*str != '\0')
-	{
-	  if (*str >= 32 && *str < 128)
-	    {
-	      mystats->st_keymap[*str - 32] = *(str + 1);
-	    }
-	  str += 2;
-	}
+  {
+    if (*str >= 32 && *str < 128)
+      {
+        mystats->st_keymap[*str - 32] = *(str + 1);
+      }
+    str += 2;
+  }
     }
 
   /* See if we can get macroKey to work. What a hack -SAC */
@@ -486,21 +485,21 @@ initkeymap(void)
       unsigned char   *p;
 
       if (strlen((char *)str) == 1)
-	{
-	  /* This is a little pointless, but it'll preform as per * the *
-	   * documentation */
-	  mystats->st_keymap[*str - 32] = 'X';
-	}
+  {
+    /* This is a little pointless, but it'll preform as per * the *
+     * documentation */
+    mystats->st_keymap[*str - 32] = 'X';
+  }
       else if (!strcmpi(str, "TAB"))
-	{
-	  p = (unsigned char *) "^i";
-	  mystats->st_keymap[getctrlkey(&p) - 32] = 'X';
-	}
+  {
+    p = (unsigned char *) "^i";
+    mystats->st_keymap[getctrlkey(&p) - 32] = 'X';
+  }
       else if (!strcmpi(str, "ESC"))
-	{
-	  p = (unsigned char *) "^[";
-	  mystats->st_keymap[getctrlkey(&p) - 32] = 'X';
-	}
+  {
+    p = (unsigned char *) "^[";
+    mystats->st_keymap[getctrlkey(&p) - 32] = 'X';
+  }
     }
 
   if ((str = myshipdef->ckeymap) != NULL)
@@ -508,16 +507,16 @@ initkeymap(void)
       unsigned char c1, c2;
 
       while (*str != '\0')
-	{
+  {
 
-	  if (*str >= 32 && *str < MAXASCII)
-	    {
-	      c1 = getctrlkey(&str) - 32;
-	      c2 = getctrlkey(&str);
-	      mystats->st_keymap[c1] = c2;
-	    }
+    if (*str >= 32 && *str < MAXASCII)
+      {
+        c1 = getctrlkey(&str) - 32;
+        c2 = getctrlkey(&str);
+        mystats->st_keymap[c1] = c2;
+      }
 
-	}
+  }
     }
 
 #ifdef MOUSE_AS_SHIFT
@@ -525,39 +524,39 @@ initkeymap(void)
     {
       b1_as_shift = 1;
       while (*str != '\0')
-	{
-	  if (*str >= 32 && *str < 176)
-	    {
-	      mystats->st_keymap[*str - 32 + 192] = *(str + 1);
-	    }
-	  str += 2;
-	}
+  {
+    if (*str >= 32 && *str < 176)
+      {
+        mystats->st_keymap[*str - 32 + 192] = *(str + 1);
+      }
+    str += 2;
+  }
     }
 
   if ((str = (unsigned char *) getdefault("b2keymap")) != NULL)
     {
       b2_as_shift = 1;
       while (*str != '\0')
-	{
-	  if (*str >= 32 && *str < 176)
-	    {
-	      mystats->st_keymap[*str - 32 + 288] = *(str + 1);
-	    }
-	  str += 2;
-	}
+  {
+    if (*str >= 32 && *str < 176)
+      {
+        mystats->st_keymap[*str - 32 + 288] = *(str + 1);
+      }
+    str += 2;
+  }
     }
 
   if ((str = (unsigned char *) getdefault("b3keymap")) != NULL)
     {
       b3_as_shift = 1;
       while (*str != '\0')
-	{
-	  if (*str >= 32 && *str < 176)
-	    {
-	      mystats->st_keymap[*str - 32 + 384] = *(str + 1);
-	    }
-	  str += 2;
-	}
+  {
+    if (*str >= 32 && *str < 176)
+      {
+        mystats->st_keymap[*str - 32 + 384] = *(str + 1);
+      }
+    str += 2;
+  }
     }
 #endif
 
@@ -565,110 +564,110 @@ initkeymap(void)
   if ((str = myshipdef->buttonmap) != NULL)
     {
       while (*str != '\0')
-	{
-	  switch (*str++)
-	    {
-	    case '1':
-	      buttonmap[1] = getctrlkey(&str);
-	      break;
-	    case '2':
-	      buttonmap[2] = getctrlkey(&str);
-	      break;
-	    case '3':
-	      buttonmap[3] = getctrlkey(&str);
-	      break;
+  {
+    switch (*str++)
+      {
+      case '1':
+        buttonmap[1] = getctrlkey(&str);
+        break;
+      case '2':
+        buttonmap[2] = getctrlkey(&str);
+        break;
+      case '3':
+        buttonmap[3] = getctrlkey(&str);
+        break;
 
-	    case 'd':
-	      buttonmap[4] = getctrlkey(&str);
-	      break;
-	    case 'e':
-	      buttonmap[5] = getctrlkey(&str);
-	      break;
-	    case 'f':
-	      buttonmap[6] = getctrlkey(&str);
-	      break;
-	    case 'g':
-	      buttonmap[7] = getctrlkey(&str);
-	      break;
+      case 'd':
+        buttonmap[4] = getctrlkey(&str);
+        break;
+      case 'e':
+        buttonmap[5] = getctrlkey(&str);
+        break;
+      case 'f':
+        buttonmap[6] = getctrlkey(&str);
+        break;
+      case 'g':
+        buttonmap[7] = getctrlkey(&str);
+        break;
 
 #ifdef SHIFTED_MOUSE
-	    case '4':
-	      buttonmap[9] = getctrlkey(&str);
-	      break;
-	    case '5':
-	      buttonmap[10] = getctrlkey(&str);
-	      break;
-	    case '6':
-	      buttonmap[11] = getctrlkey(&str);
-	      break;
+      case '4':
+        buttonmap[9] = getctrlkey(&str);
+        break;
+      case '5':
+        buttonmap[10] = getctrlkey(&str);
+        break;
+      case '6':
+        buttonmap[11] = getctrlkey(&str);
+        break;
 
-	    case 'h':
-	      buttonmap[12] = getctrlkey(&str);
-	      break;
-	    case 'i':
-	      buttonmap[13] = getctrlkey(&str);
-	      break;
-	    case 'j':
-	      buttonmap[14] = getctrlkey(&str);
-	      break;
-	    case 'k':
-	      buttonmap[15] = getctrlkey(&str);
-	      break;
+      case 'h':
+        buttonmap[12] = getctrlkey(&str);
+        break;
+      case 'i':
+        buttonmap[13] = getctrlkey(&str);
+        break;
+      case 'j':
+        buttonmap[14] = getctrlkey(&str);
+        break;
+      case 'k':
+        buttonmap[15] = getctrlkey(&str);
+        break;
 
 
-	    case '7':
-	      buttonmap[17] = getctrlkey(&str);
-	      break;
-	    case '8':
-	      buttonmap[18] = getctrlkey(&str);
-	      break;
-	    case '9':
-	      buttonmap[19] = getctrlkey(&str);
-	      break;
+      case '7':
+        buttonmap[17] = getctrlkey(&str);
+        break;
+      case '8':
+        buttonmap[18] = getctrlkey(&str);
+        break;
+      case '9':
+        buttonmap[19] = getctrlkey(&str);
+        break;
 
-	    case 'l':
-	      buttonmap[20] = getctrlkey(&str);
-	      break;
-	    case 'm':
-	      buttonmap[21] = getctrlkey(&str);
-	      break;
-	    case 'n':
-	      buttonmap[22] = getctrlkey(&str);
-	      break;
-	    case 'o':
-	      buttonmap[23] = getctrlkey(&str);
-	      break;
+      case 'l':
+        buttonmap[20] = getctrlkey(&str);
+        break;
+      case 'm':
+        buttonmap[21] = getctrlkey(&str);
+        break;
+      case 'n':
+        buttonmap[22] = getctrlkey(&str);
+        break;
+      case 'o':
+        buttonmap[23] = getctrlkey(&str);
+        break;
 
-	    case 'a':
-	      buttonmap[25] = getctrlkey(&str);
-	      break;
-	    case 'b':
-	      buttonmap[26] = getctrlkey(&str);
-	      break;
-	    case 'c':
-	      buttonmap[27] = getctrlkey(&str);
-	      break;
+      case 'a':
+        buttonmap[25] = getctrlkey(&str);
+        break;
+      case 'b':
+        buttonmap[26] = getctrlkey(&str);
+        break;
+      case 'c':
+        buttonmap[27] = getctrlkey(&str);
+        break;
 
-	    case 'p':
-	      buttonmap[28] = getctrlkey(&str);
-	      break;
-	    case 'q':
-	      buttonmap[29] = getctrlkey(&str);
-	      break;
-	    case 'r':
-	      buttonmap[30] = getctrlkey(&str);
-	      break;
-	    case 's':
-	      buttonmap[31] = getctrlkey(&str);
-	      break;
+      case 'p':
+        buttonmap[28] = getctrlkey(&str);
+        break;
+      case 'q':
+        buttonmap[29] = getctrlkey(&str);
+        break;
+      case 'r':
+        buttonmap[30] = getctrlkey(&str);
+        break;
+      case 's':
+        buttonmap[31] = getctrlkey(&str);
+        break;
 
 #endif
 
-	    default:
-	      fprintf(stderr, "%c ignored in buttonmap\n", *(str - 1));
-	      break;
-	    }
-	}
+      default:
+        fprintf(stderr, "%c ignored in buttonmap\n", *(str - 1));
+        break;
+      }
+  }
     }
 
 }
@@ -690,17 +689,17 @@ input()
   W_Event event;
 
   /* Under Windows we spawn off a separate thread to handle network *
-   * interaction; this is because it would require some awkward rewrites to * 
-   * integrate event detection and handling into the select() mechanism. It * 
+   * interaction; this is because it would require some awkward rewrites to *
+   * integrate event detection and handling into the select() mechanism. It *
    * probably also increases performance */
   THREAD(input2);
 
   while (1)
     {
-      if (!W_WaitForEvent())			 /* W_WaitForEvent returns 0
-						  * * if W_TerminateWait is * 
-						  * called */
-	break;
+      if (!W_WaitForEvent())       /* W_WaitForEvent returns 0
+              * * if W_TerminateWait is *
+              * called */
+  break;
       process_event();
     }
 
@@ -721,7 +720,7 @@ input()
 
 #ifndef HAVE_WIN32
   register
-  int     xsock = W_Socket();			 /* put it in a register */
+  int     xsock = W_Socket();      /* put it in a register */
 
 #endif
   register
@@ -730,12 +729,12 @@ input()
   while (1)
     {
 
-      if (keepInfo > 0 && opened_info != -2 &&	 /* 6/1/93 LAB */
-	  opened_info < 0 && infomapped)
-	destroyInfo();
+      if (keepInfo > 0 && opened_info != -2 &&   /* 6/1/93 LAB */
+    opened_info < 0 && infomapped)
+  destroyInfo();
 
       if (keepInfo > 0 && opened_info != -2)
-	opened_info--;
+  opened_info--;
 
       FD_ZERO(&readfds);
 
@@ -746,60 +745,60 @@ input()
       FD_SET(sock, &readfds);
 
       if (udpSock >= 0)
-	FD_SET(udpSock, &readfds);
+  FD_SET(udpSock, &readfds);
 
       /* Skip read from server if select results in error. */
       if (SELECT(max_fd, &readfds, 0, 0, 0) > 0)
-	{
+  {
 
 #ifndef THREADED
 
 #ifndef HAVE_WIN32
-	  if (FD_ISSET(xsock, &readfds))
+    if (FD_ISSET(xsock, &readfds))
 #else
-	  if (W_EventsPending())
+    if (W_EventsPending())
 #endif /* !HAVE_WIN32 */
 
-	    {
-	      process_event();
-	      /* NOTE: we're no longer calling XPending(), need this */
-	      doflush = 1;
-	    }
+      {
+        process_event();
+        /* NOTE: we're no longer calling XPending(), need this */
+        doflush = 1;
+      }
 #endif /* !THREADED */
 
-	  if (FD_ISSET(sock, &readfds) ||
-	      (udpSock >= 0 && FD_ISSET(udpSock, &readfds)))
-	    {
-	      intrupt(&readfds);
-	      /* NOTE: we're no longer calling XPending(), need this */
-	      doflush = 1;
-	      if (isServerDead())
-		{
-		  printf("Whoops!  We've been ghostbusted!\n");
-		  printf("Pray for a miracle!\n");
-		  /* UDP fail-safe */
-		  commMode = commModeReq = COMM_TCP;
-		  commSwitchTimeout = 0;
-		  if (udpSock >= 0)
-		    closeUdpConn();
-		  if (udpWin)
-		    {
-		      udprefresh(UDP_CURRENT);
-		      udprefresh(UDP_STATUS);
-		    }
-		  connectToServer(nextSocket);
-		  printf("Yea!  We've been resurrected!\n");
-		}
-	    }
+    if (FD_ISSET(sock, &readfds) ||
+        (udpSock >= 0 && FD_ISSET(udpSock, &readfds)))
+      {
+        intrupt(&readfds);
+        /* NOTE: we're no longer calling XPending(), need this */
+        doflush = 1;
+        if (isServerDead())
+    {
+      printf("Whoops!  We've been ghostbusted!\n");
+      printf("Pray for a miracle!\n");
+      /* UDP fail-safe */
+      commMode = commModeReq = COMM_TCP;
+      commSwitchTimeout = 0;
+      if (udpSock >= 0)
+        closeUdpConn();
+      if (udpWin)
+        {
+          udprefresh(UDP_CURRENT);
+          udprefresh(UDP_STATUS);
+        }
+      connectToServer(nextSocket);
+      printf("Yea!  We've been resurrected!\n");
+    }
+      }
 
-	}
+  }
 
       /* NOTE: we're no longer calling XPending(), need this */
       if (doflush)
-	{
-	  W_Flush();
-	  doflush = 0;
-	}
+  {
+    W_Flush();
+    doflush = 0;
+  }
     }
 }
 
@@ -814,141 +813,141 @@ process_event(void)
       loop++;
 
       if (!W_SpNextEvent(&data))
-	continue;				 /* continues at loop bottom */
+  continue;        /* continues at loop bottom */
 
       switch ((int) data.type)
-	{
-	case W_EV_KEY:
-	  if ((handler = W_GetWindowKeyDownHandler(data.Window)) != NULL)
-	    (*handler) (&data);
+  {
+  case W_EV_KEY:
+    if ((handler = W_GetWindowKeyDownHandler(data.Window)) != NULL)
+      (*handler) (&data);
 
 #ifdef DOC_WIN
-	  else if (data.Window == docwin)
-	    switch (data.key)
-	      {
-	      case 'f':
-		docline += 28;
+    else if (data.Window == docwin)
+      switch (data.key)
+        {
+        case 'f':
+    docline += 28;
 
-		if (docline >= maxdoclines)
-		  docline = maxdoclines - 28;
+    if (docline >= maxdoclines)
+      docline = maxdoclines - 28;
 
-		showdocs(docline);
-		break;
-	      case 'b':
-		docline -= 28;
+    showdocs(docline);
+    break;
+        case 'b':
+    docline -= 28;
 
-		if (docline < 0)
-		  docline = 0;
+    if (docline < 0)
+      docline = 0;
 
-		showdocs(docline);
-		break;
-	      case 'F':
-		docline += 4;
+    showdocs(docline);
+    break;
+        case 'F':
+    docline += 4;
 
-		if (docline >= maxdoclines)
-		  docline = maxdoclines - 28;
+    if (docline >= maxdoclines)
+      docline = maxdoclines - 28;
 
-		showdocs(docline);
-		break;
-	      case 'B':
-		docline -= 4;
+    showdocs(docline);
+    break;
+        case 'B':
+    docline -= 4;
 
-		if (docline < 0)
-		  docline = 0;
+    if (docline < 0)
+      docline = 0;
 
-		showdocs(docline);
-		break;
-	      default:
-		data.Window = w;
-		keyaction(&data);
-		break;
-	      }
-	  else if (data.Window == xtrekrcwin)
-	    switch (data.key)
-	      {
-	      case 'f':
-		xtrekrcline += 28;
+    showdocs(docline);
+    break;
+        default:
+    data.Window = w;
+    keyaction(&data);
+    break;
+        }
+    else if (data.Window == xtrekrcwin)
+      switch (data.key)
+        {
+        case 'f':
+    xtrekrcline += 28;
 
-		if (xtrekrcline >= maxxtrekrclines)
-		  xtrekrcline = maxxtrekrclines - 28;
+    if (xtrekrcline >= maxxtrekrclines)
+      xtrekrcline = maxxtrekrclines - 28;
 
-		showxtrekrc(xtrekrcline);
-		break;
-	      case 'b':
-		xtrekrcline -= 28;
+    showxtrekrc(xtrekrcline);
+    break;
+        case 'b':
+    xtrekrcline -= 28;
 
-		if (xtrekrcline < 0)
-		  xtrekrcline = 0;
+    if (xtrekrcline < 0)
+      xtrekrcline = 0;
 
-		showxtrekrc(xtrekrcline);
-		break;
-	      case 'F':
-		xtrekrcline += 4;
+    showxtrekrc(xtrekrcline);
+    break;
+        case 'F':
+    xtrekrcline += 4;
 
-		if (xtrekrcline >= maxxtrekrclines)
-		  xtrekrcline = maxxtrekrclines - 28;
+    if (xtrekrcline >= maxxtrekrclines)
+      xtrekrcline = maxxtrekrclines - 28;
 
-		showxtrekrc(xtrekrcline);
-		break;
-	      case 'B':
-		xtrekrcline -= 4;
+    showxtrekrc(xtrekrcline);
+    break;
+        case 'B':
+    xtrekrcline -= 4;
 
-		if (xtrekrcline < 0)
-		  xtrekrcline = 0;
+    if (xtrekrcline < 0)
+      xtrekrcline = 0;
 
-		showxtrekrc(xtrekrcline);
-		break;
-	      default:
-		data.Window = w;
-		keyaction(&data);
-		break;
-	      }
+    showxtrekrc(xtrekrcline);
+    break;
+        default:
+    data.Window = w;
+    keyaction(&data);
+    break;
+        }
 #endif
 
-	  else if (messageon)
-	    smessage(data.key);
-	  else
-	    keyaction(&data);
-	  break;
+    else if (messageon)
+      smessage(data.key);
+    else
+      keyaction(&data);
+    break;
 
 #ifdef MOTION_MOUSE
-	case W_EV_CM_BUTTON:
+  case W_EV_CM_BUTTON:
 #endif
 
-	case W_EV_BUTTON:
-	  if ((handler = W_GetWindowButtonHandler(data.Window)) != NULL)
-	    (*handler) (&data);
-	  else
-	    buttonaction(&data);
-	  break;
+  case W_EV_BUTTON:
+    if ((handler = W_GetWindowButtonHandler(data.Window)) != NULL)
+      (*handler) (&data);
+    else
+      buttonaction(&data);
+    break;
 
-	case W_EV_EXPOSE:
-	  if ((handler = W_GetWindowExposeHandler(data.Window)) != NULL)
-	    (*handler) (&data);
-	  else if (data.Window == mapw)
-	    redrawall = 1;
-	  else if (data.Window == warnw)
-	    W_ClearWindow(warnw);
-	  else if (data.Window == messagew)
-	    W_ClearWindow(messagew);
+  case W_EV_EXPOSE:
+    if ((handler = W_GetWindowExposeHandler(data.Window)) != NULL)
+      (*handler) (&data);
+    else if (data.Window == mapw)
+      redrawall = 1;
+    else if (data.Window == warnw)
+      W_ClearWindow(warnw);
+    else if (data.Window == messagew)
+      W_ClearWindow(messagew);
 
 #ifdef XTREKRC_HELP
-	  else if (defWin && (data.Window == defWin))
-	    showdef();
+    else if (defWin && (data.Window == defWin))
+      showdef();
 #endif
 
 #ifdef DOC_WIN
-	  else if (docwin && (data.Window == docwin))
-	    showdocs(docline);
-	  else if (xtrekrcwin && (data.Window == xtrekrcwin))
-	    showxtrekrc(xtrekrcline);
+    else if (docwin && (data.Window == docwin))
+      showdocs(docline);
+    else if (xtrekrcwin && (data.Window == xtrekrcwin))
+      showxtrekrc(xtrekrcline);
 #endif
 
-	  break;
+    break;
 
-	default:
-	  break;
-	}
+  default:
+    break;
+  }
     }
   while (W_EventsQueued());
   return loop;
@@ -970,8 +969,8 @@ keyaction(W_Event * data)
 
 #endif
 
-  fastQuit = 0;					 /* any event, cancel * *
-						  * fastquit! */
+  fastQuit = 0;          /* any event, cancel * *
+              * fastquit! */
 
   if (data->Window != mapw && data->Window != w && data->Window != infow
       && data->Window != scanw)
@@ -988,17 +987,17 @@ keyaction(W_Event * data)
       int     x, y;
 
       if (findMouseInWin(&x, &y, w))
-	{					 /* local window */
-	  data->Window = w;
-	  data->x = x;
-	  data->y = y;
-	}
+  {          /* local window */
+    data->Window = w;
+    data->x = x;
+    data->y = y;
+  }
       else if (findMouseInWin(&x, &y, mapw))
-	{					 /* galactic window */
-	  data->Window = mapw;
-	  data->x = x;
-	  data->y = y;
-	}
+  {          /* galactic window */
+    data->Window = mapw;
+    data->x = x;
+    data->y = y;
+  }
     }
 
 
@@ -1007,52 +1006,52 @@ keyaction(W_Event * data)
   if (localflags & (PFREFIT))
     {
       switch (key)
-	{
-	case 'c':
-	  sendRefitReq(CRUISER);
-	  localflags &= ~(PFREFIT);
-	  return;
-	  break;
-	case 'o':
-	  sendRefitReq(STARBASE);
-	  localflags &= ~(PFREFIT);
-	  return;
-	  break;
-	case 'a':
-	  sendRefitReq(ASSAULT);
-	  localflags &= ~(PFREFIT);
-	  return;
-	  break;
-	case 'd':
-	  sendRefitReq(DESTROYER);
-	  localflags &= ~(PFREFIT);
-	  return;
-	  break;
-	case 'g':
-	  sendRefitReq(SGALAXY);
-	  localflags &= ~(PFREFIT);
-	  return;
-	  break;
-	case 'b':
-	  sendRefitReq(BATTLESHIP);
-	  localflags &= ~(PFREFIT);
-	  return;
-	  break;
-	case 's':
-	  sendRefitReq(SCOUT);
-	  localflags &= ~(PFREFIT);
-	  return;
-	  break;
-	case '*':
-	  sendRefitReq(ATT);
-	  localflags &= ~(PFREFIT);
-	  return;
-	  break;
-	default:
-	  localflags &= ~(PFREFIT);
-	  return;
-	  break;
-	}
+  {
+  case 'c':
+    sendRefitReq(CRUISER);
+    localflags &= ~(PFREFIT);
+    return;
+    break;
+  case 'o':
+    sendRefitReq(STARBASE);
+    localflags &= ~(PFREFIT);
+    return;
+    break;
+  case 'a':
+    sendRefitReq(ASSAULT);
+    localflags &= ~(PFREFIT);
+    return;
+    break;
+  case 'd':
+    sendRefitReq(DESTROYER);
+    localflags &= ~(PFREFIT);
+    return;
+    break;
+  case 'g':
+    sendRefitReq(SGALAXY);
+    localflags &= ~(PFREFIT);
+    return;
+    break;
+  case 'b':
+    sendRefitReq(BATTLESHIP);
+    localflags &= ~(PFREFIT);
+    return;
+    break;
+  case 's':
+    sendRefitReq(SCOUT);
+    localflags &= ~(PFREFIT);
+    return;
+    break;
+  case '*':
+    sendRefitReq(ATT);
+    localflags &= ~(PFREFIT);
+    return;
+    break;
+  default:
+    localflags &= ~(PFREFIT);
+    return;
+    break;
+  }
     }
 
 #ifdef RECORDGAME
@@ -1061,8 +1060,8 @@ keyaction(W_Event * data)
       {
       case 0x8:
       case 0xd:
-	pbsetspeed(key);
-	return;
+  pbsetspeed(key);
+  return;
       }
 #endif
 
@@ -1085,68 +1084,68 @@ keyaction(W_Event * data)
       struct obtype *target;
 
       switch (key)
-	{
-	case 'Q':
-	case 'q':
-	  /* Instant Quit */
-	  terminate(0);
-	  break;
-	case ' ':
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':
-	case '!':
-	case '#':
-	case '%':
-	case '(':
-	case ')':
-	case '<':
-	case '>':
-	case '@':
-	case 'R':
+  {
+  case 'Q':
+  case 'q':
+    /* Instant Quit */
+    terminate(0);
+    break;
+  case ' ':
+  case '0':
+  case '1':
+  case '2':
+  case '3':
+  case '4':
+  case '5':
+  case '6':
+  case '7':
+  case '8':
+  case '9':
+  case '!':
+  case '#':
+  case '%':
+  case '(':
+  case ')':
+  case '<':
+  case '>':
+  case '@':
+  case 'R':
         case 'j':
         case 'J':
         case 's':
-	  pbsetspeed(key);
-	  return;
-	  break;
-	case 'l':
-	  target = gettarget(data->Window, data->x, data->y, TARG_PLAYER | TARG_CLOAK);
-	  pblockplayer(target->o_num);
-	  return;
-	  break;
-	case ';':
-	  target = gettarget(data->Window, data->x, data->y, TARG_PLANET);
-	  pblockplanet(target->o_num);
-	  return;
-	  break;
+    pbsetspeed(key);
+    return;
+    break;
+  case 'l':
+    target = gettarget(data->Window, data->x, data->y, TARG_PLAYER | TARG_CLOAK);
+    pblockplayer(target->o_num);
+    return;
+    break;
+  case ';':
+    target = gettarget(data->Window, data->x, data->y, TARG_PLANET);
+    pblockplanet(target->o_num);
+    return;
+    break;
         case '=':
           printf("sequence #%d\n", pb_sequence_count);
           return;
           break;
-	case 'I':
-	case 'i':
-	case '?':
-	  /* Do the normal function */
-	  /* Used for commands that do not try to send packets */
-	  break;
-	default:
-	  /* If key is not in above list dont run it. */
-	  return;
-	}
+  case 'I':
+  case 'i':
+  case '?':
+    /* Do the normal function */
+    /* Used for commands that do not try to send packets */
+    break;
+  default:
+    /* If key is not in above list dont run it. */
+    return;
+  }
     }
 #endif
 
 
   /* suggestion:  later we can add an option removing this to the emptyKey()
-   * * * function.  This would improve input efficiency considerably when * * 
+   * * * function.  This would improve input efficiency considerably when * *
    * "singleMacro" is non-NULL. - jn */
 
   if ((!MacroMode)
@@ -1164,9 +1163,9 @@ keyaction(W_Event * data)
     }
 
 #ifdef MOTION_MOUSE
-  if ((data->type == W_EV_CM_BUTTON) &&		 /* KOC - 10/18/95     */
-      (!motion_mouse_enablable) &&		 /* Hack for            */
-      (key != 107))				 /* continuous_steer    */
+  if ((data->type == W_EV_CM_BUTTON) &&    /* KOC - 10/18/95     */
+      (!motion_mouse_enablable) &&     /* Hack for            */
+      (key != 107))        /* continuous_steer    */
     return;
 #endif
 
@@ -1178,32 +1177,32 @@ mkeyaction(W_Event * data)
 {
   unsigned char key = data->key;
 
-  fastQuit = 0;					 /* any event, cancel * *
-						  * fastquit! */
+  fastQuit = 0;          /* any event, cancel * *
+              * fastquit! */
 
   if (!INDEX("sbogadc", key) || !(localflags & PFREFIT))
     {
       if (key >= 32 && key < 176)
-	{
-	  int     offset;
+  {
+    int     offset;
 
-	  switch (data->modifier)
-	    {
-	    case W_LBUTTON:
-	      offset = 192;
-	      break;
+    switch (data->modifier)
+      {
+      case W_LBUTTON:
+        offset = 192;
+        break;
 
-	    case W_MBUTTON:
-	      offset = 288;
-	      break;
+      case W_MBUTTON:
+        offset = 288;
+        break;
 
-	    case W_RBUTTON:
-	      offset = 384;
-	      break;
-	    }
+      case W_RBUTTON:
+        offset = 384;
+        break;
+      }
 
-	  key = mystats->st_keymap[key - 32 + offset];
-	}
+    key = mystats->st_keymap[key - 32 + offset];
+  }
     }
 
   data->key = key;
@@ -1217,10 +1216,10 @@ buttonaction(W_Event * data)
   struct obtype *gettarget(W_Window ww, int x, int y, int targtype);
 
   if (messageon)
-    message_off();				 /* ATM */
+    message_off();         /* ATM */
 
-  fastQuit = 0;					 /* any event, cancel * *
-						  * fastquit! */
+  fastQuit = 0;          /* any event, cancel * *
+              * fastquit! */
 
 #ifdef RECORDGAME
   /* While playing back recorded games, ignore the mouse */
@@ -1232,13 +1231,13 @@ buttonaction(W_Event * data)
   if (data->Window == reviewWin)
     {
       if (recv_mesg)
-	{
-	  sendShortReq(SPK_MOFF);
-	}
+  {
+    sendShortReq(SPK_MOFF);
+  }
       else
-	{
-	  sendShortReq(SPK_MON);
-	}
+  {
+    sendShortReq(SPK_MON);
+  }
       return;
     }
 #endif
@@ -1257,17 +1256,17 @@ buttonaction(W_Event * data)
 
     {
       if (buttonmap[data->key] != '\0')
-	{
-	  data->key = buttonmap[data->key];
-	  keyaction(data);
-	  return;
-	}
+  {
+    data->key = buttonmap[data->key];
+    keyaction(data);
+    return;
+  }
     }
 
 #ifdef MOTION_MOUSE
-  if ((data->type == W_EV_CM_BUTTON) &&		 /* KOC - 10/18/95     */
-      (!motion_mouse_enablable) &&		 /* Hack for            */
-      (data->key != W_RBUTTON))			 /* continuous_steer    */
+  if ((data->type == W_EV_CM_BUTTON) &&    /* KOC - 10/18/95     */
+      (!motion_mouse_enablable) &&     /* Hack for            */
+      (data->key != W_RBUTTON))      /* continuous_steer    */
     return;
 #endif
 
@@ -1276,17 +1275,17 @@ buttonaction(W_Event * data)
       int     x, y;
 
       if (findMouseInWin(&x, &y, w))
-	{					 /* local window */
-	  data->Window = w;
-	  data->x = x;
-	  data->y = y;
-	}
+  {          /* local window */
+    data->Window = w;
+    data->x = x;
+    data->y = y;
+  }
       else if (findMouseInWin(&x, &y, mapw))
-	{					 /* galactic window */
-	  data->Window = mapw;
-	  data->x = x;
-	  data->y = y;
-	}
+  {          /* galactic window */
+    data->Window = mapw;
+    data->x = x;
+    data->y = y;
+  }
     }
 
   if (data->key == W_RBUTTON)
@@ -1313,7 +1312,7 @@ buttonaction(W_Event * data)
     }
   else if (data->key == W_LBUTTON2)
     {
-      set_speed(99);				 /* Max speed... */
+      set_speed(99);         /* Max speed... */
       localflags &= ~(PFREFIT);
     }
   else if (data->key == W_MBUTTON2)
@@ -1323,15 +1322,15 @@ buttonaction(W_Event * data)
   else if (data->key == W_RBUTTON3)
     {
       if (!infomapped)
-	{
-	  inform(data->Window, data->x, data->y, 'i');
-	  opened_info = keepInfo;		 /* 5/31/93 LAB */
-	}
+  {
+    inform(data->Window, data->x, data->y, 'i');
+    opened_info = keepInfo;    /* 5/31/93 LAB */
+  }
       else
-	{
-	  destroyInfo();
-	  opened_info = -2;
-	}
+  {
+    destroyInfo();
+    opened_info = -2;
+  }
     }
   else if (data->key == W_LBUTTON3)
     {
@@ -1351,7 +1350,7 @@ buttonaction(W_Event * data)
              *target;
 
       if (me->p_flags & (PFTRACT | PFPRESS))
-	sendTractorReq(0, me->p_no);
+  sendTractorReq(0, me->p_no);
       target = gettarget(data->Window, data->x, data->y, TARG_PLAYER);
       me->p_tractor = target->o_num;
       sendTractorReq(1, target->o_num);
@@ -1362,7 +1361,7 @@ buttonaction(W_Event * data)
              *target;
 
       if (me->p_flags & (PFTRACT | PFPRESS))
-	sendRepressReq(0, me->p_no);
+  sendRepressReq(0, me->p_no);
       target = gettarget(data->Window, data->x, data->y, TARG_PLAYER);
       me->p_tractor = target->o_num;
       sendRepressReq(1, target->o_num);
@@ -1379,12 +1378,12 @@ getcourse(W_Window ww, int x, int y)
       me_x = me->p_x * GWINSIDE / GWIDTH;
       me_y = me->p_y * GWINSIDE / GWIDTH;
       return ((unsigned char) nint((atan2((double) (x - me_x),
-			     (double) (me_y - y)) / 3.14159 * 128.) + 0.5));
+           (double) (me_y - y)) / 3.14159 * 128.) + 0.5));
     }
   else
     return ((unsigned char) nint((atan2((double) (x - TWINSIDE / 2),
-					(double) (TWINSIDE / 2 - y))
-				  / 3.14159 * 128.) + 0.5));
+          (double) (TWINSIDE / 2 - y))
+          / 3.14159 * 128.) + 0.5));
 }
 
 scan(W_Window w, int x, int y)
@@ -1398,22 +1397,22 @@ detmine(void)
   for (i = 0; i < MAXTORP; i++)
     {
       if (torps[i + (me->p_no * MAXTORP)].t_status == TMOVE ||
-	  torps[i + (me->p_no * MAXTORP)].t_status == TSTRAIGHT)
-	{
-	  sendDetMineReq(i + (me->p_no * MAXTORP));
+    torps[i + (me->p_no * MAXTORP)].t_status == TSTRAIGHT)
+  {
+    sendDetMineReq(i + (me->p_no * MAXTORP));
 
 #ifdef SHORT_PACKETS
-	  if (recv_short)
-	    break;				 /* Let the server det for me 
-						  * 
-						  */
+    if (recv_short)
+      break;         /* Let the server det for me
+              *
+              */
 #endif
-	}
+  }
     }
 }
 
-lockPlanetOrBase(W_Window ww, int x, int y)	 /* special version of * *
-						  * gettarget, 6/1/93 LAB */
+lockPlanetOrBase(W_Window ww, int x, int y)  /* special version of * *
+              * gettarget, 6/1/93 LAB */
 
 
 {
@@ -1440,31 +1439,31 @@ lockPlanetOrBase(W_Window ww, int x, int y)	 /* special version of * *
     {
       dist = hypot((double) (g_x - k->pl_x), (double) (g_y - k->pl_y));
       if (dist < closedist)
-	{
-	  targtyp = PLANETTYPE;
-	  targnum = i;
-	  closedist = dist;
-	}
+  {
+    targtyp = PLANETTYPE;
+    targnum = i;
+    closedist = dist;
+  }
     }
 
   for (i = 0, j = &players[i]; i < MAXPLAYER; i++, j++)
     {
       if (j->p_status != PALIVE)
-	continue;
+  continue;
       if (j->p_flags & PFCLOAK)
-	continue;
+  continue;
       if (j == me)
-	continue;
+  continue;
       if ((j->p_ship.s_type == STARBASE) && (j->p_team == me->p_team))
-	{
-	  dist = hypot((double) (g_x - j->p_x), (double) (g_y - j->p_y));
-	  if (dist < closedist)
-	    {
-	      targtyp = PLAYERTYPE;
-	      targnum = i;
-	      closedist = dist;
-	    }
-	}
+  {
+    dist = hypot((double) (g_x - j->p_x), (double) (g_y - j->p_y));
+    if (dist < closedist)
+      {
+        targtyp = PLAYERTYPE;
+        targnum = i;
+        closedist = dist;
+      }
+  }
     }
 
   if (targtyp == PLAYERTYPE)
@@ -1509,8 +1508,8 @@ void    doMacro(W_Event * data)
 
 #endif
 
-  warning(" ");					 /* We are here now, so turn
-						  * * off macro mode */
+  warning(" ");          /* We are here now, so turn
+              * * off macro mode */
   MacroMode = 0;
 
 
@@ -1529,145 +1528,145 @@ void    doMacro(W_Event * data)
       /* sorry guys, I only program in kludge - jn 6/3/93 */
 
       if (MacroNum > -1)
-	{					 /* macro identified, who to? 
-						  * 
-						  */
-	  if (MacroNum >= MAX_MACRO)
-	    fprintf(stderr, "Unknown Macro Num!  There is a macro bug!!\n");
+  {          /* macro identified, who to?
+              *
+              */
+    if (MacroNum >= MAX_MACRO)
+      fprintf(stderr, "Unknown Macro Num!  There is a macro bug!!\n");
 
-	  if (!pmacro(MacroNum, data->key, data))
-	    W_Beep();
+    if (!pmacro(MacroNum, data->key, data))
+      W_Beep();
 
-	  MacroNum = -1;
-	  return;
-	}
+    MacroNum = -1;
+    return;
+  }
     }
 
 
   for (c = 0; c < macrocnt; ++c)
     {
       if (macro[c].key == data->key)
-	{
-	  if (!UseNewMacro)
-	    {
-	      if (rejectMacro && macro[c].type != NBTM)
-		warning("NEWMACROs not allowed at this server!!");
-	      else
-		pnbtmacro(c);
+  {
+    if (!UseNewMacro)
+      {
+        if (rejectMacro && macro[c].type != NBTM)
+    warning("NEWMACROs not allowed at this server!!");
+        else
+    pnbtmacro(c);
 
-	      return;
-	    }
+        return;
+      }
 
 
-	  /* Use New Macro */
+    /* Use New Macro */
 
-	  switch (macro[c].type)
-	    {
-	    case NBTM:
+    switch (macro[c].type)
+      {
+      case NBTM:
 
-	      pnbtmacro(c);
-	      return;
-	      break;
+        pnbtmacro(c);
+        return;
+        break;
 
-	    case NEWM:
+      case NEWM:
 
-	      warning("Send macro to which player?");
-	      MacroNum = c;
-	      MacroMode = 1;			 /* Need another key */
-	      return;
-	      break;
+        warning("Send macro to which player?");
+        MacroNum = c;
+        MacroMode = 1;       /* Need another key */
+        return;
+        break;
 
-	    case NEWMMOUSE:
-	      {
-		/* first translate into who, then send */
-		switch (macro[c].who)
-		  {
-		    struct player *j;
-		    struct planet *l;
+      case NEWMMOUSE:
+        {
+    /* first translate into who, then send */
+    switch (macro[c].who)
+      {
+        struct player *j;
+        struct planet *l;
 
-		  case MACRO_FRIEND:
-		  case MACRO_ENEMY:
-		  case MACRO_PLAYER:
+      case MACRO_FRIEND:
+      case MACRO_ENEMY:
+      case MACRO_PLAYER:
 
-		    targettype = TARG_PLAYER;
-		    if (macro[c].who == MACRO_ENEMY)
-		      targettype |= TARG_ENEMY;
-		    else if (macro[c].who == MACRO_FRIEND)
-		      targettype |= TARG_FRIEND;
+        targettype = TARG_PLAYER;
+        if (macro[c].who == MACRO_ENEMY)
+          targettype |= TARG_ENEMY;
+        else if (macro[c].who == MACRO_FRIEND)
+          targettype |= TARG_FRIEND;
 
-		    target = gettarget(data->Window, data->x, data->y,
-				       TARG_PLAYER | TARG_CLOAK);
-		    if (target->o_type == PLAYERTYPE)
-		      {
-			j = &players[target->o_num];
-			if (j->p_flags & PFCLOAK)
-			  maskrecip = 1;
-			who = j->p_mapchars[1];
-		      }
-		    else
-		      {
-			who = me->p_mapchars[1];
-			warning("Can only send a message to a player");
-		      }
-		    break;
+        target = gettarget(data->Window, data->x, data->y,
+               TARG_PLAYER | TARG_CLOAK);
+        if (target->o_type == PLAYERTYPE)
+          {
+      j = &players[target->o_num];
+      if (j->p_flags & PFCLOAK)
+        maskrecip = 1;
+      who = j->p_mapchars[1];
+          }
+        else
+          {
+      who = me->p_mapchars[1];
+      warning("Can only send a message to a player");
+          }
+        break;
 
-		  case MACRO_TEAM:
-		    target = gettarget(data->Window, data->x, data->y,
-				       TARG_PLAYER | TARG_PLANET);
-		    if (target->o_type == PLANETTYPE)
-		      {
-			l = &planets[target->o_num];
-			who = teamlet[l->pl_owner];
-		      }
-		    else if (target->o_type == PLAYERTYPE)
-		      {
-			j = &players[target->o_num];
-			who = j->p_mapchars[0];
-		      }
-		    else
-		      {
-			who = me->p_mapchars[1];
-			warning("Player or planet only please");
-		      }
-		    break;
+      case MACRO_TEAM:
+        target = gettarget(data->Window, data->x, data->y,
+               TARG_PLAYER | TARG_PLANET);
+        if (target->o_type == PLANETTYPE)
+          {
+      l = &planets[target->o_num];
+      who = teamlet[l->pl_owner];
+          }
+        else if (target->o_type == PLAYERTYPE)
+          {
+      j = &players[target->o_num];
+      who = j->p_mapchars[0];
+          }
+        else
+          {
+      who = me->p_mapchars[1];
+      warning("Player or planet only please");
+          }
+        break;
 
-		  default:
-		    who = me->p_mapchars[1];
-		    break;
-		  }
+      default:
+        who = me->p_mapchars[1];
+        break;
+      }
 
-		if (!pmacro(c, who, data))
-		  W_Beep();
+    if (!pmacro(c, who, data))
+      W_Beep();
 
-		return;
-		break;
-	      }
+    return;
+    break;
+        }
 
 #ifdef MULTILINE_MACROS
-	    case NEWMULTIM:
+      case NEWMULTIM:
 
-	      if (!pmacro(c, macro[c].who, data))
-		W_Beep();
+        if (!pmacro(c, macro[c].who, data))
+    W_Beep();
 
-	      found = 1;
-	      break;				 /* Loop again */
+        found = 1;
+        break;         /* Loop again */
 #endif
 
-	    case NEWMSPEC:
+      case NEWMSPEC:
 
-	      if (!pmacro(c, macro[c].who, data))
-		W_Beep();
-	      return;
-	      break;
+        if (!pmacro(c, macro[c].who, data))
+    W_Beep();
+        return;
+        break;
 
 
-	    default:
-	      fprintf(stderr, "Unknown Macro Type!  Jeff's a twink!!\n");
-	      warning("Unknown macro type (eg There is a macro bug)");
-	      return;
-	      break;
-	    }
-	}
+      default:
+        fprintf(stderr, "Unknown Macro Type!  Jeff's a twink!!\n");
+        warning("Unknown macro type (eg There is a macro bug)");
+        return;
+        break;
+      }
+  }
     }
 
   if (found)
@@ -1680,10 +1679,10 @@ void    doMacro(W_Event * data)
   for (i = take; distmacro[i].name; i++)
     {
       if (distmacro[i].c == data->key)
-	{
-	  emergency(i, data);
-	  return;
-	}
+  {
+    emergency(i, data);
+    return;
+  }
     }
 #endif
 
@@ -1747,7 +1746,7 @@ Key36(void)
 
 Key37(void)
 {
-  set_speed(99);				 /* Max speed... */
+  set_speed(99);         /* Max speed... */
 }
 
 Key38(void)
@@ -1793,7 +1792,7 @@ Key43(void)
 
       udpwindow();
       sprintf(buf, "UDP client version %.1f",
-	      (float) UDPVERSION / 10.0);
+        (float) UDPVERSION / 10.0);
       warning(buf);
     }
 
@@ -1927,17 +1926,17 @@ Key63(void)
   if (!W_IsMapped(reviewWin))
     {
       if (W_IsMapped(messwa))
-	{
-	  W_UnmapWindow(messwa);
-	  W_UnmapWindow(phaserwin);
-	  W_UnmapWindow(messwt);
-	  W_UnmapWindow(messwi);
-	  W_UnmapWindow(messwk);
-	}
+  {
+    W_UnmapWindow(messwa);
+    W_UnmapWindow(phaserwin);
+    W_UnmapWindow(messwt);
+    W_UnmapWindow(messwi);
+    W_UnmapWindow(messwk);
+  }
       else
-	{
-	  W_MapWindow(reviewWin);
-	}
+  {
+    W_MapWindow(reviewWin);
+  }
     }
   else
     {
@@ -1947,12 +1946,12 @@ Key63(void)
       W_MapWindow(messwi);
       W_MapWindow(messwk);
       if (phaserWindow)
-	W_MapWindow(phaserwin);
+  W_MapWindow(phaserwin);
       if (W_IsMapped(statwin))
-	{
-	  W_UnmapWindow(statwin);
-	  W_MapWindow(statwin);
-	}
+  {
+    W_UnmapWindow(statwin);
+    W_MapWindow(statwin);
+  }
     }
   if (optionWin)
     {
@@ -1997,7 +1996,7 @@ Key68(void)
 
 #ifdef AUTOKEY
   if (autoKey)
-    autoKeyAllOff();				 /* xx */
+    autoKeyAllOff();         /* xx */
 #endif
 }
 
@@ -2029,7 +2028,7 @@ Key73(W_Event * data)
   if (!infomapped)
     {
       inform(data->Window, data->x, data->y, key);
-      opened_info = keepInfo;			 /* 5/31/93 LAB */
+      opened_info = keepInfo;      /* 5/31/93 LAB */
     }
   else
     {
@@ -2205,9 +2204,9 @@ Key92(void)
   if (netstat)
     {
       if (lMeter != NULL && W_IsMapped(lMeter))
-	W_UnmapWindow(lMeter);
+  W_UnmapWindow(lMeter);
       else
-	W_MapWindow(lMeter);
+  W_MapWindow(lMeter);
     }
   else
     {
@@ -2260,7 +2259,7 @@ Key97(W_Event * data)
   else
     {
       if (scanmapped)
-	W_UnmapWindow(scanwin);
+  W_UnmapWindow(scanwin);
       scanmapped = 0;
     }
 }
@@ -2298,7 +2297,7 @@ Key100(void)
 #else
   /* want to limit these to one per update */
   curtime = mstime();
-  if (curtime >= lastdet + 100)			 /* Allow one per 100 ms */
+  if (curtime >= lastdet + 100)      /* Allow one per 100 ms */
     {
       sendDetonateReq();
       lastdet = curtime;
@@ -2364,7 +2363,7 @@ Key105(W_Event * data)
   if (!infomapped)
     {
       inform(data->Window, data->x, data->y, key);
-      opened_info = keepInfo;			 /* 5/31/93 LAB */
+      opened_info = keepInfo;      /* 5/31/93 LAB */
     }
   else
     {
@@ -2390,7 +2389,7 @@ Key107(W_Event * data)
 Key108(W_Event * data)
 {
   target = gettarget(data->Window, data->x, data->y,
-		     TARG_PLAYER | TARG_PLANET);
+         TARG_PLAYER | TARG_PLANET);
   if (target->o_type == PLAYERTYPE)
     {
       sendPlaylockReq(target->o_num);
@@ -2398,7 +2397,7 @@ Key108(W_Event * data)
 
     }
   else
-    {						 /* It's a planet */
+    {            /* It's a planet */
       sendPlanlockReq(target->o_num);
       me->p_planet = target->o_num;
     }

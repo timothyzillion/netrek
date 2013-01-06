@@ -23,58 +23,58 @@
  * Revision 1.8.2.1  2002/06/13 04:10:16  tanner
  * Wed Jun 12 22:52:13 2002  Bob Tanner  <tanner@real-time.com>
  *
- * 	* playback.c (pbmain):  Converted enter_ship.wav
+ *  * playback.c (pbmain):  Converted enter_ship.wav
  *
- * 	* input.c (Key113): Converted self_destruct.wav
+ *  * input.c (Key113): Converted self_destruct.wav
  *
- * 	* input.c (Key109): Converted message.wav
+ *  * input.c (Key109): Converted message.wav
  *
- * 	* local.c (DrawMisc): Converted warning.wav
+ *  * local.c (DrawMisc): Converted warning.wav
  *
- * 	* local.c (DrawPlasmaTorps): Converted plasma_hit.wav
+ *  * local.c (DrawPlasmaTorps): Converted plasma_hit.wav
  *
- * 	* local.c (DrawTorps): Converted torp_hit.wav
+ *  * local.c (DrawTorps): Converted torp_hit.wav
  *
- * 	* sound.h: added EXPLOSION_OTHER_WAV, PHASER_OTHER_WAV,
- * 	FIRE_TORP_OTHER. and the code to load these new sounds.
+ *  * sound.h: added EXPLOSION_OTHER_WAV, PHASER_OTHER_WAV,
+ *  FIRE_TORP_OTHER. and the code to load these new sounds.
  *
- * 	* local.c (DrawShips): Converted cloak.wav, uncloak.wav,
- * 	shield_down.wav, shield_up.wav, explosion.wav,
- * 	explosion_other.wav, phaser.wav, phaser_other.wav
+ *  * local.c (DrawShips): Converted cloak.wav, uncloak.wav,
+ *  shield_down.wav, shield_up.wav, explosion.wav,
+ *  explosion_other.wav, phaser.wav, phaser_other.wav
  *
- * 	* cowmain.c (cowmain): Converted enter_ship.wav and engine.wav
+ *  * cowmain.c (cowmain): Converted enter_ship.wav and engine.wav
  *
- * 	* sound.c: added isDirectory to check that the sounddir is
- * 	actually a directory.
+ *  * sound.c: added isDirectory to check that the sounddir is
+ *  actually a directory.
  *
  * Tue Jun 11 01:10:51 2002  Bob Tanner  <tanner@real-time.com>
  *
- * 	* system.mk.in: Added SDL_CFLAGS, SDL_CONFIG, SDL_LIBS,
- * 	SDL_MIXER_LIBS
+ *  * system.mk.in: Added SDL_CFLAGS, SDL_CONFIG, SDL_LIBS,
+ *  SDL_MIXER_LIBS
  *
- * 	* sound.c: Added HAVE_SDL wrapper, initialization of SDL system,
- * 	opening of audio device, and loading of 17 cow sounds.
+ *  * sound.c: Added HAVE_SDL wrapper, initialization of SDL system,
+ *  opening of audio device, and loading of 17 cow sounds.
  *
- * 	* cowmain.c (cowmain): HAVE_SDL wrapper to Init_Sound using SDL. I
- * 	moved the Init_Sound method to right after readdefaults() so the
- * 	intro can start playing ASAP.
+ *  * cowmain.c (cowmain): HAVE_SDL wrapper to Init_Sound using SDL. I
+ *  moved the Init_Sound method to right after readdefaults() so the
+ *  intro can start playing ASAP.
  *
- * 	* configure.in: Added AC_CANONICAL_SYSTEM, added check for SDL,
- * 	add check for SDL_mixer.
+ *  * configure.in: Added AC_CANONICAL_SYSTEM, added check for SDL,
+ *  add check for SDL_mixer.
  *
- * 	* config.h.in: add HAVE_SDL
+ *  * config.h.in: add HAVE_SDL
  *
- * 	* spike: See spike/README for details
+ *  * spike: See spike/README for details
  *
  * Revision 1.9  2002/06/13 03:58:41  tanner
  * The changes for sound are mostly isolated in local.c, just a few other changes
  * in the commit.
  *
- * 	* playback.c (pbmain):  Converted enter_ship.wav
+ *  * playback.c (pbmain):  Converted enter_ship.wav
  *
- * 	* input.c (Key113): Converted self_destruct.wav
+ *  * input.c (Key113): Converted self_destruct.wav
  *
- * 	* input.c (Key109): Converted message.wav
+ *  * input.c (Key109): Converted message.wav
  *
  * Revision 1.8  2001/07/24 00:29:13  quozl
  * minor playback fix
@@ -83,20 +83,20 @@
  * add single-step playback keys
  *
  * Revision 1.6  2001/04/26 05:58:20  quozl
- * 	* Makefile (dist): change dist and distdoc targets to generate a
- * 	.tar.gz file that unpacks to a directory below the current
- * 	directory.  Note: also writes the output kit file to the current
- * 	directory rather than the directory above.
+ *  * Makefile (dist): change dist and distdoc targets to generate a
+ *  .tar.gz file that unpacks to a directory below the current
+ *  directory.  Note: also writes the output kit file to the current
+ *  directory rather than the directory above.
  *
- * 	* INSTALL: new file, standard generic installation instructions.
+ *  * INSTALL: new file, standard generic installation instructions.
  *
- * 	* README: new file, explains the other important package
- * 	documentation files.
+ *  * README: new file, explains the other important package
+ *  documentation files.
  *
- * 	* ChangeLog: new file, a programmers change log as per GNU
- * 	packaging standards and automated EMACS change log entry creation.
+ *  * ChangeLog: new file, a programmers change log as per GNU
+ *  packaging standards and automated EMACS change log entry creation.
  *
- * 	* .cvsignore: add list of files to be ignored by CVS.
+ *  * .cvsignore: add list of files to be ignored by CVS.
  *
  * Revision 1.5  2000/11/07 20:24:05  ahn
  * Add patch from Crist Clark <cjclark@alum.mit.edu>
@@ -176,10 +176,10 @@
 #include "playerlist.h"
 
 #ifdef RECORDGAME
-extern int opened_info;				 /* counter for infowin *
+extern int opened_info;        /* counter for infowin *
 
-						  * 
-						  * * popup, 6/1/93 LAB */
+              *
+              * * popup, 6/1/93 LAB */
 #define RETURNBASE 10
 
 extern jmp_buf env;
@@ -194,8 +194,8 @@ int pb_index_exists;
 int pb_num_context = 0;
 int pb_num_fast_forward = 0;
 int pb_sequence_count = 0;
-int pb_stepping = 0;			/* non-zero if doing a step	*/
-int pb_snapping = 0;			/* non-zero if taking camera snapshots	*/
+int pb_stepping = 0;      /* non-zero if doing a step */
+int pb_snapping = 0;      /* non-zero if taking camera snapshots  */
 
 const char *INDEX_FORMAT = "%d,%d,%d";
 const int INDEX_GRANULARITY = 100;
@@ -245,9 +245,9 @@ int
   playback = PL_FORWARD;
   pseudo[0] = defpasswd[0] = '\0';
 
-  i = setjmp(env);				 /* Error while initializing */
+  i = setjmp(env);         /* Error while initializing */
   if (i >= RETURNBASE)
-    return (i - RETURNBASE);			 /* Terminate with retcode */
+    return (i - RETURNBASE);       /* Terminate with retcode */
 
   if (logFileName != NULL)
     {
@@ -315,7 +315,7 @@ int
   {
       perror("Could not create index file.");
       exit(1);
-  } 
+  }
   if (pb_create_index && (recordContextFile =
        fopen(context_filename, "wb"))==NULL)
   {
@@ -390,8 +390,8 @@ int
       char    buf[128];
 
       sprintf(buf,
-	   "Maximum:      %2d  %3d %3d               %3d   %6d   %3d   %3d",
-	      0, 0, 0, 0, 0, 0, 0);
+     "Maximum:      %2d  %3d %3d               %3d   %6d   %3d   %3d",
+        0, 0, 0, 0, 0, 0, 0);
       W_WriteText(tstatw, 50, 27, textColor, buf, strlen(buf), W_RegularFont);
     }
 
@@ -407,9 +407,9 @@ int
   Init_Sound();
 #endif
 
-  i = setjmp(env);				 /* Reentry point of game */
+  i = setjmp(env);         /* Reentry point of game */
   if (i >= RETURNBASE)
-    return (i - RETURNBASE);			 /* Terminate with retcode */
+    return (i - RETURNBASE);       /* Terminate with retcode */
 
 #if defined(SOUND) && !defined(HAVE_SDL)
   Abort_Sound(ENGINE_SOUND);
@@ -421,9 +421,9 @@ int
     run_clock(time(0));
 
     if (remap[me->p_team] == NOBODY)
-      RedrawPlayerList();			 /* When you first login */
+      RedrawPlayerList();      /* When you first login */
     else
-      UpdatePlayerList();			 /* Otherwise */
+      UpdatePlayerList();      /* Otherwise */
 
   }
   /* End entrywindow() */
@@ -437,18 +437,18 @@ int
   calibrate_stats();
   W_ClearWindow(w);
 
-  me->p_status = PALIVE;			 /* Put player in game */
+  me->p_status = PALIVE;       /* Put player in game */
   PlistNoteUpdate(me->p_no);
 
-  if (showStats)				 /* Default showstats are on. 
-						  * 
-						  */
+  if (showStats)         /* Default showstats are on.
+              *
+              */
     W_MapWindow(statwin);
 
   if (W_IsMapped(lMeter))
     redrawLMeter();
 
-  if (W_IsMapped(pStats))			 /* support ping stuff */
+  if (W_IsMapped(pStats))      /* support ping stuff */
     redrawPStats();
 
 #ifdef SOUND
@@ -476,18 +476,18 @@ int
       timeout.tv_usec = 0;
 #endif
 
-      if (keepInfo > 0 && opened_info != -2 &&	 /* 6/1/93 LAB */
-	  opened_info < 0 && infomapped)
-	destroyInfo();
+      if (keepInfo > 0 && opened_info != -2 &&   /* 6/1/93 LAB */
+    opened_info < 0 && infomapped)
+  destroyInfo();
 
       if (keepInfo > 0 && opened_info != -2)
-	opened_info--;
+  opened_info--;
 
       while (W_EventsQueuedCk())
-	{
-	  process_event();
-	  /* W_Flush(); */
-	}
+  {
+    process_event();
+    /* W_Flush(); */
+  }
 
       intrupt();
       W_Flush();
@@ -553,18 +553,18 @@ void
     playback = PL_FORWARD;
   switch (key)
     {
-    case 0x8:	/* step backward one frame	*/
+    case 0x8: /* step backward one frame  */
       pb_stepping++;
       playback = PL_REVERSE;
       break;
-    case 0xd:	/* step forward one frame	*/
+    case 0xd: /* step forward one frame */
       pb_stepping++;
       break;
-    case ' ':	/* turn on or off single step	*/
+    case ' ': /* turn on or off single step */
       if (old_playback == PL_PAUSE)
-	playback = PL_FORWARD;
+  playback = PL_FORWARD;
       else
-	pb_stepping++;
+  pb_stepping++;
       break;
     case '0':
       playback = PL_PAUSE;
@@ -615,12 +615,12 @@ void
     case 'R':
       {
 #ifdef REVERSE_PLAYBACK
-	rpb_init();
+  rpb_init();
 #endif
-  	fseek (recordFile, 0, SEEK_SET);
-	playback = PL_FORWARD;
+    fseek (recordFile, 0, SEEK_SET);
+  playback = PL_FORWARD;
         pb_sequence_count = 0;
-	break;
+  break;
       }
     case '(':
       playback = PL_REVERSE;
@@ -757,14 +757,14 @@ pb_dopacket(char *buf)
   if (size == -1)
     {
       if (buf[0] == SP_S_MESSAGE)
-	{
-	  /* UGH.  SP_S_MESSAGE needs next word to calculate size */
-	  count += fread(buf+count, 1, 4, recordFile);
-	  if (count < 8)
-	    {
-	      return 1;
-	    }
-	}
+  {
+    /* UGH.  SP_S_MESSAGE needs next word to calculate size */
+    count += fread(buf+count, 1, 4, recordFile);
+    if (count < 8)
+      {
+        return 1;
+      }
+  }
       size = getvpsize(buf);
     }
 
@@ -785,9 +785,9 @@ pb_dopacket(char *buf)
   /* Call the packet handler and return success (zero). */
   (*(handlers[buf[0]].handler)) (buf
 #ifdef CORRUPTED_PACKETS
-				 ,recordFile
+         ,recordFile
 #endif
-				 );
+         );
   return 0;
 }
 
@@ -869,8 +869,8 @@ readFromFile0()
         me = displayme;
 
         if (pb_stepping) {
-	  playback = PL_PAUSE;
-	  pb_stepping = 0;
+    playback = PL_PAUSE;
+    pb_stepping = 0;
         }
 
         return 1;
@@ -976,7 +976,7 @@ readFromFile0()
   } /* while(1) */
 
 }
-  
+
 void pb_read_index() {
     const int MAXLINE = 100;
     char line[MAXLINE+1];
@@ -1152,7 +1152,7 @@ int pb_index_compare(const void *a, const void *b) {
  *  for improvement..  Reverse playback is pretty slow.. (but there
  *  is no need to reverse only 1 update at a time..)  I'm pretty
  *  sure this will start to exhibit 'weird' effects in high packet loss..
- *		-Kevin O'Connor 03/17/98
+ *    -Kevin O'Connor 03/17/98
  */
 
 
@@ -1257,203 +1257,203 @@ rpb_analyze(int diskpos, void *packet)
     case SP_PLAYER_INFO:
       id = ((struct plyr_info_spacket *)packet)->pnum;
       rpb_insert(diskpos, RPB_PLAYER_OFFSET + id * RPB_PLAYER_MAX
-	+ RPB_PLAYER_INFO);
+  + RPB_PLAYER_INFO);
       break;
     case SP_PL_LOGIN:
       id = ((struct plyr_login_spacket *)packet)->pnum;
       rpb_insert(diskpos, RPB_PLAYER_OFFSET + id * RPB_PLAYER_MAX
-	+ RPB_PLAYER_LOGIN);
+  + RPB_PLAYER_LOGIN);
       break;
     case SP_HOSTILE:
       id = ((struct hostile_spacket *)packet)->pnum;
       rpb_insert(diskpos, RPB_PLAYER_OFFSET + id * RPB_PLAYER_MAX
-	+ RPB_PLAYER_HOSTILE);
+  + RPB_PLAYER_HOSTILE);
       break;
     case SP_STATS:
       id = ((struct stats_spacket *)packet)->pnum;
       rpb_insert(diskpos, RPB_PLAYER_OFFSET + id * RPB_PLAYER_MAX
-	+ RPB_PLAYER_STATS);
+  + RPB_PLAYER_STATS);
       break;
     case SP_FLAGS:
       id = ((struct flags_spacket *)packet)->pnum;
       rpb_insert(diskpos, RPB_PLAYER_OFFSET + id * RPB_PLAYER_MAX
-	+ RPB_PLAYER_FLAGS);
+  + RPB_PLAYER_FLAGS);
       break;
     case SP_KILLS:
       id = ((struct kills_spacket *)packet)->pnum;
       rpb_insert(diskpos, RPB_PLAYER_OFFSET + id * RPB_PLAYER_MAX
-	+ RPB_PLAYER_KILLS);
+  + RPB_PLAYER_KILLS);
       break;
     case SP_PLAYER:
       id = ((struct player_spacket *)packet)->pnum;
       rpb_insert(diskpos, RPB_PLAYER_OFFSET + id * RPB_PLAYER_MAX
-	+ RPB_PLAYER_POSITION);
+  + RPB_PLAYER_POSITION);
       break;
     case SP_YOU:
       id = ((struct you_spacket *)packet)->pnum;
       rpb_insert(diskpos, RPB_PLAYER_OFFSET + id * RPB_PLAYER_MAX
-	+ RPB_PLAYER_HOSTILE);
+  + RPB_PLAYER_HOSTILE);
       rpb_insert(diskpos, RPB_PLAYER_OFFSET + id * RPB_PLAYER_MAX
-	+ RPB_PLAYER_FLAGS);
+  + RPB_PLAYER_FLAGS);
       rpb_insert(diskpos, RPB_PLAYER_OFFSET + id * RPB_PLAYER_MAX
-	+ RPB_PLAYER_FUEL);
+  + RPB_PLAYER_FUEL);
       rpb_insert(diskpos, RPB_PLAYER_OFFSET + id * RPB_PLAYER_MAX
-	+ RPB_PLAYER_ARMIES);
+  + RPB_PLAYER_ARMIES);
       break;
     case SP_PSTATUS:
       id = ((struct pstatus_spacket *)packet)->pnum;
       rpb_insert(diskpos, RPB_PLAYER_OFFSET + id * RPB_PLAYER_MAX
-	+ RPB_PLAYER_STATUS);
+  + RPB_PLAYER_STATUS);
       break;
     case SP_S_YOU:
        id = ((struct youshort_spacket *)packet)->pnum;
        rpb_insert(diskpos, RPB_PLAYER_OFFSET + id * RPB_PLAYER_MAX
- 	+ RPB_PLAYER_HOSTILE);
+  + RPB_PLAYER_HOSTILE);
        rpb_insert(diskpos, RPB_PLAYER_OFFSET + id * RPB_PLAYER_MAX
- 	+ RPB_PLAYER_FLAGS);
+  + RPB_PLAYER_FLAGS);
        rpb_insert(diskpos, RPB_PLAYER_OFFSET + id * RPB_PLAYER_MAX
-	+ RPB_PLAYER_ARMIES);
+  + RPB_PLAYER_ARMIES);
       break;
     case SP_S_YOU_SS:
       if (F_many_self)
-	id = ((struct youss_spacket *)packet)->pad1;
+  id = ((struct youss_spacket *)packet)->pad1;
       else
-	id = me->p_no;
+  id = me->p_no;
       rpb_insert(diskpos, RPB_PLAYER_OFFSET + id * RPB_PLAYER_MAX
-	+ RPB_PLAYER_FUEL);
+  + RPB_PLAYER_FUEL);
       break;
     case SP_S_KILLS:
       {
-	int i, numofkills;
+  int i, numofkills;
 
-	numofkills = ((unsigned char *) packet)[1];
+  numofkills = ((unsigned char *) packet)[1];
 
-	for (i = 0; i < numofkills; i++)
-	  {
-	    id = ((unsigned char *) packet)[i*2+3] >> 2;
- 	    rpb_insert(diskpos, RPB_PLAYER_OFFSET + id * RPB_PLAYER_MAX
- 		       + RPB_PLAYER_KILLS);
- 	  }
+  for (i = 0; i < numofkills; i++)
+    {
+      id = ((unsigned char *) packet)[i*2+3] >> 2;
+      rpb_insert(diskpos, RPB_PLAYER_OFFSET + id * RPB_PLAYER_MAX
+           + RPB_PLAYER_KILLS);
+    }
       }
       break;
     case SP_S_PLAYER:
       {
-	int i, numofplayers, offset;
- 	unsigned char *sbuf = (unsigned char *) packet;
- 
- 	numofplayers = sbuf[1] & 0x3f;
- 
- 	if (sbuf[1] & 128)
- 	  {
- 	    offset = 32;
- 	    sbuf += 4;
- 	  }
- 	else if (sbuf[1] & 64)
- 	  {
- 	    offset = 0;
- 	    if (shortversion == SHORTVERSION)
- 	      if (sbuf[2] == 2)
- 		sbuf += 8;
- 	      else if (sbuf[2] == 1)
- 		sbuf += 4;
- 	  }
- 	else
- 	  {
- 	    offset = 0;
- 	    sbuf += 12;
- 	    id = me->p_no;
- 	    rpb_insert(diskpos, RPB_PLAYER_OFFSET + id * RPB_PLAYER_MAX
- 		       + RPB_PLAYER_POSITION);
- 	  }
- 
- 	for (i = 0; i < numofplayers; i++)
- 	  {
- 	    id = (sbuf[i*4] & 0x1f) + offset;
- 	    rpb_insert(diskpos, RPB_PLAYER_OFFSET + id * RPB_PLAYER_MAX
- 		       + RPB_PLAYER_POSITION);
- 	  }
+  int i, numofplayers, offset;
+  unsigned char *sbuf = (unsigned char *) packet;
+
+  numofplayers = sbuf[1] & 0x3f;
+
+  if (sbuf[1] & 128)
+    {
+      offset = 32;
+      sbuf += 4;
+    }
+  else if (sbuf[1] & 64)
+    {
+      offset = 0;
+      if (shortversion == SHORTVERSION)
+        if (sbuf[2] == 2)
+    sbuf += 8;
+        else if (sbuf[2] == 1)
+    sbuf += 4;
+    }
+  else
+    {
+      offset = 0;
+      sbuf += 12;
+      id = me->p_no;
+      rpb_insert(diskpos, RPB_PLAYER_OFFSET + id * RPB_PLAYER_MAX
+           + RPB_PLAYER_POSITION);
+    }
+
+  for (i = 0; i < numofplayers; i++)
+    {
+      id = (sbuf[i*4] & 0x1f) + offset;
+      rpb_insert(diskpos, RPB_PLAYER_OFFSET + id * RPB_PLAYER_MAX
+           + RPB_PLAYER_POSITION);
+    }
        }
        break;
      case SP_S_STATS:
        id = ((struct stats_s_spacket *)packet)->pnum;
        rpb_insert(diskpos, RPB_PLAYER_OFFSET + id * RPB_PLAYER_MAX
- 	+ RPB_PLAYER_STATS);
+  + RPB_PLAYER_STATS);
        break;
      case SP_PHASER:
        id = ((struct phaser_spacket *)packet)->pnum;
        rpb_insert(diskpos, RPB_PLAYER_OFFSET + id * RPB_PLAYER_MAX
- 		 + RPB_PLAYER_PHASER);
+     + RPB_PLAYER_PHASER);
        break;
      case SP_S_PHASER:
        id = ((struct phaser_s_spacket *)packet)->pnum & 0x3f;
        rpb_insert(diskpos, RPB_PLAYER_OFFSET + id * RPB_PLAYER_MAX
- 		 + RPB_PLAYER_PHASER);
+     + RPB_PLAYER_PHASER);
        break;
- 
+
      case SP_PLASMA_INFO:
        id = ntohs(((struct plasma_info_spacket *)packet)->pnum);
        rpb_insert(diskpos, RPB_PLASMA_OFFSET + id * RPB_PLASMA_MAX
- 	+ RPB_PLASMA_INFO);
+  + RPB_PLASMA_INFO);
        break;
      case SP_PLASMA:
        id = ntohs(((struct plasma_spacket *)packet)->pnum);
        rpb_insert(diskpos, RPB_PLASMA_OFFSET + id * RPB_PLASMA_MAX
- 	+ RPB_PLASMA_POSITION);
+  + RPB_PLASMA_POSITION);
        break;
- 
+
      case SP_TORP_INFO:
        id = ntohs(((struct torp_info_spacket *)packet)->tnum);
        rpb_insert(diskpos, RPB_TORP_OFFSET + id * RPB_TORP_MAX
- 	+ RPB_TORP_INFO);
+  + RPB_TORP_INFO);
        break;
      case SP_TORP:
        id = ntohs(((struct torp_spacket *)packet)->tnum);
        rpb_insert(diskpos, RPB_TORP_OFFSET + id * RPB_TORP_MAX
- 	+ RPB_TORP_POSITION);
+  + RPB_TORP_POSITION);
        break;
      case SP_S_8_TORP:
      case SP_S_TORP:
      case SP_S_TORP_INFO:
        {
- 	int i;
- 
- 	if (*(unsigned char *)packet == SP_S_8_TORP)
- 	  id = ((unsigned char *)packet)[1] * 8;
- 	else
- 	  id = ((unsigned char *)packet)[2] * 8;
- 	for (i=0; i<8; i++)
- 	  {
- 	    rpb_insert(diskpos, RPB_TORP_OFFSET + (id+i) * RPB_TORP_MAX
- 		       + RPB_TORP_INFO);
- 	    rpb_insert(diskpos, RPB_TORP_OFFSET + (id+i) * RPB_TORP_MAX
- 		       + RPB_TORP_POSITION);
- 	  }
+  int i;
+
+  if (*(unsigned char *)packet == SP_S_8_TORP)
+    id = ((unsigned char *)packet)[1] * 8;
+  else
+    id = ((unsigned char *)packet)[2] * 8;
+  for (i=0; i<8; i++)
+    {
+      rpb_insert(diskpos, RPB_TORP_OFFSET + (id+i) * RPB_TORP_MAX
+           + RPB_TORP_INFO);
+      rpb_insert(diskpos, RPB_TORP_OFFSET + (id+i) * RPB_TORP_MAX
+           + RPB_TORP_POSITION);
+    }
        }
        break;
      case SP_PLANET:
        id = ((struct planet_spacket *)packet)->pnum;
        rpb_insert(diskpos, RPB_PLANET_OFFSET + id * RPB_PLANET_MAX
- 	+ RPB_PLANET_INFO);
+  + RPB_PLANET_INFO);
        break;
      case SP_PLANET_LOC:
        id = ((struct planet_loc_spacket *)packet)->pnum;
        rpb_insert(diskpos, RPB_PLANET_OFFSET + id * RPB_PLANET_MAX
- 	+ RPB_PLANET_POSITION);
+  + RPB_PLANET_POSITION);
        break;
      case SP_S_PLANET:
        {
- 	int i, numofplanets;
- 	struct planet_s_spacket *ppacket;
- 
- 	numofplanets = ((unsigned char *)packet)[1];
- 	ppacket = (struct planet_s_spacket *) &(((char *)packet)[2]);
- 
- 	for (i=0; i<numofplanets; i++, ppacket++)
- 	  {
- 	    id = ppacket->pnum;
- 	    rpb_insert(diskpos, RPB_PLANET_OFFSET + id * RPB_PLANET_MAX
- 		       + RPB_PLANET_INFO);
- 	  }
+  int i, numofplanets;
+  struct planet_s_spacket *ppacket;
+
+  numofplanets = ((unsigned char *)packet)[1];
+  ppacket = (struct planet_s_spacket *) &(((char *)packet)[2]);
+
+  for (i=0; i<numofplanets; i++, ppacket++)
+    {
+      id = ppacket->pnum;
+      rpb_insert(diskpos, RPB_PLANET_OFFSET + id * RPB_PLANET_MAX
+           + RPB_PLANET_INFO);
+    }
        }
        break;
 #ifdef nodef
@@ -1500,11 +1500,11 @@ rpb_dorev(char *buf)
   for (i=0; i<RPB_TOTAL; i++)
     while (lastPos[i] > startpos)
      {
-	/*	if (lastPos[i] < min)
-		min = lastPos[i]; */
- 	lastPos[i] = header[lastPos[i]].prev;
+  /*  if (lastPos[i] < min)
+    min = lastPos[i]; */
+  lastPos[i] = header[lastPos[i]].prev;
        }
- 
+
   /* Well, this hack doesn't seem neccessary afterall -
    * I'm leaving it as a comment just in case it evenutally is
    * required */
@@ -1517,12 +1517,12 @@ rpb_dorev(char *buf)
    * Although these packets are gouped together here, the qsort
    * procedure will arrange them inline with the other packets. */
    i=lastPos[RPB_PLAYER_OFFSET + RPB_PLAYER_POSITION
- 	   + RPB_PLAYER_MAX * me->p_no];
+     + RPB_PLAYER_MAX * me->p_no];
    if (i != -1)
      do
       {
-	i = header[i].prev;
- 	temp[extra++] = i;
+  i = header[i].prev;
+  temp[extra++] = i;
       } while (i > min);
    i=startpos;
    do
@@ -1531,16 +1531,16 @@ rpb_dorev(char *buf)
        temp[extra++] = i;
      } while (i > min);
 #endif
- 
+
   memcpy(temp, lastPos, sizeof(lastPos));
   qsort(temp, RPB_TOTAL, sizeof(int), intcomp);
 
   for (i=0; i<RPB_TOTAL; i++)
     if (temp[i] != last)
       {
-	last = temp[i];
-	fseek(recordFile, header[last].diskpos, SEEK_SET);
-	pb_dopacket(buf);
+  last = temp[i];
+  fseek(recordFile, header[last].diskpos, SEEK_SET);
+  pb_dopacket(buf);
       }
   current = startpos + 1;
   pb_sequence_count--;

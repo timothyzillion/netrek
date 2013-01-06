@@ -34,12 +34,12 @@
 #define DGHOSTKILL 27
 /*      INL     messages                */
 #define INLDMKILLP 28
-#define INLDMKILL 29		/* Because of shiptypes */
+#define INLDMKILL 29    /* Because of shiptypes */
 #define INLDRESUME 30
 #define INLDTEXTE 31
 /* Variable warning stuff */
-#define STEXTE 32		/* static text that the server needs to send to the client first */
-#define SHORT_WARNING 33	/* like CP_S_MESSAGE */
+#define STEXTE 32   /* static text that the server needs to send to the client first */
+#define SHORT_WARNING 33  /* like CP_S_MESSAGE */
 #define STEXTE_STRING 34
 #define KILLARGS2  35
 

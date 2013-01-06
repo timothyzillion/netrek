@@ -1,6 +1,5 @@
-
 /* interface.c
- * 
+ *
  * This file will include all the interfaces between the input routines and the
  * daemon.  They should be useful for writing robots and the like
  *
@@ -80,7 +79,7 @@ beam_up(void)
 {
   if (!(me->p_flags & PFBEAMUP))
     {
-      sendBeamReq(1);				 /* 1 means up... */
+      sendBeamReq(1);        /* 1 means up... */
     }
 }
 
@@ -88,7 +87,7 @@ beam_down(void)
 {
   if (!(me->p_flags & PFBEAMDOWN))
     {
-      sendBeamReq(2);				 /* 2 means down... */
+      sendBeamReq(2);        /* 2 means down... */
     }
 }
 

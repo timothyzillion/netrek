@@ -1,4 +1,3 @@
-
 #ifdef VARY_HULL
 #define hull_width 22
 #define hull_height 22

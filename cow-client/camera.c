@@ -31,7 +31,7 @@ void camera_init(Display *arg_disp, Window arg_window) {
   depth = DefaultDepth(disp, XScreenNumberOfScreen(scr));
   cm = DefaultColormap(disp, XScreenNumberOfScreen(scr));
   rw = RootWindow(disp, XScreenNumberOfScreen(scr));
-  
+
   imlib_context_set_display(disp);
   imlib_context_set_visual(vis);
   imlib_context_set_colormap(cm);
@@ -41,7 +41,7 @@ void camera_init(Display *arg_disp, Window arg_window) {
 
   rx = 0;
   ry = 0;
-  rdx = TWINSIDE;	/* restrict to tactical */
+  rdx = TWINSIDE; /* restrict to tactical */
   rdy = TWINSIDE;
   imlib_context_set_drawable(tw);
 

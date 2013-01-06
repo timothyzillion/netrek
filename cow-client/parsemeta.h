@@ -18,12 +18,12 @@ void parsemeta(int metaType);
 /*
  * Read and Parse the metaserver information, either from the metaservers
  * by UDP (1), from a single metaserver by TCP (3), or from the cache (2).
- *  
+ *
  * NOTE: This function sets the variable "num_servers" which is
  * used in newwin() to set the height of the meta-server window.
  */
 
- 
+
 void metawindow(void);
 /*
  *  Show the meta server menu window
@@ -35,10 +35,10 @@ void metaaction(W_Event * data);
  *  Recieve an action in the meta server window.  Check selection to see
  *  if was valid.  If it was then we have a winner!
  */
- 
+
 
 void metainput(void);
-/*  
+/*
  *  Wait for actions in the meta-server window.
  *
  *  This is really the meta-server window's own little input() function.
@@ -49,5 +49,5 @@ void metainput(void);
  */
 
 
-#endif /* defined META */ 
+#endif /* defined META */
 #endif /* defined meta_h_header */

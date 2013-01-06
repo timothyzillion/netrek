@@ -1,4 +1,3 @@
-
 /*
  * $Log: docwin.c,v $
  * Revision 1.2  2001/04/28 04:05:27  quozl
@@ -27,23 +26,23 @@
 #include "data.h"
 #include "packets.h"
 
-										/* #ifndef 
-										 * _IBMR2 
-										 * char 
-										 * *malloc 
-										 * (size_t); 
-										 * #else 
-										 * void 
-										 * *malloc 
-										 * (size_t); 
-										 * #endifi 
-																				 *//* _
-																				 * *
-																				 * *
-																				 * *
-																				 * IBMR2 
-																				 * 
-																				 */
+                    /* #ifndef
+                     * _IBMR2
+                     * char
+                     * *malloc
+                     * (size_t);
+                     * #else
+                     * void
+                     * *malloc
+                     * (size_t);
+                     * #endifi
+                                         *//* _
+                                         * *
+                                         * *
+                                         * *
+                                         * IBMR2
+                                         *
+                                         */
 
 extern char cbugs[];
 
@@ -72,7 +71,7 @@ showdocs(int atline)
 
   if (!docwin)
     docwin = W_MakeWindow("DocWin", 0, 181, 500, 500, 0, 2,
-			  foreColor);
+        foreColor);
 
   W_ClearWindow(docwin);
 
@@ -87,12 +86,12 @@ showdocs(int atline)
    * screen real estate */
   center = GWINSIDE / 2 - (length * W_Textwidth) / 2;
   W_WriteText(docwin, center, W_Textheight, textColor,
-	      buf, length, W_BoldFont);
+        buf, length, W_BoldFont);
   sprintf(buf, cbugs);
   length = strlen(buf);
   center = GWINSIDE / 2 - (length * W_Textwidth) / 2;
   W_WriteText(docwin, center, 3 * W_Textheight, textColor,
-	      buf, length, W_RegularFont);
+        buf, length, W_RegularFont);
 
   if (!docdata)
     loaddocs();
@@ -107,46 +106,46 @@ showdocs(int atline)
   for (i = 0; i < atline; i++)
     {
       if (data == NULL)
-	{
-	  atline = 0;
-	  data = docdata;
-	  break;
-	}
+  {
+    atline = 0;
+    data = docdata;
+    break;
+  }
       data = data->next;
     }
 
-  count = 28;					 /* Magical # of lines to * * 
-						  * display */
+  count = 28;          /* Magical # of lines to * *
+              * display */
 
   for (i = top; i < 50; i++)
     {
       if (data == NULL)
-	break;
+  break;
 
       if (data->data == NULL)
-	continue;
+  continue;
 
       switch (data->face)
-	{
-	case BOLD:
-	  font = W_BoldFont;
-	  break;
-	case ITALIC:
-	  font = W_UnderlineFont;
-	  break;
-	case NORMAL:
-	  font = W_RegularFont;
-	  break;
-	}
+  {
+  case BOLD:
+    font = W_BoldFont;
+    break;
+  case ITALIC:
+    font = W_UnderlineFont;
+    break;
+  case NORMAL:
+    font = W_RegularFont;
+    break;
+  }
 
 
       W_WriteText(docwin, 20, i * W_Textheight, textColor, data->data,
-		  strlen(data->data), font);
+      strlen(data->data), font);
       data = data->next;
       count--;
 
       if (count <= 0)
-	break;
+  break;
     }
 }
 
@@ -163,7 +162,7 @@ loaddocs(void)
   if (filename)
     {
       if ((fptr = fopen(filename, "r")) == NULL)
-	return;
+  return;
     }
   else if ((fptr = fopen("BRM.DOC", "r")) == NULL)
     return;
@@ -171,8 +170,8 @@ loaddocs(void)
   temp = (struct list *) malloc(sizeof(struct list));
 
   if (temp == NULL)
-    {						 /* malloc error checking --
-						  * * * 10/30/92 EM */
+    {            /* malloc error checking --
+              * * * 10/30/92 EM */
       printf("Warning:  Couldn't malloc space for a new doc line!");
       return;
     }
@@ -180,34 +179,34 @@ loaddocs(void)
   while (fgets(line, 80, fptr) != NULL)
     {
       if (fl == NULL)
-	fl = temp;
+  fl = temp;
 
       if (line[strlen(line) - 1] == '\n')
-	line[strlen(line) - 1] = '\0';
+  line[strlen(line) - 1] = '\0';
 
       temp->face = NORMAL;
 
       if (line[0] == '\f')
-	line[0] = ' ';
+  line[0] = ' ';
 
       if (line[0] == 0x1b)
-	{
-	  switch (line[1])
-	    {
-	    case 'b':
-	      temp->face = BOLD;
-	      break;
-	    case 'i':
-	      temp->face = ITALIC;
-	      break;
-	    }
+  {
+    switch (line[1])
+      {
+      case 'b':
+        temp->face = BOLD;
+        break;
+      case 'i':
+        temp->face = ITALIC;
+        break;
+      }
 
-	  line[0] = line[1] = ' ';
-	}
+    line[0] = line[1] = ' ';
+  }
 
       for (i = 0; i < strlen(line); i++)
-	if (line[i] == '\t')
-	  line[i] = ' ';
+  if (line[i] == '\t')
+    line[i] = ' ';
 
       temp->data = (char *) malloc(strlen(line) + 1);
       strcpy(temp->data, line);
@@ -215,11 +214,11 @@ loaddocs(void)
       temp->next = (struct list *) malloc(sizeof(struct list));
 
       if (temp->next == NULL)
-	{					 /* malloc error checking --
-						  * * * 10/30/92 EM */
-	  printf("Warning:  Couldn't malloc space for a new doc line!");
-	  return;
-	}
+  {          /* malloc error checking --
+              * * * 10/30/92 EM */
+    printf("Warning:  Couldn't malloc space for a new doc line!");
+    return;
+  }
 
       maxdoclines++;
       temp = temp->next;
@@ -243,7 +242,7 @@ showxtrekrc(int atline)
 
   if (!xtrekrcwin)
     xtrekrcwin = W_MakeWindow("xtrekrcWin", 0, 200, 500, 500, 0, 2,
-			      foreColor);
+            foreColor);
 
   W_ClearWindow(xtrekrcwin);
 
@@ -254,12 +253,12 @@ showxtrekrc(int atline)
   length = strlen(buf);
   center = GWINSIDE / 2 - (length * W_Textwidth) / 2;
   W_WriteText(xtrekrcwin, center, W_Textheight, textColor,
-	      buf, length, W_BoldFont);
+        buf, length, W_BoldFont);
   sprintf(buf, cbugs);
   length = strlen(buf);
   center = GWINSIDE / 2 - (length * W_Textwidth) / 2;
   W_WriteText(xtrekrcwin, center, 3 * W_Textheight, textColor,
-	      buf, length, W_RegularFont);
+        buf, length, W_RegularFont);
 
   if (!xtrekrcdata)
     loadxtrekrc();
@@ -274,46 +273,46 @@ showxtrekrc(int atline)
   for (i = 0; i < atline; i++)
     {
       if (data == NULL)
-	{
-	  atline = 0;
-	  data = xtrekrcdata;
-	  break;
-	}
+  {
+    atline = 0;
+    data = xtrekrcdata;
+    break;
+  }
       data = data->next;
     }
 
-  count = 28;					 /* Magical # of lines to * * 
-						  * display */
+  count = 28;          /* Magical # of lines to * *
+              * display */
 
   for (i = top; i < 50; i++)
     {
       if (data == NULL)
-	break;
+  break;
 
       if (data->data == NULL)
-	continue;
+  continue;
 
       switch (data->face)
-	{
-	case BOLD:
-	  font = W_BoldFont;
-	  break;
-	case ITALIC:
-	  font = W_UnderlineFont;
-	  break;
-	case NORMAL:
-	  font = W_RegularFont;
-	  break;
-	}
+  {
+  case BOLD:
+    font = W_BoldFont;
+    break;
+  case ITALIC:
+    font = W_UnderlineFont;
+    break;
+  case NORMAL:
+    font = W_RegularFont;
+    break;
+  }
 
 
       W_WriteText(xtrekrcwin, 20, i * W_Textheight, textColor, data->data,
-		  strlen(data->data), font);
+      strlen(data->data), font);
       data = data->next;
       count--;
 
       if (count <= 0)
-	break;
+  break;
     }
 }
 
@@ -341,8 +340,8 @@ loadxtrekrc(void)
   temp = (struct list *) malloc(sizeof(struct list));
 
   if (temp == NULL)
-    {						 /* malloc error checking --
-						  * * * 10/30/92 EM */
+    {            /* malloc error checking --
+              * * * 10/30/92 EM */
       printf("Warning:  Couldn't malloc space for a new doc line!");
       return;
     }
@@ -350,22 +349,22 @@ loadxtrekrc(void)
   while (fgets(line, 80, fptr) != NULL)
     {
       if (fl == NULL)
-	fl = temp;
+  fl = temp;
 
       if (line[strlen(line) - 1] == '\n')
-	line[strlen(line) - 1] = '\0';
+  line[strlen(line) - 1] = '\0';
 
       temp->face = NORMAL;
 
       if (line[0] == '\f')
-	line[0] = ' ';
+  line[0] = ' ';
 
       if (line[0] == '#')
-	temp->face = ITALIC;
+  temp->face = ITALIC;
 
       for (i = 0; i < strlen(line); i++)
-	if (line[i] == '\t')
-	  line[i] = ' ';
+  if (line[i] == '\t')
+    line[i] = ' ';
 
       temp->data = (char *) malloc(strlen(line) + 1);
       strcpy(temp->data, line);
@@ -373,11 +372,11 @@ loadxtrekrc(void)
       temp->next = (struct list *) malloc(sizeof(struct list));
 
       if (temp->next == NULL)
-	{					 /* malloc error checking --
-						  * * * 10/30/92 EM */
-	  printf("Warning:  Couldn't malloc space for a new doc line!");
-	  return;
-	}
+  {          /* malloc error checking --
+              * * * 10/30/92 EM */
+    printf("Warning:  Couldn't malloc space for a new doc line!");
+    return;
+  }
 
       maxxtrekrclines++;
       temp = temp->next;

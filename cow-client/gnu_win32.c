@@ -502,7 +502,7 @@ void W_Initialize(char *display)
       {
       SHORT res = VkKeyScan((TCHAR) i);
 
-	  /* Converted SHR's to TESTs, faster on x86 -SAC */
+    /* Converted SHR's to TESTs, faster on x86 -SAC */
       if (!(res & 0xff00))            //!highbyte == no shift,ctrl,alt
         VKMap[res] = i;
       else if (res & 0x100)   //Bit 1 of high byte = shift key
@@ -1595,11 +1595,11 @@ LRESULT CALLBACK NetrekWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam
                         // (the latter avoids a bug where Windows sends a mousemove message
                         //  to a window exposed when the one on top is hidden/destroyed)
 
-		 //Check to see if we are entering a message and should be looking
-		 //to place the message on hold
-		 if (messageon && messHoldThresh)
-		 {
-			 if (messMouseDelta)
+     //Check to see if we are entering a message and should be looking
+     //to place the message on hold
+     if (messageon && messHoldThresh)
+     {
+       if (messMouseDelta)
              {
                  /* a^2 + b^2 = c^2 - messHoldThresh is c^2.
                   * Keep a running total of (a^2 + b^2) */
@@ -1646,10 +1646,10 @@ LRESULT CALLBACK NetrekWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam
          //Turn shift+button into a differnt code, and that sort of thing...
          if (extended_mouse)
             {
-	      if (wParam & MK_SHIFT)
-	            EventQueue[EventTail].key |= W_SHIFT_BUTTON;
-         	      if (wParam & MK_CONTROL)
-            		EventQueue[EventTail].key |= W_CTRL_BUTTON;
+        if (wParam & MK_SHIFT)
+              EventQueue[EventTail].key |= W_SHIFT_BUTTON;
+                if (wParam & MK_CONTROL)
+                EventQueue[EventTail].key |= W_CTRL_BUTTON;
                }
 #endif /* SHIFTED_MOUSE */
             return(0);
@@ -1882,7 +1882,7 @@ void W_MakeLines(W_Window window, int *x0, int *y0, int *x1, int *y1, int num, W
       num--;
       MoveTo(hdc, x0[num]+border, y0[num]+border);
       LineTo(hdc, x1[num]+border, y1[num]+border);
-	  SetPixel(hdc, x1[num]+border, y1[num]+border, colortable[color].rgb);
+    SetPixel(hdc, x1[num]+border, y1[num]+border, colortable[color].rgb);
    }
    
    ReleaseDC(win->hwnd, hdc);
@@ -3358,7 +3358,7 @@ void W_SetSensitive(Window *window, int b)
      {
        hdc = GetDC(win);
        if (hdc)
-	 RedrawScrolling(win,hdc);
+   RedrawScrolling(win,hdc);
        ReleaseDC(win,hdc);
      }
 }

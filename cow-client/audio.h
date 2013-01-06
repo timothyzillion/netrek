@@ -1,6 +1,5 @@
-
 /* Portable Sound Library
- * 
+ *
  * Copyright 1993 by Kurt Siegl <007@netrek.org> Permission to use,
  * modify, copy and distribute this software without fee is hereby granted as
  * long as this notice is left here.

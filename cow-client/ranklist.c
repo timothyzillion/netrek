@@ -1,6 +1,6 @@
 
 /* ranklist.c
- * 
+ *
  * Kevin P. Smith 12/5/88
  *
  * $Log: ranklist.c,v $
@@ -27,19 +27,19 @@ void    ranklist(void)
   for (i = 0; i < NUMRANKS; i++)
     {
       sprintf(buf, "%-11.11s %5.0f %8.2f %8.2f   %7.2f",
-	      ranks[i].name,
-	      ranks[i].hours,
-	      ranks[i].defense,
-	      ranks[i].ratings,
-	      ranks[i].ratings * ranks[i].hours);
+        ranks[i].name,
+        ranks[i].hours,
+        ranks[i].defense,
+        ranks[i].ratings,
+        ranks[i].ratings * ranks[i].hours);
       if (mystats->st_rank == i)
-	{
-	  W_WriteText(rankw, 1, i + 2, W_Cyan, buf, strlen(buf), W_BoldFont);
-	}
+  {
+    W_WriteText(rankw, 1, i + 2, W_Cyan, buf, strlen(buf), W_BoldFont);
+  }
       else
-	{
-	  W_WriteText(rankw, 1, i + 2, textColor, buf, strlen(buf), W_RegularFont);
-	}
+  {
+    W_WriteText(rankw, 1, i + 2, textColor, buf, strlen(buf), W_RegularFont);
+  }
     }
   strcpy(buf, "To achieve a rank, you need the corresponding DI");
   W_WriteText(rankw, 1, i + 3, textColor, buf, strlen(buf), W_RegularFont);

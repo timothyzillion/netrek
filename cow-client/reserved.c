@@ -1,6 +1,6 @@
 
 /* reserved.c (adapted for trekhopd)
- * 
+ *
  * Kevin P. Smith   7/3/89
  *
  * $Log: reserved.c,v $
@@ -90,10 +90,10 @@ encryptReservedPacket(struct reserved_spacket *spacket, struct reserved_cpacket 
     {
       len = sizeof(saddr);
       if (getpeername(sock, (struct sockaddr *) &saddr, (socklen_t *) &len) < 0)
-	{
-	  perror("getpeername(sock)");
-	  terminate(1);
-	}
+  {
+    perror("getpeername(sock)");
+    terminate(1);
+  }
       netaddr = saddr.sin_addr.s_addr;
     }
 
@@ -115,9 +115,9 @@ encryptReservedPacket(struct reserved_spacket *spacket, struct reserved_cpacket 
       cpacket->resp[s[i % 3]] ^= mixin4;
       cpacket->resp[s[i % 11]] ^= mixin5;
       for (k = 0; k < 16; k++)
-	{
-	  buf[k] = cpacket->resp[s[k]];
-	}
+  {
+    buf[k] = cpacket->resp[s[k]];
+  }
       MCOPY(buf, cpacket->resp, 16);
     }
 }

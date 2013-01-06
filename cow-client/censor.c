@@ -53,7 +53,7 @@ void    initSkipArray(char *word, int *skip)
     {
       skip[word[i]] = wordLen - i - 1;
       if (isascii(toupper(word[i])))
-	skip[toupper(word[i])] = skip[word[i]];
+  skip[toupper(word[i])] = skip[word[i]];
     }
 }
 
@@ -72,12 +72,12 @@ static int search(char *word, char *text, int *skip)
   for (i = j = wordLen - 1; j >= 0; i--, j--)
     while (tolower(text[i]) != word[j])
       {
-	int     t = skip[text[i]];
+  int     t = skip[text[i]];
 
-	i += (wordLen - j > t) ? wordLen - j : t;
-	if (i >= textLen)
-	  return NOT_FOUND;
-	j = wordLen - 1;
+  i += (wordLen - j > t) ? wordLen - j : t;
+  if (i >= textLen)
+    return NOT_FOUND;
+  j = wordLen - 1;
       }
   return i + 1;
 }
@@ -91,29 +91,29 @@ char   *censor(char *text)
     {
       text = str;
       while ((j = search(curseWords[i].badWord, text, curseWords[i].skip))
-	     != NOT_FOUND)
-	{
-	  int     k, l, wordBegin, wordEnd;
+       != NOT_FOUND)
+  {
+    int     k, l, wordBegin, wordEnd;
 
-	  for (wordBegin = j; wordBegin > 0; wordBegin--)
-	    if (!isalpha(text[wordBegin - 1]))
-	      break;
-	  for (wordEnd = j + strlen(curseWords[i].badWord) - 1; wordEnd < t; wordEnd++)
-	    if (!isalpha(text[wordEnd + 1]))
-	      break;
-	  if (!curseWords[i].beginningOnly || wordBegin == j)
-	    for (k = wordBegin, l = 0; k <= wordEnd; k++)
-	      {
-		text[k] = replacementChars[l];
-		if (++l >= REPLACE_STR_LEN)
-		  l = 0;			 /* make sure we don't go *
-						  * past bound of *
-						  * replacementChars */
-	      }
-	  text += wordEnd;			 /* so we don't go into *
-						  * infinite loop if *
-						  * beginningOnly */
-	}
+    for (wordBegin = j; wordBegin > 0; wordBegin--)
+      if (!isalpha(text[wordBegin - 1]))
+        break;
+    for (wordEnd = j + strlen(curseWords[i].badWord) - 1; wordEnd < t; wordEnd++)
+      if (!isalpha(text[wordEnd + 1]))
+        break;
+    if (!curseWords[i].beginningOnly || wordBegin == j)
+      for (k = wordBegin, l = 0; k <= wordEnd; k++)
+        {
+    text[k] = replacementChars[l];
+    if (++l >= REPLACE_STR_LEN)
+      l = 0;       /* make sure we don't go *
+              * past bound of *
+              * replacementChars */
+        }
+    text += wordEnd;       /* so we don't go into *
+              * infinite loop if *
+              * beginningOnly */
+  }
     }
   return str;
 }

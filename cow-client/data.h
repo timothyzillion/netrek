@@ -1,4 +1,3 @@
-
 /* data.h
  *
  * $Log: data.h,v $
@@ -10,7 +9,7 @@
  *
  * Revision 1.7  2001/04/28 04:03:56  quozl
  * change -U to also adopt a local port number for TCP mode.
- * 		-- Benjamin `Quisar' Lerman  <quisar@quisar.ambre.net>
+ *    -- Benjamin `Quisar' Lerman  <quisar@quisar.ambre.net>
  *
  * Revision 1.6  2000/05/19 14:24:52  jeffno
  * Improvements to playback.
@@ -50,8 +49,8 @@
 
 #define EX_FRAMES               5
 #define SBEXPVIEWS              7
-#define NUMDETFRAMES            5		 /* # frames in torp * *
-						  * explosion */
+#define NUMDETFRAMES            5    /* # frames in torp * *
+              * explosion */
 #define ex_width                64
 #define ex_height               64
 #define sbexp_width             80
@@ -106,19 +105,19 @@ extern char buttonmap[];
 extern int messpend;
 
 #ifdef XTRA_MESSAGE_UI
-extern int messageHUD;				 /* Show message being typed
+extern int messageHUD;         /* Show message being typed
 
-						  * 
-						  * * on the local display */
-extern int messHoldThresh;			 /* Threshold value for
+              *
+              * * on the local display */
+extern int messHoldThresh;       /* Threshold value for
 
-						  * 
-						  * * putting a message on
-						  * hold  */
-extern int messMouseDelta;			 /* To keep track of mouse
+              *
+              * * putting a message on
+              * hold  */
+extern int messMouseDelta;       /* To keep track of mouse
 
-						  * 
-						  * * movement delta        */
+              *
+              * * movement delta        */
 #endif
 extern int lastcount;
 extern int mdisplayed;
@@ -132,29 +131,29 @@ extern int showStats;
 extern int myPlanetBitmap;
 
 #ifdef RECORDGAME
-extern FILE *recordFile;			 /* recorder */
+extern FILE *recordFile;       /* recorder */
 extern FILE *recordIndexFile;   /* To jump around recordings. */
 extern FILE *recordContextFile; /* To jump around recordings. */
 extern int playback; /* State playback is in (pause, forward, reverse) */
 
-#define PL_OFF 0        /* not playing back, but in a real game	*/
-#define PL_PAUSE 1      /* playing back, paused			*/
-#define PL_FORWARD 2    /* playing back, in forward direction	*/
-#define PL_REVERSE 3    /* playing back, in reverse direction	*/
+#define PL_OFF 0        /* not playing back, but in a real game */
+#define PL_PAUSE 1      /* playing back, paused     */
+#define PL_FORWARD 2    /* playing back, in forward direction */
+#define PL_REVERSE 3    /* playing back, in reverse direction */
 #endif
-extern FILE *logFile;				 /* message log */
-extern int msgBeep;				 /* ATM - msg beep */
+extern FILE *logFile;        /* message log */
+extern int msgBeep;        /* ATM - msg beep */
 extern int warncount;
 extern int warntimer;
 extern int infomapped;
-extern int scanmapped;				 /* ATM - scanner stuff */
+extern int scanmapped;         /* ATM - scanner stuff */
 extern int mustexit;
 extern int messtime;
 extern int keeppeace;
 extern int gen_distress;
 
 #ifdef GATEWAY
-extern unsigned LONG netaddr;			 /* for blessing */
+extern unsigned LONG netaddr;      /* for blessing */
 
 #endif
 
@@ -181,7 +180,7 @@ extern int metaport;
 #ifdef NBT
 extern int MacroMode;
 extern int macrocnt;
-extern struct macro_list macro[];		 /* NBT 2/26/93 */
+extern struct macro_list macro[];    /* NBT 2/26/93 */
 
 #endif
 
@@ -209,7 +208,7 @@ extern char recv_threshold_s[];
 extern int recv_warn;
 
 /* S_P2 */
-extern int shortversion;			 /* Which version do we use? */
+extern int shortversion;       /* Which version do we use? */
 
 #endif
 
@@ -275,26 +274,26 @@ extern int censorMessages;
 
 extern int scanplayer;
 extern int showTractor;
-extern int commMode;				 /* UDP */
-extern int commModeReq;				 /* UDP */
-extern int commStatus;				 /* UDP */
-extern int commSwitchTimeout;			 /* UDP */
-extern int udpTotal;				 /* UDP */
-extern int udpDropped;				 /* UDP */
-extern int udpRecentDropped;			 /* UDP */
-extern int udpSock;				 /* UDP */
-extern int udpDebug;				 /* UDP */
-extern int udpClientSend;			 /* UDP */
-extern int udpClientRecv;			 /* UDP */
-extern int udpSequenceChk;			 /* UDP */
+extern int commMode;         /* UDP */
+extern int commModeReq;        /* UDP */
+extern int commStatus;         /* UDP */
+extern int commSwitchTimeout;      /* UDP */
+extern int udpTotal;         /* UDP */
+extern int udpDropped;         /* UDP */
+extern int udpRecentDropped;       /* UDP */
+extern int udpSock;        /* UDP */
+extern int udpDebug;         /* UDP */
+extern int udpClientSend;      /* UDP */
+extern int udpClientRecv;      /* UDP */
+extern int udpSequenceChk;       /* UDP */
 extern int weaponUpdate;
 
 #ifdef GATEWAY
 extern int gw_serv_port, gw_port, gw_local_port; /* UDP */
-extern char *gw_mach;				 /* UDP */
+extern char *gw_mach;        /* UDP */
 
 #endif
-extern int baseLocalPort;			 /* UDP and TCP */
+extern int baseLocalPort;      /* UDP and TCP */
 
 
 extern int showTractorPressor;
@@ -342,8 +341,8 @@ extern W_Icon bplanets[7];
 extern W_Icon mbplanets[7];
 extern W_Icon bplanets2[8];
 extern W_Icon mbplanets2[8];
-extern W_Icon bplanets3[NUM_PLANET_BITMAPS2];	 /* isae: added this */
-extern W_Icon mbplanets3[NUM_PLANET_BITMAPS2];	 /* isae: added this */
+extern W_Icon bplanets3[NUM_PLANET_BITMAPS2];  /* isae: added this */
+extern W_Icon mbplanets3[NUM_PLANET_BITMAPS2];   /* isae: added this */
 extern W_Icon noinfoplanet;
 extern W_Color borderColor, backColor, textColor, myColor, warningColor,
         shipCol[5], rColor, yColor, gColor, unColor, foreColor;
@@ -380,12 +379,12 @@ extern W_Window metaWin;
 
 #endif
 
-extern int ping;				 /* to ping or not to ping */
-extern LONG packets_sent;			 /* # all packets sent to *
+extern int ping;         /* to ping or not to ping */
+extern LONG packets_sent;      /* # all packets sent to *
 
-						  * 
-						  * * server */
-extern LONG packets_received;			 /* # all packets received */
+              *
+              * * server */
+extern LONG packets_received;      /* # all packets received */
 extern W_Window pStats;
 
 extern char deathmessage[80];

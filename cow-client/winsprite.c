@@ -25,7 +25,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
-#define FOR_MSW 
+#define FOR_MSW
 #include INC_XPM
 
 #include "Wlib.h"
@@ -84,7 +84,7 @@ struct S_Object
 #define PL_PIX_KLI 9
 #define PL_PIX_ORI 10
 
-const int reremap[5] = { NO_IND_PIX, NO_FED_PIX, NO_ROM_PIX, 
+const int reremap[5] = { NO_IND_PIX, NO_FED_PIX, NO_ROM_PIX,
                          NO_KLI_PIX, NO_ORI_PIX };
 
 static struct S_Object mplanetImg[NUM_PL_IMGS];
@@ -101,7 +101,7 @@ static struct S_Object hullImg[NUM_HL_IMGS];
 
 HDC GlobalMemDC, GlobalMemDC2;
 static HBITMAP backPix[NUM_BG_IMGS];
-  
+
 extern Window  W_Root;
 extern int takeNearest;
 
@@ -141,7 +141,7 @@ const char bgfiles[NUM_BG_IMGS][16] = { "map_back.xpm",
                                       "genocide.xpm",
                                       "greet.xpm",
                                       "hockey.xpm"
-                                    }; 
+                                    };
 
 int ReadFileToSprite(char *filename, struct S_Object *sprite, W_Window *w)
 {
@@ -268,7 +268,7 @@ void GetPixmaps(Display *d, Window *win)
   else
   {
     struct stat buf;
- 	if ((stat(pixmapDir,&buf)) || (! (S_ISDIR(buf.st_mode))))
+  if ((stat(pixmapDir,&buf)) || (! (S_ISDIR(buf.st_mode))))
     {
         pixMissing = NO_IND_PIX | NO_FED_PIX | NO_ROM_PIX |
                      NO_KLI_PIX | NO_ORI_PIX | NO_WEP_PIX | NO_EXP_PIX |
@@ -568,7 +568,7 @@ void *S_mRepair(int planetno)
   if ((pixFlags & NO_MAP_PIX) || (showgalactic != 1))
     return((void *)NULL);
 
-  if (((this->pl_info & me->p_team) 
+  if (((this->pl_info & me->p_team)
 #ifdef RECORDGAME
        || playback
 #endif
@@ -578,7 +578,7 @@ void *S_mRepair(int planetno)
     sprite->view = 0;
   }
 
-  return((void *)sprite); 
+  return((void *)sprite);
 }
 
 void *S_mFuel(int planetno)
@@ -599,7 +599,7 @@ void *S_mFuel(int planetno)
     sprite->view = 0;
   }
 
-  return((void *)sprite); 
+  return((void *)sprite);
 }
 
 void *S_mOwner(int planetno)
@@ -620,7 +620,7 @@ void *S_mOwner(int planetno)
     sprite->view = 0;
   }
 
-  return((void *)sprite); 
+  return((void *)sprite);
 }
 
 void *S_Torp(int torpno)
@@ -653,9 +653,9 @@ void *S_Torp(int torpno)
   }
 
   if ((sprite->image == NoPixmapError) || (pixFlags & NO_WEP_PIX))
-    return(NULL); 
+    return(NULL);
   else
-    return((void *)sprite); 
+    return((void *)sprite);
 }
 
 void *S_Plasma(int plasmatorpno)
@@ -688,9 +688,9 @@ void *S_Plasma(int plasmatorpno)
   }
 
   if ((sprite->image == NoPixmapError) || (pixFlags & NO_WEP_PIX))
-    return(NULL); 
+    return(NULL);
   else
-    return((void *)sprite); 
+    return((void *)sprite);
 }
 
 void W_GalacticBgd(int which)

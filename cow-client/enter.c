@@ -1,6 +1,5 @@
-
 /* enter.c
- * 
+ *
  * This version modified to work as the client in a socket based protocol.
  *
  * $Log: enter.c,v $
@@ -102,22 +101,22 @@ drawTstats(void)
   sprintf(buf, "Flags        Warp Dam Shd Torps  Kills Armies   Fuel  Wtemp Etemp");
   W_WriteText(tstatw, 50, 5, textColor, buf, strlen(buf), W_RegularFont);
   sprintf(buf,
-	  "Maximum:      %2d  %3d %3d               %3d   %6d   %3d   %3d",
-	  me->p_ship.s_maxspeed, me->p_ship.s_maxdamage,
-	  me->p_ship.s_maxshield, me->p_ship.s_maxarmies,
-	  me->p_ship.s_maxfuel, me->p_ship.s_maxwpntemp / 10,
-	  me->p_ship.s_maxegntemp / 10);
+    "Maximum:      %2d  %3d %3d               %3d   %6d   %3d   %3d",
+    me->p_ship.s_maxspeed, me->p_ship.s_maxdamage,
+    me->p_ship.s_maxshield, me->p_ship.s_maxarmies,
+    me->p_ship.s_maxfuel, me->p_ship.s_maxwpntemp / 10,
+    me->p_ship.s_maxegntemp / 10);
   W_WriteText(tstatw, 50, 27, textColor, buf, strlen(buf), W_RegularFont);
 }
 
 #ifdef HOCKEY_LINES
 init_hockey_lines(void)
 {
-  int     i = 0;				 /* This is incremented for * 
+  int     i = 0;         /* This is incremented for *
 
-						  * 
-						  * 
-						  * * each line added */
+              *
+              *
+              * * each line added */
 
   /* For speed, the normal netrek walls are not done this way */
 
@@ -125,24 +124,24 @@ init_hockey_lines(void)
 #define RINK_TOP 0
 #define RINK_BOTTOM (GWIDTH)
 #define TENTH (((RINK_BOTTOM - RINK_TOP)/10))
-#define R_MID (((RINK_BOTTOM - RINK_TOP)/2))	 /* center (red) line */
+#define R_MID (((RINK_BOTTOM - RINK_TOP)/2))   /* center (red) line */
 #define RINK_LENGTH ((RINK_BOTTOM - RINK_TOP))
 #define RINK_WIDTH ((GWIDTH*2/3))
-#define G_MID ((GWIDTH/2))			 /* center of goal */
+#define G_MID ((GWIDTH/2))       /* center of goal */
 #define RINK_LEFT ((G_MID-(RINK_WIDTH/2)))
 #define RINK_RIGHT ((G_MID+(RINK_WIDTH/2)))
-#define G_LFT (R_MID-TENTH)			 /* left edge of goal */
-#define G_RGT (R_MID+TENTH)			 /* right edge of goal */
+#define G_LFT (R_MID-TENTH)      /* left edge of goal */
+#define G_RGT (R_MID+TENTH)      /* right edge of goal */
 #define RED_1 (RINK_LEFT + (1*RINK_WIDTH/5))
 #define RED_2 (RINK_LEFT + (2*RINK_WIDTH/5))
 #define RED_3 (RINK_LEFT + (3*RINK_WIDTH/5))
 #define RED_4 (RINK_LEFT + (4*RINK_WIDTH/5))
-#define ORI_G (RINK_BOTTOM - /*2* */TENTH)	 /* Ori goal line */
-#define ORI_E (RINK_BOTTOM -   TENTH/2)		 /* end of Ori goal */
-#define ORI_B (RINK_BOTTOM - (RINK_LENGTH/3))	 /* Ori blue line */
-#define KLI_G (RINK_TOP    + /*2* */TENTH)	 /* Kli goal line */
-#define KLI_E (RINK_TOP    +   TENTH/2)		 /* end of Kli goal */
-#define KLI_B (RINK_TOP    + (RINK_LENGTH/3))	 /* Kli blue line */
+#define ORI_G (RINK_BOTTOM - /*2* */TENTH)   /* Ori goal line */
+#define ORI_E (RINK_BOTTOM -   TENTH/2)    /* end of Ori goal */
+#define ORI_B (RINK_BOTTOM - (RINK_LENGTH/3))  /* Ori blue line */
+#define KLI_G (RINK_TOP    + /*2* */TENTH)   /* Kli goal line */
+#define KLI_E (RINK_TOP    +   TENTH/2)    /* end of Kli goal */
+#define KLI_B (RINK_TOP    + (RINK_LENGTH/3))  /* Kli blue line */
 
   /* The Kli goal line */
   s_lines[i].begin_x = G_LFT;

@@ -1,5 +1,4 @@
 
-
 /* pingstats.c        (mostly taken from stats.c)
  *
  * $Log: pingstats.c,v $
@@ -17,28 +16,28 @@
 #include "data.h"
 
 
-#define	MIN(a,b)	(((a) < (b)) ? (a) : (b))
+#define MIN(a,b)  (((a) < (b)) ? (a) : (b))
 
-#define	BX_OFF()	((textWidth + 1) * W_Textwidth + S_IBORDER)
-#define	BY_OFF(line)	((line) * (W_Textheight + S_IBORDER) + S_IBORDER)
-#define	TX_OFF(len)	((textWidth - len) * W_Textwidth + S_IBORDER)
-#define	TY_OFF(line)	BY_OFF(line)
+#define BX_OFF()  ((textWidth + 1) * W_Textwidth + S_IBORDER)
+#define BY_OFF(line)  ((line) * (W_Textheight + S_IBORDER) + S_IBORDER)
+#define TX_OFF(len) ((textWidth - len) * W_Textwidth + S_IBORDER)
+#define TY_OFF(line)  BY_OFF(line)
 
 /* right side labels */
-#define TEXT_WIDTH		(5*W_Textwidth + 2*STAT_BORDER)
-#define STAT_WIDTH		(260 + TEXT_WIDTH)
-#define STAT_HEIGHT		BY_OFF(NUM_SLIDERS)
-#define STAT_BORDER		2
-#define S_IBORDER		5
-#define STAT_X			422
-#define STAT_Y			13
+#define TEXT_WIDTH    (5*W_Textwidth + 2*STAT_BORDER)
+#define STAT_WIDTH    (260 + TEXT_WIDTH)
+#define STAT_HEIGHT   BY_OFF(NUM_SLIDERS)
+#define STAT_BORDER   2
+#define S_IBORDER   5
+#define STAT_X      422
+#define STAT_Y      13
 
-#define SL_WID			\
-	(STAT_WIDTH -TEXT_WIDTH - 2 * S_IBORDER - (textWidth + 1) * W_Textwidth)
-#define SL_HEI			(W_Textheight)
+#define SL_WID      \
+  (STAT_WIDTH -TEXT_WIDTH - 2 * S_IBORDER - (textWidth + 1) * W_Textwidth)
+#define SL_HEI      (W_Textheight)
 
-#define NUM_ELS(a)		(sizeof (a) / sizeof (*(a)))
-#define NUM_SLIDERS		NUM_ELS(sliders)
+#define NUM_ELS(a)    (sizeof (a) / sizeof (*(a)))
+#define NUM_SLIDERS   NUM_ELS(sliders)
 
 typedef struct slider
   {
@@ -79,25 +78,25 @@ static int box(int filled, int x, int y, int wid, int hei, W_Color color),
 
 /* externals from ping.c (didn't feel like cluttering up data.c with them) */
 
-extern int ping_iloss_sc;			 /* inc % loss 0--100, server
+extern int ping_iloss_sc;      /* inc % loss 0--100, server
 
-						  * 
-						  * * * to client */
-extern int ping_iloss_cs;			 /* inc % loss 0--100, client
+              *
+              * * * to client */
+extern int ping_iloss_cs;      /* inc % loss 0--100, client
 
-						  * 
-						  * * * to server */
-extern int ping_tloss_sc;			 /* total % loss 0--100, *
+              *
+              * * * to server */
+extern int ping_tloss_sc;      /* total % loss 0--100, *
 
-						  * 
-						  * * server to client */
-extern int ping_tloss_cs;			 /* total % loss 0--100, *
+              *
+              * * server to client */
+extern int ping_tloss_cs;      /* total % loss 0--100, *
 
-						  * 
-						  * * client to server */
-extern int ping_lag;				 /* delay in ms of last ping */
-extern int ping_av;				 /* average rt */
-extern int ping_sd;				 /* standard deviation */
+              *
+              * * client to server */
+extern int ping_lag;         /* delay in ms of last ping */
+extern int ping_av;        /* average rt */
+extern int ping_sd;        /* standard deviation */
 
 pStatsHeight(void)
 {
@@ -154,8 +153,8 @@ void    redrawPStats(void)
   for (i = 0; i < NUM_SLIDERS; i++)
     {
       W_WriteText(pStats, TX_OFF(sliders[i].label_length), TY_OFF(i),
-		  textColor, sliders[i].label, sliders[i].label_length,
-		  W_RegularFont);
+      textColor, sliders[i].label, sliders[i].label_length,
+      W_RegularFont);
       box(0, BX_OFF() - 1, BY_OFF(i) - 1, SL_WID + 2, SL_HEI + 2, borderColor);
       sliders[i].lastVal = 0;
     }
@@ -178,46 +177,46 @@ updatePStats(void)
       text(*(s->var), BY_OFF(i));
 
       if (value < s->min)
-	value = s->min;
+  value = s->min;
       else if (value > s->max)
-	value = s->max;
+  value = s->max;
       if (value == s->lastVal)
-	continue;
+  continue;
       diff = value - s->lastVal;
       if (diff < 0)
-	{					 /* bar decreasing */
-	  old_x = s->lastVal * SL_WID / s->diff;
-	  new_x = value * SL_WID / s->diff;
-	  box(1, BX_OFF() + new_x, BY_OFF(i), old_x - new_x, SL_HEI, backColor);
+  {          /* bar decreasing */
+    old_x = s->lastVal * SL_WID / s->diff;
+    new_x = value * SL_WID / s->diff;
+    box(1, BX_OFF() + new_x, BY_OFF(i), old_x - new_x, SL_HEI, backColor);
 
-	  if (s->lastVal > s->green && value <= s->green)
-	    box(1, BX_OFF(), BY_OFF(i), new_x, SL_HEI, gColor);
-	  else if (s->lastVal > s->yellow && value <= s->yellow)
-	    box(1, BX_OFF(), BY_OFF(i), new_x, SL_HEI, yColor);
-	}
+    if (s->lastVal > s->green && value <= s->green)
+      box(1, BX_OFF(), BY_OFF(i), new_x, SL_HEI, gColor);
+    else if (s->lastVal > s->yellow && value <= s->yellow)
+      box(1, BX_OFF(), BY_OFF(i), new_x, SL_HEI, yColor);
+  }
       else
-	{					 /* bar increasing */
-	  if (s->lastVal <= s->yellow && value > s->yellow)
-	    {
-	      color = rColor;
-	      s->lastVal = 0;
-	    }
-	  else if (s->lastVal <= s->green && value > s->green)
-	    {
-	      color = yColor;
-	      s->lastVal = 0;
-	    }
-	  else if (value > s->yellow)
-	    color = rColor;
-	  else if (value > s->green)
-	    color = yColor;
-	  else
-	    color = gColor;
+  {          /* bar increasing */
+    if (s->lastVal <= s->yellow && value > s->yellow)
+      {
+        color = rColor;
+        s->lastVal = 0;
+      }
+    else if (s->lastVal <= s->green && value > s->green)
+      {
+        color = yColor;
+        s->lastVal = 0;
+      }
+    else if (value > s->yellow)
+      color = rColor;
+    else if (value > s->green)
+      color = yColor;
+    else
+      color = gColor;
 
-	  old_x = s->lastVal * SL_WID / s->diff;
-	  new_x = value * SL_WID / s->diff;
-	  box(1, BX_OFF() + old_x, BY_OFF(i), new_x - old_x, SL_HEI, color);
-	}
+    old_x = s->lastVal * SL_WID / s->diff;
+    new_x = value * SL_WID / s->diff;
+    box(1, BX_OFF() + old_x, BY_OFF(i), new_x - old_x, SL_HEI, color);
+  }
       s->lastVal = value;
     }
 }
@@ -246,8 +245,8 @@ static
 {
   char    buf[6];
 
-  sprintf(buf, "(%3d)", value);			 /* fix */
+  sprintf(buf, "(%3d)", value);      /* fix */
 
   W_WriteText(pStats, STAT_WIDTH - TEXT_WIDTH, y, textColor,
-	      buf, 5, W_RegularFont);
+        buf, 5, W_RegularFont);
 }

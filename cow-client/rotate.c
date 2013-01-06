@@ -74,21 +74,21 @@ rotate_coord(int *x, int *y, int d, int cx, int cy)
 
     default:
       {
-	/* do it the hard way */
-	double  dir;
-	double  r, dx, dy;
-	double  rd = (double) d * 3.1415927 / 128.;
+  /* do it the hard way */
+  double  dir;
+  double  r, dx, dy;
+  double  rd = (double) d * 3.1415927 / 128.;
 
-	if (*x != cx || *y != cy)
-	  {
-	    dx = (double) (*x - cx);
-	    dy = (double) (cy - *y);
-	    dir = atan2(dx, dy) - 3.1415927 / 2.;
-	    r = hypot(dx, dy);
-	    dir += rd;
-	    *x = (int) (r * cos(dir) + cx);
-	    *y = (int) (r * sin(dir) + cy);
-	  }
+  if (*x != cx || *y != cy)
+    {
+      dx = (double) (*x - cx);
+      dy = (double) (cy - *y);
+      dir = atan2(dx, dy) - 3.1415927 / 2.;
+      r = hypot(dx, dy);
+      dir += rd;
+      *x = (int) (r * cos(dir) + cx);
+      *y = (int) (r * sin(dir) + cy);
+    }
       }
     }
 }

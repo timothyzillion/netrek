@@ -67,14 +67,14 @@ check(void)
   if ((addr.sin_addr.s_addr = inet_addr(serverName)) == -1)
     {
       if ((hp = gethostbyname(serverName)) == NULL)
-	{
-	  fprintf(stderr, "unknown host '%s'\n", serverName);
-	  terminate(0);
-	}
+  {
+    fprintf(stderr, "unknown host '%s'\n", serverName);
+    terminate(0);
+  }
       else
-	{
-	  addr.sin_addr.s_addr = *(LONG *) hp->h_addr;
-	}
+  {
+    addr.sin_addr.s_addr = *(LONG *) hp->h_addr;
+  }
     }
   addr.sin_family = AF_INET;
   addr.sin_port = htons(xtrekPort);

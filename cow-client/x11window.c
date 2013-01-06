@@ -1,6 +1,5 @@
-
 /* x11window.c
- * 
+ *
  * Kevin P. Smith  6/11/89 Much modified by Jerry Frain and Joe Young
  *
  * $Log: x11window.c,v $
@@ -81,7 +80,7 @@ extern void terminate(int error);
 /* XFIX speedup */
 #define MAXCACHE        128
 
-#define MAX_TEXT_WIDTH	90
+#define MAX_TEXT_WIDTH  90
 
 /* changes too good to risk leaving out, by Richard Caley (rjc@cstr.ed.ac.uk) */
 /* Was #ifdef RJC, but now they're just part of the code                    */
@@ -201,23 +200,23 @@ W_Color W_Ind = C_IND, W_Fed = C_FED, W_Rom = C_ROM, W_Kli = C_KLI, W_Ori = C_OR
 int     W_Textwidth, W_Textheight;
 char   *getdefault(char *str);
 
-int     W_in_message = 0;			 /* jfy -- for Jerry's warp * 
+int     W_in_message = 0;      /* jfy -- for Jerry's warp *
 
-						  * 
-						  * 
-						  * * message hack */
+              *
+              *
+              * * message hack */
 
 /* TTS: moved this out so we can use the 8th color */
 
 static unsigned long planes[PLANES];
 
 /* Scrollable message windows */
-#define SCROLL_THUMB_WIDTH	5
+#define SCROLL_THUMB_WIDTH  5
 static int scrollbar = 1;
 static int scroll_thumb_width = SCROLL_THUMB_WIDTH;
 static GC scroll_thumb_gc;
 static Pixmap scroll_thumb_pixmap;
-static int scroll_lines = 100;			 /* save 100 lines */
+static int scroll_lines = 100;       /* save 100 lines */
 
 extern W_Window baseWin;
 static XClassHint class_hint =
@@ -349,11 +348,11 @@ struct window myroot;
 #define fontNum(font) (*((int *) font))
 #define TILESIDE 16
 
-#define WIN_EDGE 5				 /* border on l/r edges of *
-						  * * text windows */
-#define MENU_PAD 4				 /* border on t/b edges of *
-						  * * text windows */
-#define MENU_BAR 4				 /* width of menu bar */
+#define WIN_EDGE 5         /* border on l/r edges of *
+              * * text windows */
+#define MENU_PAD 4         /* border on t/b edges of *
+              * * text windows */
+#define MENU_BAR 4         /* width of menu bar */
 
 static char gray[] =
 {
@@ -412,9 +411,9 @@ static long
     {
       hm_default_string = getdefault("WMXYHintMode");
       if (!hm_default_string || strcmp(hm_default_string, "USPosition") == 0)
-	WMXYHM_default = USPosition;
+  WMXYHM_default = USPosition;
       else
-	WMXYHM_default = PPosition;
+  WMXYHM_default = PPosition;
       fetched = 1;
     }
   return WMXYHM_default;
@@ -536,9 +535,9 @@ void GetFonts(void)
       bold = fontinfo->fid;
       fonts[2].baseline = fontinfo->max_bounds.ascent;
       if (fontinfo->max_bounds.width > W_Textwidth)
-	W_Textwidth = fontinfo->max_bounds.width;
+  W_Textwidth = fontinfo->max_bounds.width;
       if (fontinfo->max_bounds.descent + fontinfo->max_bounds.ascent > W_Textheight)
-	W_Textheight = fontinfo->max_bounds.descent + fontinfo->max_bounds.ascent;
+  W_Textheight = fontinfo->max_bounds.descent + fontinfo->max_bounds.ascent;
     }
 
   fontname = getdefault("italicfont");
@@ -560,9 +559,9 @@ void GetFonts(void)
       italic = fontinfo->fid;
       fonts[3].baseline = fontinfo->max_bounds.ascent;
       if (fontinfo->max_bounds.width > W_Textwidth)
-	W_Textwidth = fontinfo->max_bounds.width;
+  W_Textwidth = fontinfo->max_bounds.width;
       if (fontinfo->max_bounds.descent + fontinfo->max_bounds.ascent > W_Textheight)
-	W_Textheight = fontinfo->max_bounds.descent + fontinfo->max_bounds.ascent;
+  W_Textheight = fontinfo->max_bounds.descent + fontinfo->max_bounds.ascent;
     }
 
   fontname = getdefault("bigfont");
@@ -599,9 +598,9 @@ void GetFonts(void)
       values.fill_style = FillTiled;
       values.tile = insens_tile;
       colortable[i].insens_contexts[1] = XCreateGC(W_Display, W_Root,
-				    GCFont | GCFillStyle | GCTile, &values);
+            GCFont | GCFillStyle | GCTile, &values);
       XSetGraphicsExposures(W_Display, colortable[i].insens_contexts[1],
-			    False);
+          False);
       values.font = bold;
       colortable[i].contexts[2] = XCreateGC(W_Display, W_Root, GCFont, &values);
       XSetGraphicsExposures(W_Display, colortable[i].contexts[2], False);
@@ -609,16 +608,16 @@ void GetFonts(void)
       colortable[i].contexts[3] = XCreateGC(W_Display, W_Root, GCFont, &values);
       XSetGraphicsExposures(W_Display, colortable[i].contexts[3], False);
       {
-	static char dl[] =
-	{1, 8};
+  static char dl[] =
+  {1, 8};
 
-	XSetLineAttributes(W_Display, colortable[i].contexts[3],
-			   0, LineOnOffDash, CapButt, JoinMiter);
-	XSetDashes(W_Display, colortable[i].contexts[3], 0, dl, 2);
+  XSetLineAttributes(W_Display, colortable[i].contexts[3],
+         0, LineOnOffDash, CapButt, JoinMiter);
+  XSetDashes(W_Display, colortable[i].contexts[3], 0, dl, 2);
       }
       values.function = GXor;
       colortable[i].contexts[BITGC] = XCreateGC(W_Display, W_Root, GCFunction,
-						&values);
+            &values);
       XSetGraphicsExposures(W_Display, colortable[i].contexts[BITGC], False);
     }
 }
@@ -629,14 +628,14 @@ XFontStruct *
   char  **f;
 
   fprintf(stderr, "netrek: Can't find font %s.  Trying others...\n",
-	  oldf);
+    oldf);
   for (f = fonts; *f; f++)
     {
       if (strcmp(*f, oldf) != 0)
-	{
-	  if ((fi = XLoadQueryFont(W_Display, *f)))
-	    return fi;
-	}
+  {
+    if ((fi = XLoadQueryFont(W_Display, *f)))
+      return fi;
+  }
     }
   return (NULL);
 }
@@ -662,198 +661,198 @@ void GetColors(void)
   XColor  colordef;
 
 
-  forceMono = booleanDefault("forcemono", forceMono);	/* 11/14/91 TC */
+  forceMono = booleanDefault("forcemono", forceMono); /* 11/14/91 TC */
 
   if ((DisplayCells(W_Display, W_Screen) <= 2) || forceMono)
     {
       white = WhitePixel(W_Display, W_Screen);
       black = BlackPixel(W_Display, W_Screen);
       for (i = 0; i < NCOLORS; i++)
-	{
-	  if (i != W_Black)
-	    {
-	      colortable[i].pixelValue = white;
-	    }
-	  else
-	    {
-	      colortable[i].pixelValue = black;
-	    }
-	  if (i == W_Red)
-	    {
-	      colortable[i].pixmap = XCreatePixmapFromBitmapData(W_Display,
-			  W_Root, striped, TILESIDE, TILESIDE, white, black,
-					 DefaultDepth(W_Display, W_Screen));
-	    }
-	  else if (i == W_Yellow)
-	    {
-	      colortable[i].pixmap = XCreatePixmapFromBitmapData(W_Display,
-			     W_Root, gray, TILESIDE, TILESIDE, white, black,
-					 DefaultDepth(W_Display, W_Screen));
-	    }
-	  else
-	    {
-	      colortable[i].pixmap = XCreatePixmapFromBitmapData(W_Display,
-					  W_Root, solid, TILESIDE, TILESIDE,
-						   colortable[i].pixelValue,
-						   colortable[i].pixelValue,
-					 DefaultDepth(W_Display, W_Screen));
-	    }
-	  /* We assume white is 0 or 1, and black is 0 or 1. We adjust * *
-	   * graphics function based upon who is who. */
-	  if (white == 0)
-	    {					 /* Black is 1 */
-	      XSetFunction(W_Display, colortable[i].contexts[BITGC],
-			   GXand);
-	    }
-	}
+  {
+    if (i != W_Black)
+      {
+        colortable[i].pixelValue = white;
+      }
+    else
+      {
+        colortable[i].pixelValue = black;
+      }
+    if (i == W_Red)
+      {
+        colortable[i].pixmap = XCreatePixmapFromBitmapData(W_Display,
+        W_Root, striped, TILESIDE, TILESIDE, white, black,
+           DefaultDepth(W_Display, W_Screen));
+      }
+    else if (i == W_Yellow)
+      {
+        colortable[i].pixmap = XCreatePixmapFromBitmapData(W_Display,
+           W_Root, gray, TILESIDE, TILESIDE, white, black,
+           DefaultDepth(W_Display, W_Screen));
+      }
+    else
+      {
+        colortable[i].pixmap = XCreatePixmapFromBitmapData(W_Display,
+            W_Root, solid, TILESIDE, TILESIDE,
+               colortable[i].pixelValue,
+               colortable[i].pixelValue,
+           DefaultDepth(W_Display, W_Screen));
+      }
+    /* We assume white is 0 or 1, and black is 0 or 1. We adjust * *
+     * graphics function based upon who is who. */
+    if (white == 0)
+      {          /* Black is 1 */
+        XSetFunction(W_Display, colortable[i].contexts[BITGC],
+         GXand);
+      }
+  }
     }
   else if (W_Visual->class == PseudoColor)
     {
       if (!XAllocColorCells(W_Display, W_Colormap, False, planes, PLANES,
-			    &pixel, 1) && !takeNearest)
-	{
-	  /* couldn't allocate 3 planes, make a new colormap */
-	  W_Colormap = XCreateColormap(W_Display, W_Root, W_Visual, AllocNone);
+          &pixel, 1) && !takeNearest)
+  {
+    /* couldn't allocate 3 planes, make a new colormap */
+    W_Colormap = XCreateColormap(W_Display, W_Root, W_Visual, AllocNone);
 
-	  if (!XAllocColorCells(W_Display, W_Colormap, False, planes, PLANES,
-				&pixel, 1))
-	    {
-	      fprintf(stderr, "Cannot create new colormap\n");
-	      terminate(1);
-	    }
-	  /* and fill it with at least 8 more colors so when mouse is inside
-	   * * * netrek windows, use might be able to see his other windows */
-	  if (XAllocColorCells(W_Display, W_Colormap, False, NULL, 0,
-			       extracolors, COLORS))
-	    {
-	      colordef.flags = DoRed | DoGreen | DoBlue;
+    if (!XAllocColorCells(W_Display, W_Colormap, False, planes, PLANES,
+        &pixel, 1))
+      {
+        fprintf(stderr, "Cannot create new colormap\n");
+        terminate(1);
+      }
+    /* and fill it with at least 8 more colors so when mouse is inside
+     * * * netrek windows, use might be able to see his other windows */
+    if (XAllocColorCells(W_Display, W_Colormap, False, NULL, 0,
+             extracolors, COLORS))
+      {
+        colordef.flags = DoRed | DoGreen | DoBlue;
 
-	      for (i = 0; i < COLORS; i++)
-		{
-		  colordef.pixel = extracolors[i];
-		  colordef.red = extrared[i] << 8;
-		  colordef.green = extragreen[i] << 8;
-		  colordef.blue = extrablue[i] << 8;
-		  XStoreColor(W_Display, W_Colormap, &colordef);
-		}
-	    }
-	}
+        for (i = 0; i < COLORS; i++)
+    {
+      colordef.pixel = extracolors[i];
+      colordef.red = extrared[i] << 8;
+      colordef.green = extragreen[i] << 8;
+      colordef.blue = extrablue[i] << 8;
+      XStoreColor(W_Display, W_Colormap, &colordef);
+    }
+      }
+  }
 
       for (i = 0; i < NCOLORS; i++)
-	{
-	  sprintf(defaultstring, "color.%s", colortable[i].name);
-	  defaults = getdefault(defaultstring);
+  {
+    sprintf(defaultstring, "color.%s", colortable[i].name);
+    defaults = getdefault(defaultstring);
 
-	  if (defaults == NULL)
-	    {
+    if (defaults == NULL)
+      {
 
 #ifdef RACE_COLORS
-	      if (i > GREY)
-		{
-		  /* The default colour from the ROMS is the colour defined * 
-		   * 
-		   * * to be RED and not the colour which is actually RED. */
+        if (i > GREY)
+    {
+      /* The default colour from the ROMS is the colour defined *
+       *
+       * * to be RED and not the colour which is actually RED. */
 
-		  sprintf(defaultstring, "color.%s",
-			  colortable[i - RaceDefaultOffset].name);
-		  defaults = getdefault(defaultstring);
+      sprintf(defaultstring, "color.%s",
+        colortable[i - RaceDefaultOffset].name);
+      defaults = getdefault(defaultstring);
 
-		  if (defaults == NULL)
-		    defaults = colortable[i - RaceDefaultOffset].name;
-		}
-	      else
+      if (defaults == NULL)
+        defaults = colortable[i - RaceDefaultOffset].name;
+    }
+        else
 #endif
 
-		defaults = colortable[i].name;
-	    }
+    defaults = colortable[i].name;
+      }
 
-	  XParseColor(W_Display, W_Colormap, defaults, &foo);
+    XParseColor(W_Display, W_Colormap, defaults, &foo);
 
-	  switch (i)
-	    {
+    switch (i)
+      {
 
 #ifndef RACE_COLORS
-	    case WHITE:
-	      foo.pixel = pixel | planes[0] | planes[1] | planes[2];
-	      break;
-	    case BLACK:
-	      foo.pixel = pixel;
-	      break;
-	    case RED:
-	      foo.pixel = pixel | planes[0];
-	      break;
-	    case CYAN:
-	      foo.pixel = pixel | planes[1];
-	      break;
-	    case YELLOW:
-	      foo.pixel = pixel | planes[2];
-	      break;
-	    case GREY:
-	      foo.pixel = pixel | planes[0] | planes[1];
-	      break;
-	    case GREEN:
-	      foo.pixel = pixel | planes[1] | planes[2];
-	      break;
+      case WHITE:
+        foo.pixel = pixel | planes[0] | planes[1] | planes[2];
+        break;
+      case BLACK:
+        foo.pixel = pixel;
+        break;
+      case RED:
+        foo.pixel = pixel | planes[0];
+        break;
+      case CYAN:
+        foo.pixel = pixel | planes[1];
+        break;
+      case YELLOW:
+        foo.pixel = pixel | planes[2];
+        break;
+      case GREY:
+        foo.pixel = pixel | planes[0] | planes[1];
+        break;
+      case GREEN:
+        foo.pixel = pixel | planes[1] | planes[2];
+        break;
 #else
-	      /* 
-	       * Choose colors so that when two ships overlap, things look
-	       * ok.  When players overlab, the bits are ORed together. */
+        /*
+         * Choose colors so that when two ships overlap, things look
+         * ok.  When players overlab, the bits are ORed together. */
 
-	      /* Background color */
-	    case BLACK:
-	      foo.pixel = pixel;
-	      break;
+        /* Background color */
+      case BLACK:
+        foo.pixel = pixel;
+        break;
 
-	      /* Alert colors (sum to grey usually) */
-	    case RED:
-	      foo.pixel = pixel | planes[1] | planes[2];
-	      break;
-	    case CYAN:
-	      foo.pixel = pixel | planes[1] | planes[3];
-	      break;
-	    case YELLOW:
-	      foo.pixel = pixel | planes[2] | planes[3];
-	      break;
-	    case GREEN:
-	      foo.pixel = pixel | planes[1];
-	      break;
-	    case GREY:
-	      foo.pixel = pixel | planes[1] | planes[2] | planes[3];
-	      break;
+        /* Alert colors (sum to grey usually) */
+      case RED:
+        foo.pixel = pixel | planes[1] | planes[2];
+        break;
+      case CYAN:
+        foo.pixel = pixel | planes[1] | planes[3];
+        break;
+      case YELLOW:
+        foo.pixel = pixel | planes[2] | planes[3];
+        break;
+      case GREEN:
+        foo.pixel = pixel | planes[1];
+        break;
+      case GREY:
+        foo.pixel = pixel | planes[1] | planes[2] | planes[3];
+        break;
 
-	      /* Your color */
-	    case WHITE:
-	      foo.pixel = pixel | planes[0];
-	      break;
+        /* Your color */
+      case WHITE:
+        foo.pixel = pixel | planes[0];
+        break;
 
-	      /* The color of other ships should dominate over your color * * 
-	       * and should sum to C_IND where possible. */
-	    case C_FED:
-	      foo.pixel = pixel | planes[0] | planes[1] | planes[2];
-	      break;
-	    case C_ROM:
-	      foo.pixel = pixel | planes[0] | planes[1] | planes[3];
-	      break;
-	    case C_KLI:
-	      foo.pixel = pixel | planes[0] | planes[2] | planes[3];
-	      break;
-	    case C_ORI:
-	      foo.pixel = pixel | planes[0] | planes[1];
-	      break;
-	    case C_IND:
-	      foo.pixel = pixel | planes[0] | planes[1] | planes[2] | planes[3];
-	      break;
+        /* The color of other ships should dominate over your color * *
+         * and should sum to C_IND where possible. */
+      case C_FED:
+        foo.pixel = pixel | planes[0] | planes[1] | planes[2];
+        break;
+      case C_ROM:
+        foo.pixel = pixel | planes[0] | planes[1] | planes[3];
+        break;
+      case C_KLI:
+        foo.pixel = pixel | planes[0] | planes[2] | planes[3];
+        break;
+      case C_ORI:
+        foo.pixel = pixel | planes[0] | planes[1];
+        break;
+      case C_IND:
+        foo.pixel = pixel | planes[0] | planes[1] | planes[2] | planes[3];
+        break;
 #endif
-	    }
-	  if (takeNearest)
-	    XAllocColor(W_Display, W_Colormap, &foo);
-	  else
-	    XStoreColor(W_Display, W_Colormap, &foo);
-	  colortable[i].pixelValue = foo.pixel;
-	  colortable[i].pixmap = XCreatePixmapFromBitmapData(W_Display,
-		    W_Root, solid, TILESIDE, TILESIDE, foo.pixel, foo.pixel,
-					 DefaultDepth(W_Display, W_Screen));
-	}
+      }
+    if (takeNearest)
+      XAllocColor(W_Display, W_Colormap, &foo);
+    else
+      XStoreColor(W_Display, W_Colormap, &foo);
+    colortable[i].pixelValue = foo.pixel;
+    colortable[i].pixmap = XCreatePixmapFromBitmapData(W_Display,
+        W_Root, solid, TILESIDE, TILESIDE, foo.pixel, foo.pixel,
+           DefaultDepth(W_Display, W_Screen));
+  }
     }
   else if (W_Visual->class >= TrueColor)
     {
@@ -861,59 +860,59 @@ void GetColors(void)
        * detect a TrueColor display, and then do a lookup of the colors in *
        * * default colormap, instead of creating new colormap. */
       for (i = 0; i < NCOLORS; i++)
-	{
-	  sprintf(defaultstring, "color.%s", colortable[i].name);
+  {
+    sprintf(defaultstring, "color.%s", colortable[i].name);
 
-	  defaults = getdefault(defaultstring);
-	  if (defaults == NULL)
-	    {
+    defaults = getdefault(defaultstring);
+    if (defaults == NULL)
+      {
 
 #ifdef RACE_COLORS
-	      if (i > GREY)
-		{
-		  /* The default color from the ROMS is the color defined to
-		   * * * be RED and not the color which is actually RED. */
+        if (i > GREY)
+    {
+      /* The default color from the ROMS is the color defined to
+       * * * be RED and not the color which is actually RED. */
 
-		  sprintf(defaultstring, "color.%s",
-			  colortable[i - RaceDefaultOffset].name);
-		  defaults = getdefault(defaultstring);
+      sprintf(defaultstring, "color.%s",
+        colortable[i - RaceDefaultOffset].name);
+      defaults = getdefault(defaultstring);
 
-		  if (defaults == NULL)
-		    defaults = colortable[i - RaceDefaultOffset].name;
-		}
-	      else
+      if (defaults == NULL)
+        defaults = colortable[i - RaceDefaultOffset].name;
+    }
+        else
 #endif
 
-		defaults = colortable[i].name;
-	    }
+    defaults = colortable[i].name;
+      }
 
 
-	  XParseColor(W_Display, W_Colormap, defaults, &foo);
-	  XAllocColor(W_Display, W_Colormap, &foo);
-	  colortable[i].pixelValue = foo.pixel;
-	  colortable[i].pixmap = XCreatePixmapFromBitmapData(W_Display,
-		    W_Root, solid, TILESIDE, TILESIDE, foo.pixel, foo.pixel,
-					 DefaultDepth(W_Display, W_Screen));
-	}
+    XParseColor(W_Display, W_Colormap, defaults, &foo);
+    XAllocColor(W_Display, W_Colormap, &foo);
+    colortable[i].pixelValue = foo.pixel;
+    colortable[i].pixmap = XCreatePixmapFromBitmapData(W_Display,
+        W_Root, solid, TILESIDE, TILESIDE, foo.pixel, foo.pixel,
+           DefaultDepth(W_Display, W_Screen));
+  }
     }
   else
     {
 
       fprintf(stderr, "Don't know how to deal with a Class %d Visual\n",
-	      W_Visual->class);
+        W_Visual->class);
       fprintf(stderr, "Your X server is not supported at %d bpp!\n",
-	      DefaultDepth(W_Display, W_Screen));
+        DefaultDepth(W_Display, W_Screen));
       terminate(1);
     }
   for (i = 0; i < NCOLORS; i++)
     {
       for (j = 0; j < FONTS + 1; j++)
-	{
-	  XSetForeground(W_Display, colortable[i].contexts[j],
-			 colortable[i].pixelValue);
-	  XSetBackground(W_Display, colortable[i].contexts[j],
-			 colortable[W_Black].pixelValue);
-	}
+  {
+    XSetForeground(W_Display, colortable[i].contexts[j],
+       colortable[i].pixelValue);
+    XSetBackground(W_Display, colortable[i].contexts[j],
+       colortable[W_Black].pixelValue);
+  }
     }
 
   if (scroll_thumb_gc)
@@ -931,16 +930,16 @@ void GetColors(void)
     {
 
       scroll_thumb_pixmap = XCreatePixmapFromBitmapData(W_Display,
-					   W_Root, gray, TILESIDE, TILESIDE,
-					     colortable[W_White].pixelValue,
-					     colortable[W_Black].pixelValue,
-					 DefaultDepth(W_Display, W_Screen));
+             W_Root, gray, TILESIDE, TILESIDE,
+               colortable[W_White].pixelValue,
+               colortable[W_Black].pixelValue,
+           DefaultDepth(W_Display, W_Screen));
 
       values.fill_style = FillTiled;
       values.tile = scroll_thumb_pixmap;
 
       scroll_thumb_gc = XCreateGC(W_Display, W_Root,
-				  GCFillStyle | GCTile, &values);
+          GCFillStyle | GCTile, &values);
     }
 }
 
@@ -983,18 +982,18 @@ W_MakeWindow(char *name, int x, int y, int width, int height, W_Window parent, i
   //  }
 
 
-  if (strcmp(name, "netrek_icon") == 0)		 /* icon should not select *
-						  * for input */
+  if (strcmp(name, "netrek_icon") == 0)    /* icon should not select *
+              * for input */
     attrs.event_mask = ExposureMask;
   attrs.background_pixel = colortable[W_Black].pixelValue;
   attrs.do_not_propagate_mask = KeyPressMask | ButtonPressMask | ExposureMask;
   newwin = newWindow(
-	      XCreateWindow(W_Display, wparent, x, y, width, height, border,
-			    CopyFromParent, InputOutput, CopyFromParent,
-			    CWBackPixel | CWEventMask |
-			    CWBorderPixel,
-			    &attrs),
-		      WIN_GRAPH);
+        XCreateWindow(W_Display, wparent, x, y, width, height, border,
+          CopyFromParent, InputOutput, CopyFromParent,
+          CWBackPixel | CWEventMask |
+          CWBorderPixel,
+          &attrs),
+          WIN_GRAPH);
 
   if (!strcmp(name, "netrek")) {
     if (full_screen_enabled) {
@@ -1008,18 +1007,18 @@ W_MakeWindow(char *name, int x, int y, int width, int height, W_Window parent, i
       strcmp(name, "waitmotd") == 0)
     {
       if (!title && serverName)
-	{
-	  if (strcmp(name, "wait") == 0)
-	    strcpy(title_buff, serverName);
-	  else if (strcmp(name, "waitmotd") == 0)
-	    strcpy(title_buff, "Motd-[f]forward, [b]back, [space]unmap");
-	  else
-	    sprintf(title_buff, "Netrek  @  %s", serverName);
-	  window_title = title_buff;
-	}
+  {
+    if (strcmp(name, "wait") == 0)
+      strcpy(title_buff, serverName);
+    else if (strcmp(name, "waitmotd") == 0)
+      strcpy(title_buff, "Motd-[f]forward, [b]back, [space]unmap");
+    else
+      sprintf(title_buff, "Netrek  @  %s", serverName);
+    window_title = title_buff;
+  }
       else
-	/* but title on command line will override */ if (title)
-	window_title = title;
+  /* but title on command line will override */ if (title)
+  window_title = title;
       sz_hints->min_width = width;
       sz_hints->max_width = width;
       sz_hints->min_height = height;
@@ -1032,13 +1031,13 @@ W_MakeWindow(char *name, int x, int y, int width, int height, W_Window parent, i
       if (gcheck_result & G_SET_X || gcheck_result & G_SET_Y)
 #endif
 
-	sz_hints->flags |= WMXYHintMode_default();
+  sz_hints->flags |= WMXYHintMode_default();
     }
   else
     {
       window_title = name;
       if (gcheck_result & G_SET_X || gcheck_result & G_SET_Y)
-	sz_hints->flags |= WMXYHintMode_default();
+  sz_hints->flags |= WMXYHintMode_default();
     }
   XStoreName(W_Display, newwin->window, window_title);
   XSetWMNormalHints(W_Display, newwin->window, sz_hints);
@@ -1080,10 +1079,10 @@ void
   if ((DisplayCells(W_Display, W_Screen) <= 2) || forceMono)
 
     XSetWindowBorderPixmap(W_Display, W_Void2Window(window)->window,
-			   colortable[color].pixmap);
+         colortable[color].pixmap);
   else
     XSetWindowBorder(W_Display, W_Void2Window(window)->window,
-		     colortable[color].pixelValue);
+         colortable[color].pixelValue);
 
 
 }
@@ -1138,7 +1137,7 @@ void
 
 #ifdef DEBUG
   printf("Clearing (%d %d) x (%d %d) with %d on %d\n", x, y, width, height,
-	 color, window);
+   color, window);
 #endif
 
   win = W_Void2Window(window);
@@ -1146,18 +1145,18 @@ void
     {
     case WIN_GRAPH:
       XFillRectangle(W_Display, win->window, colortable[color].contexts[0],
-		     x, y, width, height);
+         x, y, width, height);
       break;
     case WIN_SCROLL:
       XFillRectangle(W_Display, win->window, colortable[color].contexts[0],
-		     WIN_EDGE + x * W_Textwidth,
-		     MENU_PAD + y * W_Textheight,
-		     width * W_Textwidth, height * W_Textheight);
+         WIN_EDGE + x * W_Textwidth,
+         MENU_PAD + y * W_Textheight,
+         width * W_Textwidth, height * W_Textheight);
       break;
     default:
       XFillRectangle(W_Display, win->window, colortable[color].contexts[0],
-		     WIN_EDGE + x * W_Textwidth, MENU_PAD + y * W_Textheight,
-		     width * W_Textwidth, height * W_Textheight);
+         WIN_EDGE + x * W_Textwidth, MENU_PAD + y * W_Textheight,
+         width * W_Textwidth, height * W_Textheight);
     }
 }
 
@@ -1170,7 +1169,7 @@ static void
         FlushClearAreaCache(Window win)
 {
   XFillRectangles(W_Display, win, colortable[backColor].contexts[0],
-		  _rcache, _rcache_index);
+      _rcache, _rcache_index);
   _rcache_index = 0;
 }
 
@@ -1215,13 +1214,13 @@ void
       break;
     case WIN_SCROLL:
       XClearArea(W_Display, win->window, WIN_EDGE + x * W_Textwidth,
-		 MENU_PAD + y * W_Textheight,
-		 width * W_Textwidth, height * W_Textheight, False);
+     MENU_PAD + y * W_Textheight,
+     width * W_Textwidth, height * W_Textheight, False);
       break;
     default:
       /* XFIX: changed */
       XClearArea(W_Display, win->window, WIN_EDGE + x * W_Textwidth,
-		 MENU_PAD + y * W_Textheight, width * W_Textwidth, height * W_Textheight, False);
+     MENU_PAD + y * W_Textheight, width * W_Textwidth, height * W_Textheight, False);
       break;
     }
 }
@@ -1245,10 +1244,10 @@ int
   while (XPending(W_Display))
     {
       if (W_SpNextEvent(&W_myevent))
-	{
-	  W_isEvent = 1;
-	  return (1);
-	}
+  {
+    W_isEvent = 1;
+    return (1);
+  }
     }
   return (0);
 }
@@ -1317,381 +1316,381 @@ int
       /* printf("read an event %d\n", event.type); */
       win = findWindow(key->window);
       if (win == NULL)
-	return (0);
-      if (key->send_event == True)		 /* event sent by another * * 
-						  * client */
-	return 0;
+  return (0);
+      if (key->send_event == True)     /* event sent by another * *
+              * client */
+  return 0;
       if ((event.type == KeyPress || event.type == ButtonPress) &&
-	  win->type == WIN_MENU)
-	{
-	  if (key->y % (W_Textheight + MENU_PAD * 2 + MENU_BAR) >=
-	      W_Textheight + MENU_PAD * 2)
-	    return (0);
-	  key->y = key->y / (W_Textheight + MENU_PAD * 2 + MENU_BAR);
-	}
+    win->type == WIN_MENU)
+  {
+    if (key->y % (W_Textheight + MENU_PAD * 2 + MENU_BAR) >=
+        W_Textheight + MENU_PAD * 2)
+      return (0);
+    key->y = key->y / (W_Textheight + MENU_PAD * 2 + MENU_BAR);
+  }
       switch ((int) event.type)
-	{
-	case LeaveNotify:			 /* for message window -- jfy 
-						  * 
-						  */
-	  if (win == (struct window *) messagew)
-	    {
-	      W_in_message = 0;
-	    }
-	  return (0);
-	  break;
-	case KeyPress:
+  {
+  case LeaveNotify:      /* for message window -- jfy
+              *
+              */
+    if (win == (struct window *) messagew)
+      {
+        W_in_message = 0;
+      }
+    return (0);
+    break;
+  case KeyPress:
 
-	  if ((key->state & LockMask) && !(key->state & ShiftMask) &&
-	      (ignoreCaps))
-	    {
-	      printf("Got a capslock!\n");
+    if ((key->state & LockMask) && !(key->state & ShiftMask) &&
+        (ignoreCaps))
+      {
+        printf("Got a capslock!\n");
 
-	      key->state = key->state & ~LockMask;
-	    }
+        key->state = key->state & ~LockMask;
+      }
 
 #ifdef CONTROL_KEY
-	  if (key->state & ControlMask && use_control_key)
-	    {
-	      control_key = 1;
-	      key->state = key->state & ~ControlMask;
-	    }
-	  else
-	    control_key = 0;
+    if (key->state & ControlMask && use_control_key)
+      {
+        control_key = 1;
+        key->state = key->state & ~ControlMask;
+      }
+    else
+      control_key = 0;
 #endif
 
-	  if (
+    if (
 
 #ifdef FUNCTION_KEYS
-	     ((XLookupString(key, (char *) &ch, 1, &sym, NULL) > 0) || sym == XK_Tab)
+       ((XLookupString(key, (char *) &ch, 1, &sym, NULL) > 0) || sym == XK_Tab)
 #else
-	       (XLookupString(key, (char *) &ch, 1, NULL, NULL) > 0)
+         (XLookupString(key, (char *) &ch, 1, NULL, NULL) > 0)
 #endif
 
-	      )
-	    {
+        )
+      {
 
 #ifdef FUNCTION_KEYS
-	      if (sym == XK_Tab)
-		ch = 201;
+        if (sym == XK_Tab)
+    ch = 201;
 #endif
 
 #ifdef MOUSE_AS_SHIFT
-	      if (mouse_as_shift)
-		{
-		  if (key->state & Button1Mask)
-		    {
-		      wevent->modifier = W_LBUTTON;
-		      wevent->type = W_EV_MKEY;
-		    }
-		  else if (key->state & Button2Mask)
-		    {
-		      wevent->modifier = W_MBUTTON;
-		      wevent->type = W_EV_MKEY;
-		    }
-		  else if (key->state & Button3Mask)
-		    {
-		      wevent->modifier = W_RBUTTON;
-		      wevent->type = W_EV_MKEY;
-		    }
-		  else
-		    {
-		      wevent->type = W_EV_KEY;
-		    }
-		}
-	      else
-		wevent->type = W_EV_KEY;
+        if (mouse_as_shift)
+    {
+      if (key->state & Button1Mask)
+        {
+          wevent->modifier = W_LBUTTON;
+          wevent->type = W_EV_MKEY;
+        }
+      else if (key->state & Button2Mask)
+        {
+          wevent->modifier = W_MBUTTON;
+          wevent->type = W_EV_MKEY;
+        }
+      else if (key->state & Button3Mask)
+        {
+          wevent->modifier = W_RBUTTON;
+          wevent->type = W_EV_MKEY;
+        }
+      else
+        {
+          wevent->type = W_EV_KEY;
+        }
+    }
+        else
+    wevent->type = W_EV_KEY;
 #else
-	      wevent->type = W_EV_KEY;
+        wevent->type = W_EV_KEY;
 #endif
 
-	      wevent->Window = W_Window2Void(win);
-	      wevent->x = key->x;
-	      wevent->y = key->y;
+        wevent->Window = W_Window2Void(win);
+        wevent->x = key->x;
+        wevent->y = key->y;
 
 #ifdef CONTROL_KEY
-	      if (control_key)
-		wevent->key = (unsigned char) (ch + 96);
-	      else
-		wevent->key = ch;
+        if (control_key)
+    wevent->key = (unsigned char) (ch + 96);
+        else
+    wevent->key = ch;
 #else
-	      wevent->key = ch;
+        wevent->key = ch;
 #endif
 
-	      return (1);
-	    }
+        return (1);
+      }
 
 #ifdef nodef
-	  if (sym != NoSymbol)
-	    switch (sym)
-	      {
-	      case XK_F1:
-		printf("Function key1 \n");
-		break;
-	      case XK_F2:
-		printf("Function key2\n");
-		break;
-	      case XK_F3:
-		printf("Function key3\n");
-		break;
-	      case XK_F4:
-		printf("Function key4\n");
-		break;
-	      case XK_F5:
-		printf("Function key5\n");
-		break;
-	      case XK_F6:
-		printf("Function key6\n");
-		break;
-	      case XK_F7:
-		printf("Function key7\n");
-		break;
-	      case XK_F8:
-		printf("Function key8\n");
-		break;
-	      case XK_F9:
-		printf("Function key9\n");
-		break;
-	      case XK_F10:
-		printf("Function key10\n");
-		break;
-	      }
+    if (sym != NoSymbol)
+      switch (sym)
+        {
+        case XK_F1:
+    printf("Function key1 \n");
+    break;
+        case XK_F2:
+    printf("Function key2\n");
+    break;
+        case XK_F3:
+    printf("Function key3\n");
+    break;
+        case XK_F4:
+    printf("Function key4\n");
+    break;
+        case XK_F5:
+    printf("Function key5\n");
+    break;
+        case XK_F6:
+    printf("Function key6\n");
+    break;
+        case XK_F7:
+    printf("Function key7\n");
+    break;
+        case XK_F8:
+    printf("Function key8\n");
+    break;
+        case XK_F9:
+    printf("Function key9\n");
+    break;
+        case XK_F10:
+    printf("Function key10\n");
+    break;
+        }
 #endif
 
-	  return (0);
-	  break;
+    return (0);
+    break;
 
 #ifdef AUTOKEY
-	case KeyRelease:
-	  if (XLookupString(key, &ch, 1, NULL, NULL) > 0)
-	    {
-	      wevent->type = W_EV_KEY_OFF;
-	      wevent->Window = W_Window2Void(win);
-	      wevent->x = key->x;
-	      wevent->y = key->y;
-	      wevent->key = ch;
-	      return (1);
-	    }
-	  return (0);
-	  break;
+  case KeyRelease:
+    if (XLookupString(key, &ch, 1, NULL, NULL) > 0)
+      {
+        wevent->type = W_EV_KEY_OFF;
+        wevent->Window = W_Window2Void(win);
+        wevent->x = key->x;
+        wevent->y = key->y;
+        wevent->key = ch;
+        return (1);
+      }
+    return (0);
+    break;
 #endif /* AUTOKEY */
 
-	case ButtonPress:
-	  wevent->type = W_EV_BUTTON;
-	  wevent->Window = W_Window2Void(win);
+  case ButtonPress:
+    wevent->type = W_EV_BUTTON;
+    wevent->Window = W_Window2Void(win);
 
 #ifdef MOTION_MOUSE
-	  prev_x = wevent->x = button->x;
-	  prev_y = wevent->y = button->y;
+    prev_x = wevent->x = button->x;
+    prev_y = wevent->y = button->y;
 #else
-	  wevent->x = button->x;
-	  wevent->y = button->y;
+    wevent->x = button->x;
+    wevent->y = button->y;
 #endif
 
 
 #ifdef MOUSE_AS_SHIFT
-	  if (mouse_as_shift &&
-	      (wevent->Window == mapw || wevent->Window == w))
-	    switch (button->button & 0xf)
-	      {
-	      case Button3:
-		if (b3_as_shift)
-		  return (0);
-		break;
-	      case Button1:
-		if (b1_as_shift)
-		  return (0);
-		break;
-	      case Button2:
-		if (b2_as_shift)
-		  return (0);
-		break;
-	      }
+    if (mouse_as_shift &&
+        (wevent->Window == mapw || wevent->Window == w))
+      switch (button->button & 0xf)
+        {
+        case Button3:
+    if (b3_as_shift)
+      return (0);
+    break;
+        case Button1:
+    if (b1_as_shift)
+      return (0);
+    break;
+        case Button2:
+    if (b2_as_shift)
+      return (0);
+    break;
+        }
 #endif
 
-	  switch (button->button & 0xf)
-	    {
-	    case Button3:
-	      wevent->key = W_RBUTTON;
-	      break;
-	    case Button1:
-	      wevent->key = W_LBUTTON;
-	      break;
-	    case Button2:
-	      wevent->key = W_MBUTTON;
-	      break;
+    switch (button->button & 0xf)
+      {
+      case Button3:
+        wevent->key = W_RBUTTON;
+        break;
+      case Button1:
+        wevent->key = W_LBUTTON;
+        break;
+      case Button2:
+        wevent->key = W_MBUTTON;
+        break;
 #ifdef Button4
-	    case Button4:
-	      wevent->key = W_WUBUTTON;
-	      break;
+      case Button4:
+        wevent->key = W_WUBUTTON;
+        break;
 #endif
 #ifdef Button5
-	    case Button5:
-	      wevent->key = W_WDBUTTON;
-	      break;
+      case Button5:
+        wevent->key = W_WDBUTTON;
+        break;
 #endif
 #ifdef Button6
-	    case Button6:
-	      wevent->key = W_X1BUTTON;
-	      break;
+      case Button6:
+        wevent->key = W_X1BUTTON;
+        break;
 #endif
 #ifdef Button7
-	    case Button7:
-	      wevent->key = W_X2BUTTON;
-	      break;
+      case Button7:
+        wevent->key = W_X2BUTTON;
+        break;
 #endif
-	    }
+      }
 
 #ifdef SHIFTED_MOUSE
-	  if (extended_mouse)
-	    {
-	      if (button->state & (ControlMask | ShiftMask))
-		{
+    if (extended_mouse)
+      {
+        if (button->state & (ControlMask | ShiftMask))
+    {
 
-		  if (button->state & ShiftMask)
-		    {
-		      wevent->key |= W_SHIFT_BUTTON;
-		    }
+      if (button->state & ShiftMask)
+        {
+          wevent->key |= W_SHIFT_BUTTON;
+        }
 
-		  if (button->state & ControlMask)
-		    {
-		      wevent->key |= W_CTRL_BUTTON;
-		    }
+      if (button->state & ControlMask)
+        {
+          wevent->key |= W_CTRL_BUTTON;
+        }
 
-		  return (1);
-		}
+      return (1);
+    }
 
-	    }
+      }
 #endif
 
-	  if (win->type == WIN_SCROLL)
-	    {
-	      scrollScrolling(wevent);
-	      return 0;
-	    }
-	  return (1);
+    if (win->type == WIN_SCROLL)
+      {
+        scrollScrolling(wevent);
+        return 0;
+      }
+    return (1);
 
 #ifdef MOTION_MOUSE
-	case MotionNotify:
-	  if (!motion_mouse ||
-	      (!motion_mouse_enablable && !motion_mouse_steering))
-	    return (0);
-	  wevent->type = W_EV_CM_BUTTON;
-	  wevent->Window = W_Window2Void(win);
+  case MotionNotify:
+    if (!motion_mouse ||
+        (!motion_mouse_enablable && !motion_mouse_steering))
+      return (0);
+    wevent->type = W_EV_CM_BUTTON;
+    wevent->Window = W_Window2Void(win);
 
-	  thresh = abs(prev_x - motion->x) + abs(prev_y - motion->y);
+    thresh = abs(prev_x - motion->x) + abs(prev_y - motion->y);
 
-	  if (thresh < user_motion_thresh)
-	    return (0);
+    if (thresh < user_motion_thresh)
+      return (0);
 
-	  prev_x = wevent->x = motion->x;
-	  prev_y = wevent->y = motion->y;
+    prev_x = wevent->x = motion->x;
+    prev_y = wevent->y = motion->y;
 
 
 #ifdef MOUSE_AS_SHIFT
-	  if (mouse_as_shift &&
-	      (wevent->Window == mapw || wevent->Window == w))
-	    switch (button->button & 0xf)
-	      {
-	      case Button3:
-		if (b3_as_shift)
-		  return (0);
-		break;
-	      case Button1:
-		if (b1_as_shift)
-		  return (0);
-		break;
-	      case Button2:
-		if (b2_as_shift)
-		  return (0);
-		break;
-	      }
+    if (mouse_as_shift &&
+        (wevent->Window == mapw || wevent->Window == w))
+      switch (button->button & 0xf)
+        {
+        case Button3:
+    if (b3_as_shift)
+      return (0);
+    break;
+        case Button1:
+    if (b1_as_shift)
+      return (0);
+    break;
+        case Button2:
+    if (b2_as_shift)
+      return (0);
+    break;
+        }
 #endif
 
-	  switch (button->button & 0xf)
-	    {
-	    case Button3:
-	      wevent->key = W_RBUTTON;
-	      break;
-	    case Button1:
-	      wevent->key = W_LBUTTON;
-	      break;
-	    case Button2:
-	      wevent->key = W_MBUTTON;
-	      break;
+    switch (button->button & 0xf)
+      {
+      case Button3:
+        wevent->key = W_RBUTTON;
+        break;
+      case Button1:
+        wevent->key = W_LBUTTON;
+        break;
+      case Button2:
+        wevent->key = W_MBUTTON;
+        break;
 #ifdef Button4
-	    case Button4:
-	      wevent->key = W_WUBUTTON;
-	      break;
+      case Button4:
+        wevent->key = W_WUBUTTON;
+        break;
 #endif
 #ifdef Button5
-	    case Button5:
-	      wevent->key = W_WDBUTTON;
-	      break;
+      case Button5:
+        wevent->key = W_WDBUTTON;
+        break;
 #endif
 #ifdef Button6
-	    case Button6:
-	      wevent->key = W_X1BUTTON;
-	      break;
+      case Button6:
+        wevent->key = W_X1BUTTON;
+        break;
 #endif
 #ifdef Button7
-	    case Button7:
-	      wevent->key = W_X2BUTTON;
-	      break;
+      case Button7:
+        wevent->key = W_X2BUTTON;
+        break;
 #endif
-	    }
+      }
 
 #ifdef SHIFTED_MOUSE
-	  if (extended_mouse)
-	    {
-	      if (button->state & (ControlMask | ShiftMask))
-		{
+    if (extended_mouse)
+      {
+        if (button->state & (ControlMask | ShiftMask))
+    {
 
-		  if (button->state & ShiftMask)
-		    {
-		      wevent->key |= W_SHIFT_BUTTON;
-		    }
+      if (button->state & ShiftMask)
+        {
+          wevent->key |= W_SHIFT_BUTTON;
+        }
 
-		  if (button->state & ControlMask)
-		    {
-		      wevent->key |= W_CTRL_BUTTON;
-		    }
+      if (button->state & ControlMask)
+        {
+          wevent->key |= W_CTRL_BUTTON;
+        }
 
-		  return (1);
-		}
-	    }
+      return (1);
+    }
+      }
 #endif
 
-	  return (1);
+    return (1);
 #endif
 
-	case Expose:
-	  if (expose->count != 0)
-	    return (0);
-	  if (win->type == WIN_SCROLL)
-	    {
-	      configureScrolling(win, expose->x, expose->y,
-				 expose->width, expose->height);
-	      redrawScrolling(win);
-	      return (0);
-	    }
-	  if (win->type == WIN_MENU)
-	    {
-	      redrawMenu(win);
-	      return (0);
-	    }
+  case Expose:
+    if (expose->count != 0)
+      return (0);
+    if (win->type == WIN_SCROLL)
+      {
+        configureScrolling(win, expose->x, expose->y,
+         expose->width, expose->height);
+        redrawScrolling(win);
+        return (0);
+      }
+    if (win->type == WIN_MENU)
+      {
+        redrawMenu(win);
+        return (0);
+      }
 
-	  wevent->type = W_EV_EXPOSE;
-	  wevent->Window = W_Window2Void(win);
-	  return (1);
-	case ConfigureNotify:
-	  configureScrolling(win, configure->x, configure->y,
-			     configure->width, configure->height);
-	  break;
-	default:
-	  return (0);
-	  break;
-	}
+    wevent->type = W_EV_EXPOSE;
+    wevent->Window = W_Window2Void(win);
+    return (1);
+  case ConfigureNotify:
+    configureScrolling(win, configure->x, configure->y,
+           configure->width, configure->height);
+    break;
+  default:
+    return (0);
+    break;
+  }
     }
 }
 
@@ -1717,7 +1716,7 @@ static void
         FlushLineCache(Window win, int color)
 {
   XDrawSegments(W_Display, win, colortable[color].contexts[0],
-		_lcache[color], _lcache_index[color]);
+    _lcache[color], _lcache_index[color]);
   _lcache_index[color] = 0;
 }
 
@@ -1747,7 +1746,7 @@ void
   for (i = 0; i < NCOLORS; i++)
     {
       if (_lcache_index[i])
-	FlushLineCache(win, i);
+  FlushLineCache(win, i);
     }
 }
 
@@ -1786,9 +1785,9 @@ void W_WriteCircle (W_Window window,
   struct window *win = W_Void2Window(window);
 
   XSetForeground(W_Display, colortable[color].contexts[0],
-		 colortable[color].pixelValue);
+     colortable[color].pixelValue);
   XDrawArc(W_Display, win->window, colortable[color].contexts[0],
-	   x, y, r, r, 0, 23040);
+     x, y, r, r, 0, 23040);
 }
 
 void
@@ -1822,7 +1821,7 @@ void
 
 
   XDrawLines(W_Display, win->window, colortable[color].contexts[0],
-	     points, 4, CoordModeOrigin);
+       points, 4, CoordModeOrigin);
 }
 
 void
@@ -1847,35 +1846,35 @@ void
       XDrawImageString(W_Display, win->window,
 
 #ifdef SHORT_PACKETS
-		       win->insensitive ?
-		       colortable[color].insens_contexts[1] :
-		       colortable[color].contexts[fontNum(font)],
+           win->insensitive ?
+           colortable[color].insens_contexts[1] :
+           colortable[color].contexts[fontNum(font)],
 #else
-		       colortable[color].contexts[fontNum(font)],
+           colortable[color].contexts[fontNum(font)],
 #endif
 
-		       x, y + addr, str, len);
+           x, y + addr, str, len);
       break;
     case WIN_SCROLL:
       XCopyArea(W_Display, win->window, win->window,
-	 colortable[W_White].contexts[0], WIN_EDGE, MENU_PAD + W_Textheight,
-		win->width * W_Textwidth, (win->height - 1) * W_Textheight,
-		WIN_EDGE, MENU_PAD);
+   colortable[W_White].contexts[0], WIN_EDGE, MENU_PAD + W_Textheight,
+    win->width * W_Textwidth, (win->height - 1) * W_Textheight,
+    WIN_EDGE, MENU_PAD);
       XClearArea(W_Display, win->window,
-		 WIN_EDGE, MENU_PAD + W_Textheight * (win->height - 1),
-		 W_Textwidth * win->width, W_Textheight, False);
+     WIN_EDGE, MENU_PAD + W_Textheight * (win->height - 1),
+     W_Textwidth * win->width, W_Textheight, False);
       XDrawImageString(W_Display, win->window,
 
 #ifdef SHORT_PACKETS
-		       win->insensitive ?
-		       colortable[color].insens_contexts[1] :
-		       colortable[color].contexts[fontNum(font)],
+           win->insensitive ?
+           colortable[color].insens_contexts[1] :
+           colortable[color].contexts[fontNum(font)],
 #else
-		       colortable[color].contexts[fontNum(font)],
+           colortable[color].contexts[fontNum(font)],
 #endif
 
-		       WIN_EDGE, MENU_PAD + W_Textheight * (win->height - 1) + fonts[fontNum(font)].baseline,
-		       str, len);
+           WIN_EDGE, MENU_PAD + W_Textheight * (win->height - 1) + fonts[fontNum(font)].baseline,
+           str, len);
       AddToScrolling(win, color, font, str, len);
       break;
     case WIN_MENU:
@@ -1886,15 +1885,15 @@ void
       XDrawImageString(W_Display, win->window,
 
 #ifdef SHORT_PACKETS
-		       win->insensitive ?
-		       colortable[color].insens_contexts[1] :
-		       colortable[color].contexts[fontNum(font)],
+           win->insensitive ?
+           colortable[color].insens_contexts[1] :
+           colortable[color].contexts[fontNum(font)],
 #else
-		       colortable[color].contexts[fontNum(font)],
+           colortable[color].contexts[fontNum(font)],
 #endif
 
-	     x * W_Textwidth + WIN_EDGE, MENU_PAD + y * W_Textheight + addr,
-		       str, len);
+       x * W_Textwidth + WIN_EDGE, MENU_PAD + y * W_Textheight + addr,
+           str, len);
       break;
     }
 }
@@ -1913,7 +1912,7 @@ void
 
   win = W_Void2Window(window);
   XDrawString(W_Display, win->window,
-	  colortable[color].contexts[fontNum(font)], x, y + addr, str, len);
+    colortable[color].contexts[fontNum(font)], x, y + addr, str, len);
 }
 
 W_Icon
@@ -1933,16 +1932,16 @@ W_StoreBitmap(int width, int height, char *data, W_Window window)
   newicon->width = width;
   newicon->height = height;
   newicon->bitmap = XCreateBitmapFromData(W_Display, win->window,
-					  data, width, height);
+            data, width, height);
 
 #ifdef nodef
   /* XFIX: changed to Pixmap */
   white = WhitePixel(W_Display, W_Screen);
   black = BlackPixel(W_Display, W_Screen);
   newicon->bitmap = XCreatePixmapFromBitmapData(W_Display, W_Root, data,
-						width, height, white, black,
-						DefaultDepth(W_Display,
-							     W_Screen));
+            width, height, white, black,
+            DefaultDepth(W_Display,
+                   W_Screen));
 #endif /* nodef */
 
   newicon->window = win->window;
@@ -1962,14 +1961,14 @@ void
 #endif
 
   XCopyPlane(W_Display, icon->bitmap, icon->window,
-	 colortable[color].contexts[BITGC], 0, 0, icon->width, icon->height,
-	     x, y, 1);
+   colortable[color].contexts[BITGC], 0, 0, icon->width, icon->height,
+       x, y, 1);
 
 #ifdef nodef
   /* XFIX : copyarea */
   XCopyArea(W_Display, icon->bitmap, icon->window,
-	 colortable[color].contexts[BITGC], 0, 0, icon->width, icon->height,
-	    x, y);
+   colortable[color].contexts[BITGC], 0, 0, icon->width, icon->height,
+      x, y);
 #endif
 }
 
@@ -1990,10 +1989,10 @@ void
   if (icon->pixmap == 0)
     {
       icon->pixmap = XCreatePixmap(W_Display, W_Root,
-	      icon->width, icon->height, DefaultDepth(W_Display, W_Screen));
+        icon->width, icon->height, DefaultDepth(W_Display, W_Screen));
       XCopyPlane(W_Display, icon->bitmap, icon->pixmap,
-	   colortable[W_White].contexts[0], 0, 0, icon->width, icon->height,
-		 0, 0, 1);
+     colortable[W_White].contexts[0], 0, 0, icon->width, icon->height,
+     0, 0, 1);
     }
   XSetWindowBackgroundPixmap(W_Display, win, icon->pixmap);
   XClearWindow(W_Display, win);
@@ -2048,13 +2047,13 @@ W_MakeTextWindow(char *name, int x, int y, int width, int height, W_Window paren
   attrs.do_not_propagate_mask = ExposureMask;
   wparent = W_Void2Window(parent)->window;
   newwin = newWindow(
-		      XCreateWindow(W_Display, wparent, x, y,
+          XCreateWindow(W_Display, wparent, x, y,
    width * W_Textwidth + WIN_EDGE * 2, MENU_PAD * 2 + height * W_Textheight,
-			border, CopyFromParent, InputOutput, CopyFromParent,
-				    CWBackPixel | CWEventMask |
-				    CWBorderPixel,
-				    &attrs),
-		      WIN_TEXT);
+      border, CopyFromParent, InputOutput, CopyFromParent,
+            CWBackPixel | CWEventMask |
+            CWBorderPixel,
+            &attrs),
+          WIN_TEXT);
   class_hint.res_name = name;
   sz_hints = XAllocSizeHints();
   sz_hints->min_width = WIN_EDGE * 2 + width * W_Textwidth;
@@ -2113,9 +2112,9 @@ struct window *
   newwin->insensitive = 0;
 #endif
 
-  newwin->cursor = (Cursor) 0;			 /* about the best I can do * 
-						  * 
-						  * * -jw */
+  newwin->cursor = (Cursor) 0;       /* about the best I can do *
+              *
+              * * -jw */
   return (newwin);
 }
 
@@ -2128,7 +2127,7 @@ struct window *
   while (entry != NULL)
     {
       if (entry->window->window == window)
-	return (entry->window);
+  return (entry->window);
       entry = entry->next;
     }
   return (NULL);
@@ -2187,13 +2186,13 @@ int     border;
   /* NOTE: CWDontPropagate seems to crash in OpenWindows */
   attrs.do_not_propagate_mask = ResizeRedirectMask | ExposureMask;
   newwin = newWindow(
-		      XCreateWindow(W_Display, wparent, x, y,
-				    width * W_Textwidth + WIN_EDGE * 2 + scw,
-				    MENU_PAD * 2 + height * W_Textheight,
-			border, CopyFromParent, InputOutput, CopyFromParent,
-				    CWBackPixel | CWEventMask |
-				    CWBorderPixel /* | CWDontPropagate */ ,
-				    &attrs), WIN_SCROLL);
+          XCreateWindow(W_Display, wparent, x, y,
+            width * W_Textwidth + WIN_EDGE * 2 + scw,
+            MENU_PAD * 2 + height * W_Textheight,
+      border, CopyFromParent, InputOutput, CopyFromParent,
+            CWBackPixel | CWEventMask |
+            CWBorderPixel /* | CWDontPropagate */ ,
+            &attrs), WIN_SCROLL);
   class_hint.res_name = name;
   sz_hints = XAllocSizeHints();
   sz_hints->width_inc = W_Textwidth;
@@ -2274,21 +2273,21 @@ int     len;
       new->next = sw->head;
       new->prev = NULL;
       if (sw->head)
-	sw->head->prev = new;
+  sw->head->prev = new;
       sw->head = new;
       if (!sw->tail)
-	sw->tail = new;
+  sw->tail = new;
       sw->lines++;
-      /* 
+      /*
        * printf("adding one line \"%s\" C:%d F:%d.\n", str, color,
        * fontNum(font)); */
     }
-  sw->index = sw->head;				 /* input forces to end of *
-						  * list */
+  sw->index = sw->head;        /* input forces to end of *
+              * list */
   sw->topline = 0;
 
-  sw->updated++;				 /* mark for *
-						  * W_FlushScrollingWindow */
+  sw->updated++;         /* mark for *
+              * W_FlushScrollingWindow */
 
   STRNCPY(new->string, str, MAX_TEXT_WIDTH - 1);
   new->color = color;
@@ -2333,30 +2332,30 @@ W_Window window;
       int y;
 
       if (win->height > sw->updated)
-	{
-	  XCopyArea(W_Display, win->window, win->window,
-		    colortable[W_White].contexts[0],
-		    WIN_EDGE, MENU_PAD + sw->updated * W_Textheight,
-		    win->width * W_Textwidth,
-		    (win->height - sw->updated) * W_Textheight,
-		    WIN_EDGE, MENU_PAD);
-	}
+  {
+    XCopyArea(W_Display, win->window, win->window,
+        colortable[W_White].contexts[0],
+        WIN_EDGE, MENU_PAD + sw->updated * W_Textheight,
+        win->width * W_Textwidth,
+        (win->height - sw->updated) * W_Textheight,
+        WIN_EDGE, MENU_PAD);
+  }
 
 
       y = (win->height - 1) * W_Textheight + fonts[1].baseline;
 
       for (item = sw->index; item && y > 0 && sw->updated; item = item->next,
-	   y -= W_Textheight,
-	   sw->updated--)
-	{
-	  XDrawImageString(W_Display, win->window,
-		      colortable[item->color].contexts[fontNum(item->font)],
-			   WIN_EDGE, MENU_PAD + y, item->string,
-			   win->width);
-	}
+     y -= W_Textheight,
+     sw->updated--)
+  {
+    XDrawImageString(W_Display, win->window,
+          colortable[item->color].contexts[fontNum(item->font)],
+         WIN_EDGE, MENU_PAD + y, item->string,
+         win->width);
+  }
       sw->updated = 0;
       if (scrollbar)
-	drawThumb(win, sw);
+  drawThumb(win, sw);
     }
 #else
   redrawScrolling(win);
@@ -2375,17 +2374,17 @@ struct scrollingWindow *sw;
 /*
  * savedlines : Number of offscreen text lines,
  * sw->lines - win->height
- * 
+ *
  * maxrow + 1 : Number of onscreen  text lines,
- * 
+ *
  * min(sw->lines + 1, win->height+1)
- * 
+ *
  * sw->topline    : -Number of lines above the last max_row+1 lines
- * 
+ *
  * thumbTop    = screen->topline + screen->savedlines;
  * thumbHeight = screen->max_row + 1;
  * totalHeight = thumbHeight + screen->savedlines;
- * 
+ *
  * XawScrollbarSetThumb(scrollWidget,
  * ((float)thumbTop) / totalHeight,
  * ((float)thumbHeight) / totalHeight);
@@ -2406,12 +2405,12 @@ struct scrollingWindow *sw;
   h = winheight * thumbHeight / totalHeight;
 
   XClearArea(W_Display, win->window, x, 0, scroll_thumb_width, winheight,
-	     False);
+       False);
   XFillRectangle(W_Display, win->window, scroll_thumb_gc,
-		 x, y,
-		 scroll_thumb_width, h);
+     x, y,
+     scroll_thumb_width, h);
   XDrawLine(W_Display, win->window, colortable[W_Red].contexts[0],
-	    x, 0, x, winheight);
+      x, 0, x, winheight);
 }
 
 static void
@@ -2436,9 +2435,9 @@ struct window *win;
   for (item = sw->index; item && y > 0; item = item->next, y -= W_Textheight)
     {
       XDrawImageString(W_Display, win->window,
-		       colortable[item->color].contexts[fontNum(item->font)],
-		       WIN_EDGE, MENU_PAD + y, item->string,
-		       win->width);
+           colortable[item->color].contexts[fontNum(item->font)],
+           WIN_EDGE, MENU_PAD + y, item->string,
+           win->width);
     }
   if (scrollbar)
     drawThumb(win, sw);
@@ -2482,14 +2481,14 @@ W_MakeMenu(char *name, int x, int y, int width, int height, W_Window parent, int
   attrs.background_pixel = colortable[W_Black].pixelValue;
   attrs.do_not_propagate_mask = KeyPressMask | ButtonPressMask | ExposureMask;
   newwin = newWindow(
-		      XCreateWindow(W_Display, wparent, x, y,
-				    width * W_Textwidth + WIN_EDGE * 2,
+          XCreateWindow(W_Display, wparent, x, y,
+            width * W_Textwidth + WIN_EDGE * 2,
    height * (W_Textheight + MENU_PAD * 2) + (height - 1) * MENU_BAR, border,
-				CopyFromParent, InputOutput, CopyFromParent,
-				    CWBackPixel | CWEventMask |
-				    CWBorderPixel,
-				    &attrs),
-		      WIN_MENU);
+        CopyFromParent, InputOutput, CopyFromParent,
+            CWBackPixel | CWEventMask |
+            CWBorderPixel,
+            &attrs),
+          WIN_MENU);
   class_hint.res_name = name;
   XSetClassHint(W_Display, newwin->window, &class_hint);
   XSetWMHints(W_Display, newwin->window, &wm_hint);
@@ -2532,9 +2531,9 @@ void redrawMenu(struct window * win)
   for (count = 1; count < win->height; count++)
     {
       XFillRectangle(W_Display, win->window,
-		     colortable[W_White].contexts[0],
-	  0, count * (W_Textheight + MENU_PAD * 2) + (count - 1) * MENU_BAR,
-		     win->width * W_Textwidth + WIN_EDGE * 2, MENU_BAR);
+         colortable[W_White].contexts[0],
+    0, count * (W_Textheight + MENU_PAD * 2) + (count - 1) * MENU_BAR,
+         win->width * W_Textwidth + WIN_EDGE * 2, MENU_BAR);
     }
   for (count = 0; count < win->height; count++)
     {
@@ -2548,16 +2547,16 @@ void redrawMenuItem(struct window *win, int n)
 
   items = (struct menuItem *) win->data;
   XFillRectangle(W_Display, win->window,
-		 colortable[W_Black].contexts[0],
-	  WIN_EDGE, n * (W_Textheight + MENU_PAD * 2 + MENU_BAR) + MENU_PAD,
-		 win->width * W_Textwidth, W_Textheight);
+     colortable[W_Black].contexts[0],
+    WIN_EDGE, n * (W_Textheight + MENU_PAD * 2 + MENU_BAR) + MENU_PAD,
+     win->width * W_Textwidth, W_Textheight);
   if (items[n].string)
     {
       XDrawImageString(W_Display, win->window,
-		       colortable[items[n].color].contexts[1],
-		       WIN_EDGE + W_Textwidth * items[n].column,
-		       n * (W_Textheight + MENU_PAD * 2 + MENU_BAR) + MENU_PAD + fonts[1].baseline,
-		       items[n].string, strlen(items[n].string));
+           colortable[items[n].color].contexts[1],
+           WIN_EDGE + W_Textwidth * items[n].column,
+           n * (W_Textheight + MENU_PAD * 2 + MENU_BAR) + MENU_PAD + fonts[1].baseline,
+           items[n].string, strlen(items[n].string));
     }
 }
 
@@ -2606,34 +2605,34 @@ void
   XQueryColor(W_Display, W_Colormap, &b);
 
   mapcursbit = XCreateBitmapFromData(W_Display, win->window, mapcursor_bits,
-				     mapcursor_width, mapcursor_height);
+             mapcursor_width, mapcursor_height);
 
   if ((path = getdefault("mapCursorDef")))
     {
 
       if (W_LoadBitmap(window, path, &mapcursmaskbit, &w, &h, &xh, &yh) != 1)
-	{
-	  mapcursmaskbit = XCreateBitmapFromData(W_Display, win->window,
-			       mapmask_bits, mapmask_width, mapmask_height);
-	  xh = yh = 5;
-	}
+  {
+    mapcursmaskbit = XCreateBitmapFromData(W_Display, win->window,
+             mapmask_bits, mapmask_width, mapmask_height);
+    xh = yh = 5;
+  }
       else
-	{
-	  mapcursbit = XCreatePixmap(W_Display, win->window, w, h, 1);
-	  XFillRectangle(W_Display, mapcursbit,
-			 colortable[W_White].contexts[0], 0, 0, w, h);
-	}
+  {
+    mapcursbit = XCreatePixmap(W_Display, win->window, w, h, 1);
+    XFillRectangle(W_Display, mapcursbit,
+       colortable[W_White].contexts[0], 0, 0, w, h);
+  }
     }
 
   else
     mapcursmaskbit = XCreateBitmapFromData(W_Display, win->window,
-			       mapmask_bits, mapmask_width, mapmask_height);
+             mapmask_bits, mapmask_width, mapmask_height);
 
   if (win->cursor)
     XFreeCursor(W_Display, win->cursor);
 
   new = XCreatePixmapCursor(W_Display, mapcursbit, mapcursmaskbit,
-			    &b, &f, xh, yh);
+          &b, &f, xh, yh);
   XRecolorCursor(W_Display, new, &b, &f);
   XDefineCursor(W_Display, win->window, new);
   win->cursor = new;
@@ -2659,32 +2658,32 @@ void
   XQueryColor(W_Display, W_Colormap, &b);
 
   localcursbit = XCreateBitmapFromData(W_Display, win->window,
-		   localcursor_bits, localcursor_width, localcursor_height);
+       localcursor_bits, localcursor_width, localcursor_height);
 
   if ((path = getdefault("localCursorDef")))
     {
       if (W_LoadBitmap(window, path, &localcursmaskbit, &w, &h, &xh, &yh) != 1)
-	{
-	  localcursmaskbit = XCreateBitmapFromData(W_Display, win->window,
-			 localmask_bits, localmask_width, localmask_height);
-	  xh = yh = 5;
-	}
+  {
+    localcursmaskbit = XCreateBitmapFromData(W_Display, win->window,
+       localmask_bits, localmask_width, localmask_height);
+    xh = yh = 5;
+  }
       else
-	{
-	  localcursbit = XCreatePixmap(W_Display, win->window, w, h, 1);
-	  XFillRectangle(W_Display, localcursbit,
-			 colortable[W_White].contexts[0], 0, 0, w, h);
-	}
+  {
+    localcursbit = XCreatePixmap(W_Display, win->window, w, h, 1);
+    XFillRectangle(W_Display, localcursbit,
+       colortable[W_White].contexts[0], 0, 0, w, h);
+  }
     }
   else
     localcursmaskbit = XCreateBitmapFromData(W_Display, win->window,
-			 localmask_bits, localmask_width, localmask_height);
+       localmask_bits, localmask_width, localmask_height);
 
   if (win->cursor)
     XFreeCursor(W_Display, win->cursor);
 
   new = XCreatePixmapCursor(W_Display, localcursbit, localcursmaskbit,
-			    &b, &f, xh, yh);
+          &b, &f, xh, yh);
   XRecolorCursor(W_Display, new, &b, &f);
   XDefineCursor(W_Display, win->window, new);
   win->cursor = new;
@@ -2708,14 +2707,14 @@ void
   XQueryColor(W_Display, W_Colormap, &b);
 
   fedcursbit = XCreateBitmapFromData(W_Display, win->window, fed_cruiser_bits,
-				     fed_cruiser_width, fed_cruiser_height);
+             fed_cruiser_width, fed_cruiser_height);
   fedcursmaskbit = XCreateBitmapFromData(W_Display, win->window,
-			    fed_mask_bits, fed_mask_width, fed_mask_height);
+          fed_mask_bits, fed_mask_width, fed_mask_height);
   if (win->cursor)
     XFreeCursor(W_Display, win->cursor);
 
   new = XCreatePixmapCursor(W_Display, fedcursmaskbit, fedcursbit,
-			    &b, &f, 10, 10);
+          &b, &f, 10, 10);
   XRecolorCursor(W_Display, new, &b, &f);
   XDefineCursor(W_Display, win->window, new);
   win->cursor = new;
@@ -2739,14 +2738,14 @@ void
   XQueryColor(W_Display, W_Colormap, &b);
 
   romcursbit = XCreateBitmapFromData(W_Display, win->window, rom_cruiser_bits,
-				     rom_cruiser_width, rom_cruiser_height);
+             rom_cruiser_width, rom_cruiser_height);
   romcursmaskbit = XCreateBitmapFromData(W_Display, win->window,
-		      rom_mask_bits, rom_cruiser_width, rom_cruiser_height);
+          rom_mask_bits, rom_cruiser_width, rom_cruiser_height);
   if (win->cursor)
     XFreeCursor(W_Display, win->cursor);
 
   new = XCreatePixmapCursor(W_Display, romcursmaskbit, romcursbit,
-			    &b, &f, 10, 10);
+          &b, &f, 10, 10);
   XRecolorCursor(W_Display, new, &b, &f);
   XDefineCursor(W_Display, win->window, new);
   win->cursor = new;
@@ -2770,14 +2769,14 @@ void
   XQueryColor(W_Display, W_Colormap, &b);
 
   klicursbit = XCreateBitmapFromData(W_Display, win->window, kli_cruiser_bits,
-				     kli_cruiser_width, kli_cruiser_height);
+             kli_cruiser_width, kli_cruiser_height);
   klicursmaskbit = XCreateBitmapFromData(W_Display, win->window,
-		      fed_mask_bits, kli_cruiser_width, kli_cruiser_height);
+          fed_mask_bits, kli_cruiser_width, kli_cruiser_height);
   if (win->cursor)
     XFreeCursor(W_Display, win->cursor);
 
   new = XCreatePixmapCursor(W_Display, klicursmaskbit, klicursbit,
-			    &b, &f, 10, 10);
+          &b, &f, 10, 10);
   XRecolorCursor(W_Display, new, &b, &f);
   XDefineCursor(W_Display, win->window, new);
   win->cursor = new;
@@ -2801,14 +2800,14 @@ void
   XQueryColor(W_Display, W_Colormap, &b);
 
   oricursbit = XCreateBitmapFromData(W_Display, win->window, ori_cruiser_bits,
-				     ori_cruiser_width, ori_cruiser_height);
+             ori_cruiser_width, ori_cruiser_height);
   oricursmaskbit = XCreateBitmapFromData(W_Display, win->window,
-		      fed_mask_bits, ori_cruiser_width, ori_cruiser_height);
+          fed_mask_bits, ori_cruiser_width, ori_cruiser_height);
   if (win->cursor)
     XFreeCursor(W_Display, win->cursor);
 
   new = XCreatePixmapCursor(W_Display, oricursmaskbit, oricursbit,
-			    &b, &f, 10, 10);
+          &b, &f, 10, 10);
   XRecolorCursor(W_Display, new, &b, &f);
   XDefineCursor(W_Display, win->window, new);
   win->cursor = new;
@@ -2837,32 +2836,32 @@ void
       Pixmap  pm, mpm;
 
       if (W_LoadBitmap(window, path, &pm, &w, &h, &xh, &yh) != 1)
-	new = XCreateFontCursor(W_Display, XC_trek);
+  new = XCreateFontCursor(W_Display, XC_trek);
       else
-	{
-	  char    mask_path[512];
+  {
+    char    mask_path[512];
 
-	  strcpy(mask_path, path);
-	  strcat(mask_path, ".mask");
+    strcpy(mask_path, path);
+    strcat(mask_path, ".mask");
 
-	  if (W_LoadBitmap(window, mask_path, &mpm, &mw, &mh, &mxh, &myh) != 1)
-	    {
-	      mw = w;
-	      mh = h;
-	      mpm = XCreatePixmap(W_Display, win->window, w, h, 1);
-	      XFillRectangle(W_Display, mpm,
-			     colortable[W_White].contexts[0], 0, 0, w, h);
-	    }
+    if (W_LoadBitmap(window, mask_path, &mpm, &mw, &mh, &mxh, &myh) != 1)
+      {
+        mw = w;
+        mh = h;
+        mpm = XCreatePixmap(W_Display, win->window, w, h, 1);
+        XFillRectangle(W_Display, mpm,
+           colortable[W_White].contexts[0], 0, 0, w, h);
+      }
 
-	  if ((w != mw) || (h != mh))
-	    {
-	      printf("Cursor and mask are not the same size. %s\n", path);
-	      new = XCreateFontCursor(W_Display, XC_trek);
-	    }
-	  else
-	    new = XCreatePixmapCursor(W_Display, pm, mpm,
-				      &b, &f, xh, yh);
-	}
+    if ((w != mw) || (h != mh))
+      {
+        printf("Cursor and mask are not the same size. %s\n", path);
+        new = XCreateFontCursor(W_Display, XC_trek);
+      }
+    else
+      new = XCreatePixmapCursor(W_Display, pm, mpm,
+              &b, &f, xh, yh);
+  }
     }
   else
     new = XCreateFontCursor(W_Display, XC_trek);
@@ -2917,32 +2916,32 @@ void
       Pixmap  pm, mpm;
 
       if (W_LoadBitmap(window, path, &pm, &w, &h, &xh, &yh) != 1)
-	new = XCreateFontCursor(W_Display, XC_left_ptr);
+  new = XCreateFontCursor(W_Display, XC_left_ptr);
       else
-	{
-	  char    mask_path[512];
+  {
+    char    mask_path[512];
 
-	  strcpy(mask_path, path);
-	  strcat(mask_path, ".mask");
+    strcpy(mask_path, path);
+    strcat(mask_path, ".mask");
 
-	  if (W_LoadBitmap(window, mask_path, &mpm, &mw, &mh, &mxh, &myh) != 1)
-	    {
-	      mw = w;
-	      mh = h;
-	      mpm = XCreatePixmap(W_Display, win->window, w, h, 1);
-	      XFillRectangle(W_Display, mpm,
-			     colortable[W_White].contexts[0], 0, 0, w, h);
-	    }
+    if (W_LoadBitmap(window, mask_path, &mpm, &mw, &mh, &mxh, &myh) != 1)
+      {
+        mw = w;
+        mh = h;
+        mpm = XCreatePixmap(W_Display, win->window, w, h, 1);
+        XFillRectangle(W_Display, mpm,
+           colortable[W_White].contexts[0], 0, 0, w, h);
+      }
 
-	  if ((w != mw) || (h != mh))
-	    {
-	      printf("Cursor and mask are not the same size. %s\n", path);
-	      new = XCreateFontCursor(W_Display, XC_left_ptr);
-	    }
-	  else
-	    new = XCreatePixmapCursor(W_Display, pm, mpm,
-				      &b, &f, xh, yh);
-	}
+    if ((w != mw) || (h != mh))
+      {
+        printf("Cursor and mask are not the same size. %s\n", path);
+        new = XCreateFontCursor(W_Display, XC_left_ptr);
+      }
+    else
+      new = XCreatePixmapCursor(W_Display, pm, mpm,
+              &b, &f, xh, yh);
+  }
     }
   else
     new = XCreateFontCursor(W_Display, XC_left_ptr);
@@ -2975,32 +2974,32 @@ void
       Pixmap  pm, mpm;
 
       if (W_LoadBitmap(window, path, &pm, &w, &h, &xh, &yh) != 1)
-	new = XCreateFontCursor(W_Display, XC_xterm);
+  new = XCreateFontCursor(W_Display, XC_xterm);
       else
-	{
-	  char    mask_path[512];
+  {
+    char    mask_path[512];
 
-	  strcpy(mask_path, path);
-	  strcat(mask_path, ".mask");
+    strcpy(mask_path, path);
+    strcat(mask_path, ".mask");
 
-	  if (W_LoadBitmap(window, mask_path, &mpm, &mw, &mh, &mxh, &myh) != 1)
-	    {
-	      mw = w;
-	      mh = h;
-	      mpm = XCreatePixmap(W_Display, win->window, w, h, 1);
-	      XFillRectangle(W_Display, mpm,
-			     colortable[W_White].contexts[0], 0, 0, w, h);
-	    }
+    if (W_LoadBitmap(window, mask_path, &mpm, &mw, &mh, &mxh, &myh) != 1)
+      {
+        mw = w;
+        mh = h;
+        mpm = XCreatePixmap(W_Display, win->window, w, h, 1);
+        XFillRectangle(W_Display, mpm,
+           colortable[W_White].contexts[0], 0, 0, w, h);
+      }
 
-	  if ((w != mw) || (h != mh))
-	    {
-	      printf("Cursor and mask are not the same size. %s\n", path);
-	      new = XCreateFontCursor(W_Display, XC_xterm);
-	    }
-	  else
-	    new = XCreatePixmapCursor(W_Display, pm, mpm,
-				      &b, &f, xh, yh);
-	}
+    if ((w != mw) || (h != mh))
+      {
+        printf("Cursor and mask are not the same size. %s\n", path);
+        new = XCreateFontCursor(W_Display, XC_xterm);
+      }
+    else
+      new = XCreatePixmapCursor(W_Display, pm, mpm,
+              &b, &f, xh, yh);
+  }
     }
   else
     new = XCreateFontCursor(W_Display, XC_xterm);
@@ -3032,12 +3031,12 @@ void
   if (!oldbits || oldbits != bits)
     {
       cursbits = XCreateBitmapFromData(W_Display, win->window,
-				       bits, width, height);
+               bits, width, height);
       cursmask = XCreateBitmapFromData(W_Display, win->window,
-				       mask, width, height);
+               mask, width, height);
       oldbits = bits;
       curs = XCreatePixmapCursor(W_Display, cursbits, cursmask,
-				 &whiteCol, &blackCol, xhot, yhot);
+         &whiteCol, &blackCol, xhot, yhot);
       XFreePixmap(W_Display, cursbits);
       XFreePixmap(W_Display, cursmask);
     }
@@ -3053,15 +3052,15 @@ int
   win = W_Void2Window(window);
 
   status = XReadBitmapFile(W_Display, win->window, path, (unsigned int *) width,
-			   (unsigned int *) height, pixmap, x_hot, y_hot);
+         (unsigned int *) height, pixmap, x_hot, y_hot);
 
   if (status == BitmapSuccess)
     {
       if (*x_hot < 0)
-	{
-	  *x_hot = *width / 2;
-	  *y_hot = *height / 2;
-	}
+  {
+    *x_hot = *width / 2;
+    *y_hot = *height / 2;
+  }
 
       return (1);
     }
@@ -3118,7 +3117,7 @@ void
         W_SetTransientForHint(W_Window w, W_Window pw)
 {
   XSetTransientForHint(W_Display, W_Void2Window(w)->window,
-		       W_Void2Window(pw)->window);
+           W_Void2Window(pw)->window);
 }
 
 
@@ -3176,10 +3175,10 @@ int     y;
   if (sw->topline + savedlines > 0)
     {
       if (!sw->index)
-	{
-	  fprintf(stderr, "scroll error, NULL index (scrollUp).\n");
-	  return;
-	}
+  {
+    fprintf(stderr, "scroll error, NULL index (scrollUp).\n");
+    return;
+  }
       sw->index = sw->index->next;
       sw->topline--;
       redrawScrolling(win);
@@ -3197,10 +3196,10 @@ int     y;
   if (sw->topline < 0)
     {
       if (!sw->index)
-	{
-	  fprintf(stderr, "scroll error, NULL index (scrollDown).\n");
-	  return;
-	}
+  {
+    fprintf(stderr, "scroll error, NULL index (scrollDown).\n");
+    return;
+  }
       sw->index = sw->index->prev;
       sw->topline++;
       redrawScrolling(win);
@@ -3241,20 +3240,20 @@ int     topline;
   while (topline < sw->topline)
     {
       if (!sw->index)
-	{
-	  fprintf(stderr, "scroll error, NULL index (1).\n");
-	  break;
-	}
+  {
+    fprintf(stderr, "scroll error, NULL index (1).\n");
+    break;
+  }
       sw->index = sw->index->next;
       sw->topline--;
     }
   while (topline > sw->topline)
     {
       if (!sw->index)
-	{
-	  fprintf(stderr, "scroll error, NULL index (2).\n");
-	  break;
-	}
+  {
+    fprintf(stderr, "scroll error, NULL index (2).\n");
+    break;
+  }
       sw->index = sw->index->prev;
       sw->topline++;
     }
@@ -3288,7 +3287,7 @@ static void
         configureScrolling(win, x, y, width, height)
 
 struct window *win;
-int     x, y;					 /* TODO */
+int     x, y;          /* TODO */
 int     width, height;
 
 {
@@ -3350,7 +3349,7 @@ static int
   sprintf(buf, "%s.geometry", name);
   geom_default = getdefault(buf);
   if (!geom_default)
-    return 0;					 /* nothing set */
+    return 0;          /* nothing set */
 
   return XParseGeometry(geom_default, x, y, (unsigned int *) width, (unsigned int *) height);
 }
@@ -3376,14 +3375,14 @@ void checkParent(char *name, W_Window * parent)
     {
       windows = hashtable[i];
       while (windows != NULL)
-	{
-	  if (strcmpi(adefault, windows->window->name) == 0)
-	    {
-	      *parent = W_Window2Void(windows->window);
-	      return;
-	    }
-	  windows = windows->next;
-	}
+  {
+    if (strcmpi(adefault, windows->window->name) == 0)
+      {
+        *parent = W_Window2Void(windows->window);
+        return;
+      }
+    windows = windows->next;
+  }
     }
 }
 
@@ -3411,10 +3410,10 @@ void
   if (window == NULL)
     {
       if (W_in_message)
-	{
-	  XWarpPointer(W_Display, None, W_Root, 0, 0, 0, 0, warped_from_x, warped_from_y);
-	  W_in_message = 0;
-	}
+  {
+    XWarpPointer(W_Display, None, W_Root, 0, 0, 0, 0, warped_from_x, warped_from_y);
+    W_in_message = 0;
+  }
     }
   else
     {
@@ -3453,18 +3452,18 @@ int
   Window  thisWin = win->window;
 
   status = XQueryPointer(W_Display, thisWin, &theRoot, &theChild,
-			 &rootX, &rootY, &wX, &wY, &wButtons);
+       &rootX, &rootY, &wX, &wY, &wButtons);
   if (status == True)
     {
-      /* if it's in the window we specified then the values returned should * 
-       * 
+      /* if it's in the window we specified then the values returned should *
+       *
        * * be within the with and height of the window */
       if (wX <= win->width && wY <= win->height)
-	{
-	  *x = wX;
-	  *y = wY;
-	  return 1;
-	}
+  {
+    *x = wX;
+    *y = wY;
+    return 1;
+  }
     }
   *x = 0;
   *y = 0;
@@ -3501,7 +3500,7 @@ MAKE_WINDOW_GETTER(W_GetWindowExposeHandler, handle_expose)
 MAKE_WINDOW_SETTER(W_SetWindowExposeHandler, handle_expose)
 
 void
-        W_ResizeWindow(W_Window window, int neww, int newh)	/* TSH 2/93 */
+        W_ResizeWindow(W_Window window, int neww, int newh) /* TSH 2/93 */
 
 
 
@@ -3520,18 +3519,18 @@ void
 }
 
 void
-        W_ResizeTextWindow(W_Window window, int neww, int newh)		/* TSH 
-									 * 
-									 * *
-									 * 2/93 
-									 * 
-									 */
+        W_ResizeTextWindow(W_Window window, int neww, int newh)   /* TSH
+                   *
+                   * *
+                   * 2/93
+                   *
+                   */
 
 
 
 {
   W_ResizeWindow(window, neww * W_Textwidth + WIN_EDGE * 2,
-		 newh * W_Textheight + WIN_EDGE * 2);
+     newh * W_Textheight + WIN_EDGE * 2);
 }
 
 int
@@ -3579,8 +3578,8 @@ void W_OverlayBitmap(int x, int y, W_Icon bit, W_Color color)
 #endif
 
   XCopyPlane(W_Display, icon->bitmap, icon->window,
-	     colortable[color].contexts[0], 0, 0, icon->width, icon->height,
-	     x, y, 1);
+       colortable[color].contexts[0], 0, 0, icon->width, icon->height,
+       x, y, 1);
 }
 
 void    W_SetWindowName(W_Window w, char *name)
@@ -3664,29 +3663,29 @@ void
 
       color = getdefault("tts_color");
       if (!color)
-	color = "#777";
+  color = "#777";
 
 #ifdef SHOW_DEFAULTS
       show_defaults("TTS", "tts_color", color, "TTS msg color.");
 #endif
 
       if (!XParseColor(W_Display, W_Colormap, color, &xc))
-	{
-	  fprintf(stderr, "netrek: Unknown color \"%s\"\n", color);
-	  (void) XParseColor(W_Display, W_Colormap, "#777", &xc);
-	}
+  {
+    fprintf(stderr, "netrek: Unknown color \"%s\"\n", color);
+    (void) XParseColor(W_Display, W_Colormap, "#777", &xc);
+  }
       /* using the 8th color allocated in GetColors() */
       xc.pixel = colortable[W_Black].pixelValue | planes[0] | planes[2];
       if ((takeNearest) || (W_Visual->class != PseudoColor))
-	XAllocColor(W_Display, W_Colormap, &xc);
+  XAllocColor(W_Display, W_Colormap, &xc);
       else
-	XStoreColor(W_Display, W_Colormap, &xc);
+  XStoreColor(W_Display, W_Colormap, &xc);
       values.foreground = xc.pixel;
       values.function = GXor;
     }
 
   _tts_gc = XCreateGC(W_Display, W_Root, GCFont | GCForeground | GCFunction,
-		      &values);
+          &values);
 
   XSetGraphicsExposures(W_Display, _tts_gc, False);
 }
@@ -3736,10 +3735,10 @@ void    W_Halo(int x, int y, W_Color color)
   if ((color != W_Ind) && (color != W_Grey))
     {
       XSetForeground(W_Display, colortable[color].contexts[0],
-		     colortable[color].pixelValue);
+         colortable[color].pixelValue);
       XDrawArc(W_Display, win->window, colortable[color].contexts[0],
-	       x - (mplanet_width / 2), y - (mplanet_width / 2),
-	       mplanet_width, mplanet_height, 0, 23040);
+         x - (mplanet_width / 2), y - (mplanet_width / 2),
+         mplanet_width, mplanet_height, 0, 23040);
     }
 }
 #endif /* HAVE_XPM */
@@ -3784,18 +3783,18 @@ int video_mode_initialise() {
   /* obtain the current mode line and list of known mode lines */
   XF86VidModeGetModeLine(W_Display, W_Screen, &video_mode_dotclock, &current);
   XF86VidModeGetAllModeLines(W_Display, W_Screen,
-			     &video_mode_list_size, &video_mode_list);
+           &video_mode_list_size, &video_mode_list);
 
   /* find the current mode within the list of known mode lines */
   video_mode_current = NULL;
   for (line=0; line < video_mode_list_size; line++) {
     XF86VidModeModeInfo *mode = video_mode_list[line];
     if (mode->hdisplay == current.hdisplay &&
-	mode->vdisplay == current.vdisplay &&
-	mode->dotclock == video_mode_dotclock &&
-	mode->htotal == current.htotal &&
-	mode->vtotal == current.vtotal &&
-	mode->flags == current.flags) {
+  mode->vdisplay == current.vdisplay &&
+  mode->dotclock == video_mode_dotclock &&
+  mode->htotal == current.htotal &&
+  mode->vtotal == current.vtotal &&
+  mode->flags == current.flags) {
       video_mode_current = mode;
     }
   }
@@ -3803,7 +3802,7 @@ int video_mode_initialise() {
   /* do not change if the current mode was not found */
   if (video_mode_current == NULL) {
     fprintf(stderr, "video_mode_begin: this mode not found, "
-	    "cannot switch back, so not switching\n");
+      "cannot switch back, so not switching\n");
     return 0;
   }
 
@@ -3851,15 +3850,15 @@ void pointer_grab_on(W_Window window)
   struct window *win = W_Void2Window(window);
 
   XGrabPointer(W_Display, win->window, True, ButtonPressMask |
-		 ButtonReleaseMask | EnterWindowMask | LeaveWindowMask |
-		 PointerMotionMask | PointerMotionHintMask |
-		 Button1MotionMask | Button2MotionMask |
-		 Button3MotionMask | Button4MotionMask |
-		 Button5MotionMask | ButtonMotionMask |
-		 KeymapStateMask, GrabModeAsync, GrabModeAsync,
-		 win->window, None, CurrentTime);
+     ButtonReleaseMask | EnterWindowMask | LeaveWindowMask |
+     PointerMotionMask | PointerMotionHintMask |
+     Button1MotionMask | Button2MotionMask |
+     Button3MotionMask | Button4MotionMask |
+     Button5MotionMask | ButtonMotionMask |
+     KeymapStateMask, GrabModeAsync, GrabModeAsync,
+     win->window, None, CurrentTime);
   XGrabKeyboard(W_Display, win->window, True, GrabModeAsync,
-		GrabModeAsync, CurrentTime);
+    GrabModeAsync, CurrentTime);
 }
 
 void pointer_grab_off(W_Window window)
@@ -3874,10 +3873,10 @@ void kde_fullscreen_on(W_Window window) {
   Atom WM_HINTS;
   WM_HINTS = XInternAtom(W_Display, "_NET_WM_STATE", True);
   if (WM_HINTS != None) {
-    Atom p[1]; 
+    Atom p[1];
     p[0] = XInternAtom(W_Display, "_NET_WM_STATE_FULLSCREEN", True);
     XChangeProperty(W_Display, win->window, WM_HINTS, XA_ATOM, 32,
-		    PropModeReplace, (unsigned char *)p, 1);
+        PropModeReplace, (unsigned char *)p, 1);
   }
 }
 
@@ -3922,7 +3921,7 @@ void W_FullScreenToggle(W_Window window) {
   } else {
     if (!full_screen_default) {
       if (!video_mode_initialise()) {
-	return;
+  return;
       }
     }
     full_screen_enabled++;
